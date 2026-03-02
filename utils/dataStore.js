@@ -210,12 +210,14 @@ function createBackup() {
 function getStats() {
   const totalPosts = communityDb.posts.length;
   const freePosts = communityDb.posts.filter(p => p.board === 'free').length;
+  const successPosts = communityDb.posts.filter(p => p.board === 'success').length;
+  const tipsPosts = communityDb.posts.filter(p => p.board === 'tips').length;
   const studyPosts = communityDb.posts.filter(p => p.board === 'study').length;
   const totalComments = communityDb.posts.reduce((s, p) => s + (p.comments || []).length, 0);
   const totalLikes = communityDb.posts.reduce((s, p) => s + (p.likes || 0), 0);
   return {
     users: Object.keys(usersDb.users).length,
-    posts: { total: totalPosts, free: freePosts, study: studyPosts },
+    posts: { total: totalPosts, free: freePosts, success: successPosts, tips: tipsPosts, study: studyPosts },
     comments: totalComments,
     likes: totalLikes,
     attendance: Object.keys(attendanceDb.users).length,
@@ -230,7 +232,7 @@ function printStartupStatus() {
   const stats = getStats();
   console.log(`  📊 데이터 현황:`);
   console.log(`     회원: ${stats.users}명 | 세션: ${stats.sessions}개`);
-  console.log(`     게시글: ${stats.posts.total}개 (자유:${stats.posts.free} | 스터디:${stats.posts.study})`);
+  console.log(`     게시글: ${stats.posts.total}개 (자유:${stats.posts.free} | 합격수기:${stats.posts.success} | 꿀팁:${stats.posts.tips} | 스터디:${stats.posts.study})`);
   console.log(`     댓글: ${stats.comments}개 | 좋아요: ${stats.likes}개`);
   console.log(`     출석: ${stats.attendance}명 | 문의: ${stats.contacts}건 | 로드맵: ${stats.roadmaps}명`);
   console.log(`  📂 데이터 경로: ${DATA_DIR}`);
@@ -316,46 +318,46 @@ function seedSampleData() {
       ]},
 
     // ===== 합격수기 (5개) =====
-    { board:'free', nickname:'합격자1호', title:'[합격수기] 정보처리기사 실기 합격! 3개월 준비 후기',
+    { board:'success', nickname:'합격자1호', title:'[합격수기] 정보처리기사 실기 합격! 3개월 준비 후기',
       content:'비전공자인데 3개월 풀타임으로 준비해서 합격했어요. 필기는 기출 500문제 반복, 실기는 손코딩 연습이 핵심이었습니다. 수제비 교재 강추하고 유튜브 무료강의도 많이 활용했어요.',
       certTag:'정보처리기사', likes:15, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10','u11','u12','u13','u14','u15'], createdAt:daysAgo(2), comments:[] },
-    { board:'free', nickname:'전기합격맨', title:'[합격수기] 전기기사 필기+실기 한번에 합격 후기',
+    { board:'success', nickname:'전기합격맨', title:'[합격수기] 전기기사 필기+실기 한번에 합격 후기',
       content:'전기공학 전공이라 필기는 수월했는데 실기 계산문제가 어려웠어요. 과년도 기출 10년치 3회독하니까 패턴이 보이더라고요. KEC 개정내용 꼭 체크하세요!',
       certTag:'전기기사', likes:11, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10','u11'], createdAt:daysAgo(4),
       comments:[
         { nickname:'전기도전', content:'KEC 어디서 정리된 자료 볼 수 있나요?', createdAt:daysAgo(3) }
       ]},
-    { board:'free', nickname:'안전맨', title:'[합격수기] 산업안전기사 합격! 현장 경력 없이도 가능해요',
+    { board:'success', nickname:'안전맨', title:'[합격수기] 산업안전기사 합격! 현장 경력 없이도 가능해요',
       content:'사무직인데 안전관리 쪽으로 이직하려고 준비했어요. 필기는 안전관리론 위주로, 실기는 서술형 키워드 암기가 핵심! 3개월이면 충분합니다.',
       certTag:'산업안전기사', likes:8, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8'], createdAt:daysAgo(5), comments:[] },
-    { board:'free', nickname:'회계퀸', title:'[합격수기] 전산회계1급 2주 벼락치기 합격',
+    { board:'success', nickname:'회계퀸', title:'[합격수기] 전산회계1급 2주 벼락치기 합격',
       content:'회계 전공이라 기초는 있었는데 실무 프로그램(KcLep)을 처음 써봐서 걱정했어요. 유튜브에서 실습 영상 따라하면서 매일 3시간씩 연습하니까 합격! 비전공자도 한달이면 가능할 거예요.',
       certTag:'전산회계1급', likes:6, likedBy:['u1','u2','u3','u4','u5','u6'], createdAt:daysAgo(7), comments:[] },
-    { board:'free', nickname:'토익마스터', title:'[합격수기] TOEIC 550→880 두달만에 올린 방법',
+    { board:'success', nickname:'토익마스터', title:'[합격수기] TOEIC 550→880 두달만에 올린 방법',
       content:'LC는 쉐도잉 매일 30분, RC는 파트5 문법 정리 + 파트7 지문 속독 연습했어요. 단어장은 해커스 보카 하루 50개씩. 시간 부족하면 파트5,6에서 점수 올리는 게 가장 효율적!',
       certTag:'TOEIC', likes:10, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10'], createdAt:daysAgo(3), comments:[] },
 
     // ===== 시험꿀팁 (5개) =====
-    { board:'free', nickname:'꿀팁장인', title:'[꿀팁] CBT 상시시험 꿀팁 모음 (컴활/워드/ITQ)',
+    { board:'tips', nickname:'꿀팁장인', title:'[꿀팁] CBT 상시시험 꿀팁 모음 (컴활/워드/ITQ)',
       content:'1.시험장 컴퓨터 환경이 다르니까 일찍 가서 적응하세요 2.엑셀 버전 확인 필수(2016/2019 다름) 3.실기는 저장 꼭꼭 자주 하세요 4.시간 부족하면 배점 높은 문제 먼저 5.계산기능 매크로 순서 헷갈리면 기출 패턴 외우세요',
       likes:8, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8'], createdAt:daysAgo(1), comments:[] },
-    { board:'free', nickname:'기출의신', title:'[꿀팁] 국가기술자격 기출문제 무료 사이트 정리',
+    { board:'tips', nickname:'기출의신', title:'[꿀팁] 국가기술자격 기출문제 무료 사이트 정리',
       content:'1.큐넷 공개문제(공식) 2.CBT 체험(대한상의) 3.기출문제닷컴 4.에듀윌 무료 기출 5.유튜브 해설강의. 기출 3회독이면 필기는 거의 합격권이에요. 오답노트 필수!',
       likes:14, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10','u11','u12','u13','u14'], createdAt:daysAgo(3),
       comments:[
         { nickname:'기출러', content:'기출문제닷컴 진짜 좋아요 추천!', createdAt:daysAgo(2) }
       ]},
-    { board:'free', nickname:'시간관리왕', title:'[꿀팁] 직장 다니면서 자격증 공부하는 법',
+    { board:'tips', nickname:'시간관리왕', title:'[꿀팁] 직장 다니면서 자격증 공부하는 법',
       content:'출퇴근 시간에 이론 강의 듣기, 점심시간 30분 기출풀기, 퇴근 후 1시간 실기연습. 이렇게 하면 하루 2시간은 확보돼요. 주말에 모의고사 풀면 3개월이면 기사급 합격 가능!',
       likes:11, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10','u11'], createdAt:daysAgo(5), comments:[] },
-    { board:'free', nickname:'응시료절약', title:'[꿀팁] 청년 응시료 50% 할인 받는 법 (만34세 이하)',
+    { board:'tips', nickname:'응시료절약', title:'[꿀팁] 청년 응시료 50% 할인 받는 법 (만34세 이하)',
       content:'Q-net에서 원서 접수할 때 청년할인 체크하면 끝! 기사 필기 19,400원→9,700원으로 줄어요. 연 3회까지 가능하고 별도 신청 없이 접수시 자동적용. 모르는 사람 진짜 많더라고요',
       likes:16, likedBy:['u1','u2','u3','u4','u5','u6','u7','u8','u9','u10','u11','u12','u13','u14','u15','u16'], createdAt:daysAgo(6),
       comments:[
         { nickname:'절약왕', content:'이거 진짜 꿀팁... 저 모르고 3번이나 정가 냈어요ㅠ', createdAt:daysAgo(5) },
         { nickname:'알뜰취준', content:'지자체 응시료 지원이랑 중복도 가능한 경우 있어요!', createdAt:daysAgo(5) }
       ]},
-    { board:'free', nickname:'필기만점러', title:'[꿀팁] 객관식 시험 찍기의 기술 (최후의 수단)',
+    { board:'tips', nickname:'필기만점러', title:'[꿀팁] 객관식 시험 찍기의 기술 (최후의 수단)',
       content:'1.모르는 문제는 3번이 통계적으로 정답 비율 높음 2.보기 중 \'모두/항상/절대\'가 들어간건 오답 확률 높음 3.가장 긴 보기가 정답인 경우 많음 4.직전에 본 정답 번호와 같은건 피하기. 물론 공부가 최고입니다ㅋㅋ',
       likes:7, likedBy:['u1','u2','u3','u4','u5','u6','u7'], createdAt:daysAgo(8), comments:[] },
 

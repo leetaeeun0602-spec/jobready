@@ -21,16 +21,16 @@
           "id": 1,
           "nickname": "워드마스터",
           "content": "저도 도전중인데 실기 팁 더 알려주세요!",
-          "createdAt": "2026-03-01T16:51:42.870Z"
+          "createdAt": "2026-03-01T16:58:08.664Z"
         },
         {
           "id": 2,
           "nickname": "사무직희망",
           "content": "축하드려요! 저도 다음달 시험인데 자신감 생기네요",
-          "createdAt": "2026-03-02T16:51:42.870Z"
+          "createdAt": "2026-03-02T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-03-01T16:51:42.870Z",
+      "createdAt": "2026-03-01T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -56,7 +56,7 @@
         "u5"
       ],
       "comments": [],
-      "createdAt": "2026-02-28T16:51:42.870Z",
+      "createdAt": "2026-02-28T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -88,16 +88,16 @@
           "id": 3,
           "nickname": "안전제일",
           "content": "저도 한번 떨어지고 두번째에 붙었어요! 포기하지 마세요!",
-          "createdAt": "2026-02-28T16:51:42.870Z"
+          "createdAt": "2026-02-28T16:58:08.664Z"
         },
         {
           "id": 4,
           "nickname": "전기지망생",
           "content": "계산문제 연습량이 중요하대요 화이팅!",
-          "createdAt": "2026-02-28T16:51:42.870Z"
+          "createdAt": "2026-02-28T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-27T16:51:42.870Z",
+      "createdAt": "2026-02-27T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -126,22 +126,22 @@
           "id": 5,
           "nickname": "분석가K",
           "content": "ADsP 먼저 추천! 범위가 좁아서 입문용으로 좋아요",
-          "createdAt": "2026-02-27T16:51:42.870Z"
+          "createdAt": "2026-02-27T16:58:08.664Z"
         },
         {
           "id": 6,
           "nickname": "SQL마스터",
           "content": "SQLD가 실무에서 더 많이 쓰여서 저는 SQLD 먼저 땄어요",
-          "createdAt": "2026-02-27T16:51:42.870Z"
+          "createdAt": "2026-02-27T16:58:08.664Z"
         },
         {
           "id": 7,
           "nickname": "빅데이터준비",
           "content": "둘 다 한달이면 가능해서 동시에 준비하는 것도 방법!",
-          "createdAt": "2026-02-28T16:51:42.870Z"
+          "createdAt": "2026-02-28T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-26T16:51:42.870Z",
+      "createdAt": "2026-02-26T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -164,7 +164,7 @@
         "u2"
       ],
       "comments": [],
-      "createdAt": "2026-02-25T16:51:42.870Z",
+      "createdAt": "2026-02-25T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -198,10 +198,10 @@
           "id": 8,
           "nickname": "탈공선배",
           "content": "저도 같은 루트 탔는데 지금 데이터분석가로 잘 다니고 있어요!",
-          "createdAt": "2026-02-25T16:51:42.870Z"
+          "createdAt": "2026-02-25T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-24T16:51:42.870Z",
+      "createdAt": "2026-02-24T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -229,10 +229,10 @@
           "id": 9,
           "nickname": "지원금헌터",
           "content": "각 시청 홈페이지에서 신청 가능해요! 안양시는 연 30만원까지 됩니다",
-          "createdAt": "2026-02-24T16:51:42.870Z"
+          "createdAt": "2026-02-24T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-23T16:51:42.870Z",
+      "createdAt": "2026-02-23T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -269,16 +269,16 @@
           "id": 10,
           "nickname": "서른다섯합격",
           "content": "저 36살에 전기기사 따고 취업했어요. 절대 안늦었습니다!",
-          "createdAt": "2026-02-23T16:51:42.870Z"
+          "createdAt": "2026-02-23T16:58:08.664Z"
         },
         {
           "id": 11,
           "nickname": "인사담당자",
           "content": "실무에서는 자격증+경험이 나이보다 중요해요. 자신감 가지세요!",
-          "createdAt": "2026-02-23T16:51:42.870Z"
+          "createdAt": "2026-02-23T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-22T16:51:42.870Z",
+      "createdAt": "2026-02-22T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -287,7 +287,7 @@
     },
     {
       "id": 9,
-      "board": "free",
+      "board": "success",
       "nickname": "합격자1호",
       "sessionId": "seed_9",
       "title": "[합격수기] 정보처리기사 실기 합격! 3개월 준비 후기",
@@ -314,7 +314,7 @@
         "u15"
       ],
       "comments": [],
-      "createdAt": "2026-02-28T16:51:42.870Z",
+      "createdAt": "2026-02-28T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -323,7 +323,7 @@
     },
     {
       "id": 10,
-      "board": "free",
+      "board": "success",
       "nickname": "전기합격맨",
       "sessionId": "seed_10",
       "title": "[합격수기] 전기기사 필기+실기 한번에 합격 후기",
@@ -350,10 +350,10 @@
           "id": 12,
           "nickname": "전기도전",
           "content": "KEC 어디서 정리된 자료 볼 수 있나요?",
-          "createdAt": "2026-02-27T16:51:42.870Z"
+          "createdAt": "2026-02-27T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-26T16:51:42.870Z",
+      "createdAt": "2026-02-26T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -362,7 +362,7 @@
     },
     {
       "id": 11,
-      "board": "free",
+      "board": "success",
       "nickname": "안전맨",
       "sessionId": "seed_11",
       "title": "[합격수기] 산업안전기사 합격! 현장 경력 없이도 가능해요",
@@ -382,7 +382,7 @@
         "u8"
       ],
       "comments": [],
-      "createdAt": "2026-02-25T16:51:42.870Z",
+      "createdAt": "2026-02-25T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -391,7 +391,7 @@
     },
     {
       "id": 12,
-      "board": "free",
+      "board": "success",
       "nickname": "회계퀸",
       "sessionId": "seed_12",
       "title": "[합격수기] 전산회계1급 2주 벼락치기 합격",
@@ -409,7 +409,7 @@
         "u6"
       ],
       "comments": [],
-      "createdAt": "2026-02-23T16:51:42.870Z",
+      "createdAt": "2026-02-23T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -418,7 +418,7 @@
     },
     {
       "id": 13,
-      "board": "free",
+      "board": "success",
       "nickname": "토익마스터",
       "sessionId": "seed_13",
       "title": "[합격수기] TOEIC 550→880 두달만에 올린 방법",
@@ -440,7 +440,7 @@
         "u10"
       ],
       "comments": [],
-      "createdAt": "2026-02-27T16:51:42.870Z",
+      "createdAt": "2026-02-27T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -449,7 +449,7 @@
     },
     {
       "id": 14,
-      "board": "free",
+      "board": "tips",
       "nickname": "꿀팁장인",
       "sessionId": "seed_14",
       "title": "[꿀팁] CBT 상시시험 꿀팁 모음 (컴활/워드/ITQ)",
@@ -469,7 +469,7 @@
         "u8"
       ],
       "comments": [],
-      "createdAt": "2026-03-01T16:51:42.870Z",
+      "createdAt": "2026-03-01T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -478,7 +478,7 @@
     },
     {
       "id": 15,
-      "board": "free",
+      "board": "tips",
       "nickname": "기출의신",
       "sessionId": "seed_15",
       "title": "[꿀팁] 국가기술자격 기출문제 무료 사이트 정리",
@@ -508,10 +508,10 @@
           "id": 13,
           "nickname": "기출러",
           "content": "기출문제닷컴 진짜 좋아요 추천!",
-          "createdAt": "2026-02-28T16:51:42.870Z"
+          "createdAt": "2026-02-28T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-27T16:51:42.870Z",
+      "createdAt": "2026-02-27T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -520,7 +520,7 @@
     },
     {
       "id": 16,
-      "board": "free",
+      "board": "tips",
       "nickname": "시간관리왕",
       "sessionId": "seed_16",
       "title": "[꿀팁] 직장 다니면서 자격증 공부하는 법",
@@ -543,7 +543,7 @@
         "u11"
       ],
       "comments": [],
-      "createdAt": "2026-02-25T16:51:42.870Z",
+      "createdAt": "2026-02-25T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -552,7 +552,7 @@
     },
     {
       "id": 17,
-      "board": "free",
+      "board": "tips",
       "nickname": "응시료절약",
       "sessionId": "seed_17",
       "title": "[꿀팁] 청년 응시료 50% 할인 받는 법 (만34세 이하)",
@@ -584,16 +584,16 @@
           "id": 14,
           "nickname": "절약왕",
           "content": "이거 진짜 꿀팁... 저 모르고 3번이나 정가 냈어요ㅠ",
-          "createdAt": "2026-02-25T16:51:42.870Z"
+          "createdAt": "2026-02-25T16:58:08.664Z"
         },
         {
           "id": 15,
           "nickname": "알뜰취준",
           "content": "지자체 응시료 지원이랑 중복도 가능한 경우 있어요!",
-          "createdAt": "2026-02-25T16:51:42.870Z"
+          "createdAt": "2026-02-25T16:58:08.664Z"
         }
       ],
-      "createdAt": "2026-02-24T16:51:42.870Z",
+      "createdAt": "2026-02-24T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -602,7 +602,7 @@
     },
     {
       "id": 18,
-      "board": "free",
+      "board": "tips",
       "nickname": "필기만점러",
       "sessionId": "seed_18",
       "title": "[꿀팁] 객관식 시험 찍기의 기술 (최후의 수단)",
@@ -621,7 +621,7 @@
         "u7"
       ],
       "comments": [],
-      "createdAt": "2026-02-22T16:51:42.870Z",
+      "createdAt": "2026-02-22T16:58:08.664Z",
       "maxMembers": 0,
       "method": "",
       "region": "",
@@ -645,7 +645,7 @@
         "u3"
       ],
       "comments": [],
-      "createdAt": "2026-02-28T16:51:42.870Z",
+      "createdAt": "2026-02-28T16:58:08.664Z",
       "maxMembers": 5,
       "method": "오프라인",
       "region": "서울",
@@ -680,7 +680,7 @@
         "u5"
       ],
       "comments": [],
-      "createdAt": "2026-02-26T16:51:42.870Z",
+      "createdAt": "2026-02-26T16:58:08.664Z",
       "maxMembers": 6,
       "method": "온라인",
       "region": "",
@@ -722,7 +722,7 @@
         "u4"
       ],
       "comments": [],
-      "createdAt": "2026-02-25T16:51:42.870Z",
+      "createdAt": "2026-02-25T16:58:08.664Z",
       "maxMembers": 5,
       "method": "오프라인",
       "region": "경기",
@@ -758,7 +758,7 @@
         "u2"
       ],
       "comments": [],
-      "createdAt": "2026-02-23T16:51:42.870Z",
+      "createdAt": "2026-02-23T16:58:08.664Z",
       "maxMembers": 4,
       "method": "온라인",
       "region": "",
