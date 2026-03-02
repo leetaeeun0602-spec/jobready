@@ -548,6 +548,22 @@
         font-size: 18px;
       }
     }
+    /* Mini Dashboard */
+    .iv-mini-dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:720px;margin:0 auto 20px;padding:0 24px;animation:fadeInUp .6s ease .2s both}
+    .iv-mini-item{background:#fff;border:1px solid #E5E8EB;border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s ease;text-decoration:none;color:inherit}
+    .iv-mini-item:hover{border-color:#3182F6;box-shadow:0 4px 12px rgba(49,130,246,.1);transform:translateY(-2px)}
+    .iv-mini-ring{position:relative;width:48px;height:48px;margin:0 auto 6px}
+    .iv-mini-ring svg{transform:rotate(-90deg)}
+    .iv-mini-ring-bg{fill:none;stroke:#E5E8EB;stroke-width:4}
+    .iv-mini-ring-fill{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
+    .iv-mini-ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+    .iv-mini-label{font-size:11px;font-weight:700;color:#8B95A1}
+    .iv-doc-tip{max-width:720px;margin:0 auto 24px;padding:0 24px}
+    .iv-doc-tip-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:#F0FFF4;border:1px solid rgba(52,199,89,.15);border-radius:14px}
+    .iv-doc-tip-icon{font-size:24px;flex-shrink:0}
+    .iv-doc-tip-text{font-size:13px;font-weight:600;color:#191F28;line-height:1.5}
+    .iv-doc-tip-text a{color:#34C759;text-decoration:underline;font-weight:700}
+    @media(max-width:480px){.iv-mini-dash{gap:8px;padding:0 16px}.iv-mini-item{padding:10px 6px}.iv-mini-ring{width:40px;height:40px}.iv-mini-ring-text{font-size:10px}.iv-mini-label{font-size:10px}}
   </style>
 </head>
 <body class="interview-page">
@@ -626,6 +642,26 @@
   </div>
 </section>
 
+<!-- Mini Dashboard -->
+<div class="iv-mini-dash" id="ivMiniDash">
+  <a href="/diagnosis.html" class="iv-mini-item">
+    <div class="iv-mini-ring"><svg width="48" height="48" viewBox="0 0 48 48"><circle class="iv-mini-ring-bg" cx="24" cy="24" r="20"/><circle class="iv-mini-ring-fill" id="ivMiniDiag" cx="24" cy="24" r="20" stroke="#3182F6" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="iv-mini-ring-text" id="ivMiniDiagT">-</div></div>
+    <div class="iv-mini-label">취업진단</div>
+  </a>
+  <a href="/roadmap.html" class="iv-mini-item">
+    <div class="iv-mini-ring"><svg width="48" height="48" viewBox="0 0 48 48"><circle class="iv-mini-ring-bg" cx="24" cy="24" r="20"/><circle class="iv-mini-ring-fill" id="ivMiniRoad" cx="24" cy="24" r="20" stroke="#4A5BFF" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="iv-mini-ring-text" id="ivMiniRoadT">0%</div></div>
+    <div class="iv-mini-label">로드맵</div>
+  </a>
+  <a href="/documents.html" class="iv-mini-item">
+    <div class="iv-mini-ring"><svg width="48" height="48" viewBox="0 0 48 48"><circle class="iv-mini-ring-bg" cx="24" cy="24" r="20"/><circle class="iv-mini-ring-fill" id="ivMiniDoc" cx="24" cy="24" r="20" stroke="#34C759" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="iv-mini-ring-text" id="ivMiniDocT">0%</div></div>
+    <div class="iv-mini-label">서류완성</div>
+  </a>
+  <a href="#" class="iv-mini-item" onclick="event.preventDefault()">
+    <div class="iv-mini-ring"><svg width="48" height="48" viewBox="0 0 48 48"><circle class="iv-mini-ring-bg" cx="24" cy="24" r="20"/><circle class="iv-mini-ring-fill" id="ivMiniIv" cx="24" cy="24" r="20" stroke="#FF9500" stroke-dasharray="125.66" stroke-dashoffset="125.66"/></svg><div class="iv-mini-ring-text" id="ivMiniIvT">0%</div></div>
+    <div class="iv-mini-label">면접준비</div>
+  </a>
+</div>
+
 <!-- ===== Main ===== -->
 <div class="iv-container">
 
@@ -671,6 +707,14 @@
   </div>
 
   <div class="iv-bottom-space"></div>
+</div>
+
+<!-- Document Tip -->
+<div class="iv-doc-tip">
+  <div class="iv-doc-tip-card">
+    <div class="iv-doc-tip-icon">💡</div>
+    <div class="iv-doc-tip-text">서류 완성 후 면접 준비하면 더 효과적이에요! <a href="/documents.html">서류관리 바로가기 &rarr;</a></div>
+  </div>
 </div>
 
 <!-- Scroll to Top -->
@@ -1161,6 +1205,52 @@ function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classL
   renderCommon();
   renderJobQuestions();
   updateProgress();
+
+  // ===== Mini Dashboard =====
+  (function updateIvMiniDash(){
+    var CIRC = 2 * Math.PI * 20; // ~125.66
+    function setR(id, pct, tid, txt){
+      var r = document.getElementById(id);
+      var t = document.getElementById(tid);
+      if(r) r.style.strokeDashoffset = CIRC - (CIRC * Math.min(pct,100) / 100);
+      if(t) t.textContent = txt;
+    }
+    // Diagnosis
+    try{
+      var dg = JSON.parse(localStorage.getItem('jobready_diagnosis_result'));
+      if(dg && dg.score !== undefined) setR('ivMiniDiag',100,'ivMiniDiagT',dg.score+'점');
+      else setR('ivMiniDiag',0,'ivMiniDiagT','미완료');
+    }catch(e){setR('ivMiniDiag',0,'ivMiniDiagT','미완료');}
+    // Roadmap
+    try{
+      var rp = JSON.parse(localStorage.getItem('jobready_roadmap_progress'));
+      if(rp){var ks=Object.keys(rp),dn=ks.filter(function(k){return rp[k]}).length,pp=ks.length?Math.round(dn/ks.length*100):0;setR('ivMiniRoad',pp,'ivMiniRoadT',pp+'%');}
+      else setR('ivMiniRoad',0,'ivMiniRoadT','0%');
+    }catch(e){setR('ivMiniRoad',0,'ivMiniRoadT','0%');}
+    // Documents
+    try{
+      var dc = JSON.parse(localStorage.getItem('jobready_documents_v2'));
+      if(dc && dc.resume){
+        var rr=dc.resume,tot=7,fl=0,pp=rr.personal||{};
+        if(pp.name&&pp.phone&&pp.email)fl++;
+        if(rr.education&&rr.education.length&&rr.education.some(function(e){return e.school}))fl++;
+        if(rr.career&&rr.career.length&&rr.career.some(function(c){return c.company}))fl++;
+        if(rr.certs&&rr.certs.length&&rr.certs.some(function(c){return c.name}))fl++;
+        if(rr.languages&&rr.languages.length&&rr.languages.some(function(l){return l.score}))fl++;
+        if(rr.awards&&rr.awards.length&&rr.awards.some(function(a){return a.title}))fl++;
+        if(rr.summary&&rr.summary.length>=50)fl++;
+        var dp=Math.round(fl/tot*100);setR('ivMiniDoc',dp,'ivMiniDocT',dp+'%');
+      } else setR('ivMiniDoc',0,'ivMiniDocT','0%');
+    }catch(e){setR('ivMiniDoc',0,'ivMiniDocT','0%');}
+    // Interview (own)
+    var ivPct = 0;
+    try{
+      var answered = getGlobalAnswered();
+      var total = getGlobalTotal();
+      ivPct = total > 0 ? Math.round(answered/total*100) : 0;
+    }catch(e){}
+    setR('ivMiniIv',ivPct,'ivMiniIvT',ivPct+'%');
+  })();
 
 })();
 </script>

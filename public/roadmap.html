@@ -904,6 +904,22 @@
         html += '<span class="step-badge ' + badgeClass + '">' + badgeText + '</span>';
         html += '<span class="step-duration">&#128337; ' + step.duration + '</span>';
         html += '</div>';
+        // Related page links
+        if (step.type === 'cert') {
+          html += '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
+          html += '<a href="/#certificates" style="font-size:12px;font-weight:700;color:#3182F6;text-decoration:none;padding:5px 12px;background:rgba(49,130,246,.06);border-radius:8px;transition:all .2s ease">📋 자격증 정보</a>';
+          html += '<a href="/roi.html" style="font-size:12px;font-weight:700;color:#4A5BFF;text-decoration:none;padding:5px 12px;background:rgba(74,91,255,.06);border-radius:8px;transition:all .2s ease">📊 ROI 분석</a>';
+          html += '</div>';
+        } else if (step.id === 'portfolio') {
+          html += '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
+          html += '<a href="/documents.html" style="font-size:12px;font-weight:700;color:#34C759;text-decoration:none;padding:5px 12px;background:rgba(52,199,89,.06);border-radius:8px;transition:all .2s ease">📄 서류 준비하기</a>';
+          html += '</div>';
+        } else if (step.id === 'apply') {
+          html += '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
+          html += '<a href="/documents.html" style="font-size:12px;font-weight:700;color:#34C759;text-decoration:none;padding:5px 12px;background:rgba(52,199,89,.06);border-radius:8px;transition:all .2s ease">📄 서류 관리</a>';
+          html += '<a href="/interview.html" style="font-size:12px;font-weight:700;color:#FF9500;text-decoration:none;padding:5px 12px;background:rgba(255,149,0,.06);border-radius:8px;transition:all .2s ease">🎤 면접 연습</a>';
+          html += '</div>';
+        }
         html += '</div>';
         html += '</div>';
 

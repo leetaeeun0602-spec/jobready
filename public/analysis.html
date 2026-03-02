@@ -861,6 +861,14 @@
             <div class="chart-box"><canvas id="salary-chart-${job.id}"></canvas></div>
             <div class="chart-box"><canvas id="trend-chart-${job.id}"></canvas></div>
           </div>
+          <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+            <a href="/diagnosis.html" style="flex:1;min-width:180px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;background:#3182F6;color:#fff;border-radius:12px;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s ease" onmouseover="this.style.background='#1B6AE0'" onmouseout="this.style.background='#3182F6'">
+              🎯 이 직무 진단받기
+            </a>
+            <a href="/roi.html" style="flex:1;min-width:180px;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;background:#fff;color:#3182F6;border:1px solid #3182F6;border-radius:12px;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s ease" onmouseover="this.style.background='#F0F7FF'" onmouseout="this.style.background='#fff'">
+              📊 필요 자격증 ROI 보기
+            </a>
+          </div>
         </div>
       `;
 
