@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서비스소개 - JobReady</title>
+  <meta name="description" content="JobReady 서비스를 소개합니다. 취업 준비생의 불확실함을 데이터로 해결합니다.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: #FFFFFF; color: #191F28; }
+    .about-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 140px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .about-hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .about-hero p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.8);
+      position: relative;
+    }
+    .about-section {
+      padding: 80px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .about-section-title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .about-section-desc {
+      font-size: 15px;
+      color: #4E5968;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .service-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .service-card {
+      background: #fff;
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-color: #CED4DA;
+    }
+    .service-card-icon { font-size: 40px; margin-bottom: 16px; }
+    .service-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .service-card p {
+      font-size: 14px;
+      color: #8B95A1;
+      line-height: 1.7;
+    }
+    .team-section {
+      background: #F8F9FA;
+      padding: 80px 24px;
+    }
+    .team-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .team-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid #E5E8EB;
+    }
+    .team-card h3 {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .team-card p {
+      font-size: 15px;
+      color: #4E5968;
+      line-height: 1.8;
+    }
+    .history-section {
+      padding: 80px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #E5E8EB;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+      padding-left: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #3182F6;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px #3182F6;
+    }
+    .timeline-date {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3182F6;
+      margin-bottom: 4px;
+    }
+    .timeline-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #191F28;
+    }
+    @media(max-width:768px) {
+      .service-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">자격증정보 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#certificates">자격증가이드</a>
+            <a href="/#calendar">시험일정</a>
+            <a href="/roi.html">자격증ROI</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">취업준비 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/diagnosis.html">취업진단</a>
+            <a href="/analysis.html">직무분석</a>
+            <a href="/roadmap.html">로드맵</a>
+            <a href="/documents.html">서류체크</a>
+            <a href="/interview.html">면접준비</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">커뮤니티 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#community">자유게시판</a>
+            <a href="/#ranking">출석랭킹</a>
+            <a href="/#community">스터디모집</a>
+          </div>
+        </div>
+      </div>
+      <button class="nav-hamburger" onclick="openMobileMenu()">☰</button>
+    </div>
+  </nav>
+  <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-close"><button onclick="closeMobileMenu()">✕</button></div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">자격증정보</div>
+      <a href="/#certificates">자격증가이드</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/roi.html">자격증ROI</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">취업준비</div>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html">로드맵</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html">면접준비</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">커뮤니티</div>
+      <a href="/#community">자유게시판</a>
+      <a href="/#ranking">출석랭킹</a>
+      <a href="/#community">스터디모집</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="about-hero">
+    <h1>취업 준비생의 불확실함을<br>데이터로 해결합니다</h1>
+    <p>JobReady는 체계적인 취업 준비를 위한 올인원 플랫폼입니다</p>
+  </section>
+
+  <!-- 제공 서비스 -->
+  <div class="about-section">
+    <h2 class="about-section-title">제공 서비스</h2>
+    <p class="about-section-desc">취업 준비에 필요한 모든 기능을 하나의 플랫폼에서 제공합니다</p>
+    <div class="service-cards">
+      <div class="service-card">
+        <div class="service-card-icon">📚</div>
+        <h3>자격증 정보</h3>
+        <p>5대 분야 32개 자격증의 상세 정보를 한눈에 확인하세요</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card-icon">📅</div>
+        <h3>시험일정</h3>
+        <p>접수일, 시험일, 발표일을 캘린더에서 한 번에 관리하세요</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card-icon">🎯</div>
+        <h3>취업진단</h3>
+        <p>5단계 맞춤 진단으로 나에게 딱 맞는 자격증을 추천받으세요</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card-icon">📊</div>
+        <h3>직무분석</h3>
+        <p>주요 직무별 요구 역량과 추천 자격증을 분석합니다</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card-icon">📄</div>
+        <h3>서류/면접 준비</h3>
+        <p>이력서, 자기소개서 체크리스트와 면접 질문은행을 제공합니다</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card-icon">💬</div>
+        <h3>커뮤니티</h3>
+        <p>취업 준비생들과 정보를 나누고 스터디를 모집하세요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 운영팀 -->
+  <div class="team-section">
+    <div class="team-inner">
+      <h2 class="about-section-title">운영팀 소개</h2>
+      <p class="about-section-desc">더 나은 취업 준비 경험을 만들어갑니다</p>
+      <div class="team-card">
+        <h3>후스튜디오</h3>
+        <p>
+          경기도 수원에 기반을 둔 후스튜디오는<br>
+          취업 준비생을 위한 데이터 기반 커리어 플랫폼을 운영하고 있습니다.<br><br>
+          불확실한 취업 준비 과정을 데이터와 기술로 체계화하여,<br>
+          누구나 효율적으로 커리어를 준비할 수 있도록 돕겠습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 연혁 -->
+  <div class="history-section">
+    <h2 class="about-section-title">연혁</h2>
+    <p class="about-section-desc">JobReady의 발자취</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">2026.03</div>
+        <div class="timeline-text">취업진단 시스템 오픈</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026.03</div>
+        <div class="timeline-text">자격증 ROI 분석 도입</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2026.03</div>
+        <div class="timeline-text">JobReady 서비스 런칭</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/about.html">서비스소개</a>
+          <a href="/terms.html">이용약관</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/contact.html">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="/privacy.html">개인정보처리방침</a><span>|</span><a href="/terms.html">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function openMobileMenu() {
+      document.getElementById('nav-mobile-overlay')?.classList.add('open');
+      document.getElementById('nav-mobile-menu')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      document.getElementById('nav-mobile-overlay')?.classList.remove('open');
+      document.getElementById('nav-mobile-menu')?.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>

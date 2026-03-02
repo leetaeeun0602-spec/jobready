@@ -2,6 +2,18 @@
 //  JobReady - 리뉴얼 v2 (main.js)
 // =============================================
 
+// ===== Mobile Menu =====
+function openMobileMenu() {
+  document.getElementById('nav-mobile-overlay')?.classList.add('open');
+  document.getElementById('nav-mobile-menu')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileMenu() {
+  document.getElementById('nav-mobile-overlay')?.classList.remove('open');
+  document.getElementById('nav-mobile-menu')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 // ===== 섹터 데이터 =====
 const SECTORS = [
   {

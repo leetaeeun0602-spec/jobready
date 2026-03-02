@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개인정보처리방침 - JobReady</title>
+  <meta name="description" content="JobReady 개인정보처리방침입니다.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: #FFFFFF; color: #191F28; }
+    .legal-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 140px 24px 60px;
+      text-align: center;
+    }
+    .legal-hero h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      position: relative;
+    }
+    .legal-content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .legal-content h2 {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 40px 0 16px;
+      letter-spacing: -0.5px;
+      color: #191F28;
+    }
+    .legal-content h2:first-of-type { margin-top: 0; }
+    .legal-content p {
+      font-size: 15px;
+      color: #4E5968;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .legal-content ol, .legal-content ul {
+      padding-left: 24px;
+      margin-bottom: 12px;
+    }
+    .legal-content li {
+      font-size: 15px;
+      color: #4E5968;
+      line-height: 1.8;
+      margin-bottom: 4px;
+    }
+    .legal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+    .legal-table th, .legal-table td {
+      border: 1px solid #E5E8EB;
+      padding: 12px 16px;
+      text-align: left;
+    }
+    .legal-table th {
+      background: #F8F9FA;
+      font-weight: 700;
+      color: #191F28;
+    }
+    .legal-table td {
+      color: #4E5968;
+    }
+    .legal-meta {
+      font-size: 13px;
+      color: #8B95A1;
+      text-align: right;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #E5E8EB;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">자격증정보 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#certificates">자격증가이드</a>
+            <a href="/#calendar">시험일정</a>
+            <a href="/roi.html">자격증ROI</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">취업준비 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/diagnosis.html">취업진단</a>
+            <a href="/analysis.html">직무분석</a>
+            <a href="/roadmap.html">로드맵</a>
+            <a href="/documents.html">서류체크</a>
+            <a href="/interview.html">면접준비</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">커뮤니티 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#community">자유게시판</a>
+            <a href="/#ranking">출석랭킹</a>
+            <a href="/#community">스터디모집</a>
+          </div>
+        </div>
+      </div>
+      <button class="nav-hamburger" onclick="openMobileMenu()">☰</button>
+    </div>
+  </nav>
+  <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-close"><button onclick="closeMobileMenu()">✕</button></div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">자격증정보</div>
+      <a href="/#certificates">자격증가이드</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/roi.html">자격증ROI</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">취업준비</div>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html">로드맵</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html">면접준비</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">커뮤니티</div>
+      <a href="/#community">자유게시판</a>
+      <a href="/#ranking">출석랭킹</a>
+      <a href="/#community">스터디모집</a>
+    </div>
+  </div>
+
+  <section class="legal-hero">
+    <h1>개인정보처리방침</h1>
+  </section>
+
+  <div class="legal-content">
+    <p>후스튜디오(이하 "회사")는 개인정보보호법에 따라 이용자의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있습니다.</p>
+
+    <h2>1. 개인정보의 수집 항목 및 수집 방법</h2>
+    <p>회사는 회원가입, 서비스 이용 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.</p>
+    <table class="legal-table">
+      <thead>
+        <tr>
+          <th>수집 항목</th>
+          <th>수집 목적</th>
+          <th>보유 기간</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>이름, 전화번호, 생년월일</td>
+          <td>회원 식별 및 가입 관리</td>
+          <td>회원 탈퇴 시 즉시 파기</td>
+        </tr>
+        <tr>
+          <td>서비스 이용 기록, 접속 로그</td>
+          <td>서비스 제공 및 개선</td>
+          <td>회원 탈퇴 시 즉시 파기</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. 개인정보의 수집 및 이용 목적</h2>
+    <ol>
+      <li>회원 관리: 회원 가입 의사 확인, 본인 확인, 회원자격 유지 및 관리</li>
+      <li>서비스 제공: 취업진단, 직무분석, 로드맵 생성, 자격증 정보 제공 등 서비스 이용에 따른 본인 확인</li>
+      <li>서비스 개선: 서비스 이용 통계, 서비스 개선을 위한 분석</li>
+    </ol>
+
+    <h2>3. 개인정보의 보유 및 이용 기간</h2>
+    <p>회사는 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관계 법령의 규정에 의해 보존할 필요가 있는 경우 일정 기간 동안 개인정보를 보관합니다.</p>
+    <ul>
+      <li>회원 탈퇴 시: 즉시 파기</li>
+      <li>전자상거래 등에서의 소비자 보호에 관한 법률에 따른 보존: 계약 또는 청약철회 등에 관한 기록 5년, 소비자 불만 또는 분쟁처리에 관한 기록 3년</li>
+    </ul>
+
+    <h2>4. 개인정보의 제3자 제공</h2>
+    <p>회사는 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만, 다음의 경우에는 예외로 합니다.</p>
+    <ol>
+      <li>이용자가 사전에 동의한 경우</li>
+      <li>법령의 규정에 의하거나, 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우</li>
+    </ol>
+
+    <h2>5. 개인정보의 파기 절차 및 방법</h2>
+    <p>회사는 개인정보 보유 기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.</p>
+    <ul>
+      <li>전자적 파일 형태: 복구 및 재생이 불가능한 방법으로 영구 삭제</li>
+      <li>종이 문서: 분쇄기로 분쇄하거나 소각하여 파기</li>
+    </ul>
+
+    <h2>6. 이용자의 권리와 행사 방법</h2>
+    <ol>
+      <li>이용자는 언제든지 자신의 개인정보를 조회하거나 수정할 수 있습니다.</li>
+      <li>이용자는 언제든지 개인정보 처리의 정지를 요청할 수 있으며, 회원 탈퇴를 통해 개인정보의 수집 및 이용에 대한 동의를 철회할 수 있습니다.</li>
+    </ol>
+
+    <h2>7. 개인정보 보호책임자</h2>
+    <p>회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만 처리 및 피해 구제를 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+    <ul>
+      <li>개인정보 보호책임자: 이태은</li>
+      <li>소속: 후스튜디오</li>
+      <li>주소: 경기 수원시 장안구 경수대로 935 203호(송죽동)</li>
+    </ul>
+
+    <h2>8. 개인정보처리방침 변경</h2>
+    <p>이 개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경 내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 서비스 내 공지사항을 통하여 고지할 것입니다.</p>
+
+    <p class="legal-meta">시행일자: 2026년 3월 1일</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/about.html">서비스소개</a>
+          <a href="/terms.html">이용약관</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/contact.html">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="/privacy.html">개인정보처리방침</a><span>|</span><a href="/terms.html">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function openMobileMenu() {
+      document.getElementById('nav-mobile-overlay')?.classList.add('open');
+      document.getElementById('nav-mobile-menu')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      document.getElementById('nav-mobile-overlay')?.classList.remove('open');
+      document.getElementById('nav-mobile-menu')?.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>

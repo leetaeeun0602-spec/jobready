@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -19,6 +21,35 @@ app.use('/api/attendance', attendanceRouter);
 app.use('/api/diagnosis', diagnosisRouter);
 app.use('/api/analysis', analysisRouter);
 app.use('/api/roadmap', roadmapRouter);
+
+// ===== Contact API =====
+const CONTACTS_FILE = path.join(__dirname, 'data', 'contacts.json');
+
+app.post('/api/contact', (req, res) => {
+  const { name, email, type, message } = req.body;
+  if (!name || !email || !type || !message) {
+    return res.status(400).json({ error: '모든 항목을 입력해주세요' });
+  }
+
+  let contacts = [];
+  try {
+    if (fs.existsSync(CONTACTS_FILE)) {
+      contacts = JSON.parse(fs.readFileSync(CONTACTS_FILE, 'utf-8'));
+    }
+  } catch { contacts = []; }
+
+  contacts.push({
+    id: Date.now(),
+    name,
+    email,
+    type,
+    message,
+    createdAt: new Date().toISOString()
+  });
+
+  fs.writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2), 'utf-8');
+  res.json({ success: true });
+});
 
 app.listen(PORT, () => {
   console.log(`==========================================`);

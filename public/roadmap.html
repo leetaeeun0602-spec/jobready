@@ -599,19 +599,60 @@
     <div class="nav-inner">
       <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
       <div class="nav-links">
-        <a href="/#certificates">자격증</a>
-        <a href="/#calendar">시험일정</a>
-        <a href="/diagnosis.html">취업진단</a>
-        <a href="/analysis.html">직무분석</a>
-        <a href="/roadmap.html" class="nav-link-active">로드맵</a>
-        <a href="/roi.html">자격증ROI</a>
-        <a href="/documents.html">서류체크</a>
-        <a href="/interview.html">면접준비</a>
-        <a href="/#ranking">랭킹</a>
-        <a href="/#community">커뮤니티</a>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">자격증정보 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#certificates">자격증가이드</a>
+            <a href="/#calendar">시험일정</a>
+            <a href="/roi.html">자격증ROI</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">취업준비 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/diagnosis.html">취업진단</a>
+            <a href="/analysis.html">직무분석</a>
+            <a href="/roadmap.html" class="nav-link-active">로드맵</a>
+            <a href="/documents.html">서류체크</a>
+            <a href="/interview.html">면접준비</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">커뮤니티 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#community">자유게시판</a>
+            <a href="/#ranking">출석랭킹</a>
+            <a href="/#community">스터디모집</a>
+          </div>
+        </div>
       </div>
+      <button class="nav-hamburger" onclick="openMobileMenu()">☰</button>
     </div>
   </nav>
+  <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-close"><button onclick="closeMobileMenu()">✕</button></div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">자격증정보</div>
+      <a href="/#certificates">자격증가이드</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/roi.html">자격증ROI</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">취업준비</div>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html" class="nav-link-active">로드맵</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html">면접준비</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">커뮤니티</div>
+      <a href="/#community">자유게시판</a>
+      <a href="/#ranking">출석랭킹</a>
+      <a href="/#community">스터디모집</a>
+    </div>
+  </div>
 
   <!-- No Result State -->
   <div class="no-result" id="noResult">
@@ -729,16 +770,16 @@
         </div>
         <div class="footer-col">
           <h4>고객지원</h4>
-          <a href="/#about">서비스소개</a>
-          <a href="#">이용약관</a>
-          <a href="#">개인정보처리방침</a>
-          <a href="#">문의하기</a>
+          <a href="/about.html">서비스소개</a>
+          <a href="/terms.html">이용약관</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/contact.html">문의하기</a>
         </div>
       </div>
       <div class="footer-divider"></div>
       <div class="footer-business">
         <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
-        <div class="footer-business-links"><a href="#">개인정보처리방침</a><span>|</span><a href="#">이용약관</a></div>
+        <div class="footer-business-links"><a href="/privacy.html">개인정보처리방침</a><span>|</span><a href="/terms.html">이용약관</a></div>
         <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
       </div>
     </div>
