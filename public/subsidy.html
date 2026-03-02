@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시험 지원금 정보 - JobReady</title>
+  <meta name="description" content="자격증 시험 응시료 지원금 정보를 한눈에 확인하세요. 국가기술자격 감면, 지역별 청년 지원사업까지.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: #FFFFFF; color: #191F28; }
+    .subsidy-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 140px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .subsidy-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .subsidy-hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .subsidy-hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.75);
+      position: relative;
+    }
+
+    /* Filter */
+    .subsidy-filter-section {
+      background: #F8F9FA;
+      padding: 32px 24px;
+      border-bottom: 1px solid #E5E8EB;
+    }
+    .subsidy-filter-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .subsidy-filter-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .subsidy-filter-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .subsidy-filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .subsidy-filter-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #8B95A1;
+    }
+    .subsidy-filter-select, .subsidy-filter-input {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #E5E8EB;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      color: #191F28;
+      font-family: inherit;
+      outline: none;
+      min-width: 140px;
+    }
+    .subsidy-filter-select:focus, .subsidy-filter-input:focus {
+      border-color: #3182F6;
+      box-shadow: 0 0 0 3px rgba(49,130,246,0.1);
+    }
+    .subsidy-filter-btn {
+      padding: 10px 24px;
+      border-radius: 10px;
+      border: none;
+      background: #3182F6;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .subsidy-filter-btn:hover { background: #1B6DE8; }
+    .subsidy-filter-reset {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid #E5E8EB;
+      background: #fff;
+      color: #4E5968;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .subsidy-filter-reset:hover { background: #F8F9FA; }
+
+    /* Cards */
+    .subsidy-cards-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+    .subsidy-count {
+      font-size: 14px;
+      color: #8B95A1;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .subsidy-count strong {
+      color: #3182F6;
+    }
+    .subsidy-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .subsidy-card {
+      background: #fff;
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .subsidy-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-color: #CED4DA;
+    }
+    .subsidy-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .subsidy-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .subsidy-card-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .subsidy-card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .subsidy-tag {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .subsidy-tag.region { background: rgba(49,130,246,0.08); color: #3182F6; }
+    .subsidy-tag.age { background: rgba(234,179,8,0.1); color: #d97706; }
+    .subsidy-tag.type { background: rgba(5,150,105,0.1); color: #059669; }
+    .subsidy-card-info {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 12px 16px;
+      margin-bottom: 20px;
+    }
+    .subsidy-info-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8B95A1;
+    }
+    .subsidy-info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4E5968;
+      line-height: 1.6;
+    }
+    .subsidy-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: rgba(49,130,246,0.08);
+      color: #3182F6;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .subsidy-card-link:hover { background: rgba(49,130,246,0.15); }
+    .subsidy-empty {
+      text-align: center;
+      padding: 60px 24px;
+      color: #8B95A1;
+    }
+    .subsidy-empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .subsidy-empty p { font-size: 15px; font-weight: 600; }
+    @media(max-width:768px) {
+      .subsidy-filter-row { flex-direction: column; }
+      .subsidy-filter-select, .subsidy-filter-input { min-width: 100%; }
+      .subsidy-card-info { grid-template-columns: 80px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">자격증정보 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#certificates">자격증가이드</a>
+            <a href="/#calendar">시험일정</a>
+            <a href="/roi.html">자격증ROI</a>
+            <a href="/subsidy.html" class="nav-link-active">시험지원금</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">취업준비 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/diagnosis.html">취업진단</a>
+            <a href="/analysis.html">직무분석</a>
+            <a href="/roadmap.html">로드맵</a>
+            <a href="/documents.html">서류체크</a>
+            <a href="/interview.html">면접준비</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">커뮤니티 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#community">자유게시판</a>
+            <a href="/#ranking">출석랭킹</a>
+            <a href="/study.html">스터디모집</a>
+          </div>
+        </div>
+      </div>
+      <button class="nav-hamburger" onclick="openMobileMenu()">☰</button>
+    </div>
+  </nav>
+  <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-close"><button onclick="closeMobileMenu()">✕</button></div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">자격증정보</div>
+      <a href="/#certificates">자격증가이드</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/roi.html">자격증ROI</a>
+      <a href="/subsidy.html" class="nav-link-active">시험지원금</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">취업준비</div>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html">로드맵</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html">면접준비</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">커뮤니티</div>
+      <a href="/#community">자유게시판</a>
+      <a href="/#ranking">출석랭킹</a>
+      <a href="/study.html">스터디모집</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="subsidy-hero">
+    <h1>시험 지원금 정보</h1>
+    <p>자격증 응시료 지원금, 놓치지 마세요</p>
+  </section>
+
+  <!-- Filter -->
+  <div class="subsidy-filter-section">
+    <div class="subsidy-filter-inner">
+      <div class="subsidy-filter-title">나에게 해당하는 지원금 찾기</div>
+      <div class="subsidy-filter-row">
+        <div class="subsidy-filter-group">
+          <span class="subsidy-filter-label">지역</span>
+          <select class="subsidy-filter-select" id="filter-region">
+            <option value="">전체</option>
+            <option value="전국">전국</option>
+            <option value="서울">서울</option>
+            <option value="경기">경기</option>
+            <option value="인천">인천</option>
+          </select>
+        </div>
+        <div class="subsidy-filter-group">
+          <span class="subsidy-filter-label">나이</span>
+          <input type="number" class="subsidy-filter-input" id="filter-age" placeholder="만 나이" min="15" max="65" style="width:100px">
+        </div>
+        <div class="subsidy-filter-group">
+          <span class="subsidy-filter-label">취업 상태</span>
+          <select class="subsidy-filter-select" id="filter-employed">
+            <option value="">전체</option>
+            <option value="미취업">미취업</option>
+            <option value="재직">재직 중</option>
+          </select>
+        </div>
+        <button class="subsidy-filter-btn" onclick="applyFilter()">검색</button>
+        <button class="subsidy-filter-reset" onclick="resetFilter()">초기화</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="subsidy-cards-section">
+    <div class="subsidy-count" id="subsidy-count"></div>
+    <div class="subsidy-cards" id="subsidy-cards"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/study.html">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/about.html">서비스소개</a>
+          <a href="/terms.html">이용약관</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/contact.html">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="/privacy.html">개인정보처리방침</a><span>|</span><a href="/terms.html">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Mobile Menu =====
+    function openMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.add('open');document.getElementById('nav-mobile-menu')?.classList.add('open');document.body.style.overflow='hidden';}
+    function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.remove('open');document.getElementById('nav-mobile-menu')?.classList.remove('open');document.body.style.overflow='';}
+
+    // ===== Subsidy Data =====
+    const SUBSIDIES = [
+      {
+        id: 'national',
+        title: '국가기술자격 응시료 50% 감면',
+        icon: '🏛️',
+        iconBg: 'rgba(49,130,246,0.1)',
+        region: '전국',
+        ageMin: 0, ageMax: 34,
+        employed: '무관',
+        tags: [
+          { text: '전국', cls: 'region' },
+          { text: '만 34세 이하', cls: 'age' },
+          { text: '국가기술자격', cls: 'type' }
+        ],
+        info: [
+          { label: '대상', value: '만 34세 이하 청년 누구나' },
+          { label: '지원내용', value: '한국산업인력공단 시행 국가기술자격시험 응시료 50% 지원' },
+          { label: '한도', value: '1인당 연간 3회' },
+          { label: '신청방법', value: 'Q-net 원서접수 시 자동적용 체크' },
+          { label: '예시', value: '기사 필기 19,400원 → 9,700원\n기능사 필기 14,500원 → 7,250원' }
+        ],
+        link: 'https://www.q-net.or.kr',
+        linkText: 'Q-net 바로가기'
+      },
+      {
+        id: 'seoul',
+        title: '서울시 청년 어학·자격시험 응시료 지원',
+        icon: '🏙️',
+        iconBg: 'rgba(239,68,68,0.1)',
+        region: '서울',
+        ageMin: 18, ageMax: 39,
+        employed: '미취업',
+        tags: [
+          { text: '서울', cls: 'region' },
+          { text: '18~39세', cls: 'age' },
+          { text: '미취업 청년', cls: 'type' }
+        ],
+        info: [
+          { label: '대상', value: '서울 거주 18~39세 미취업 청년' },
+          { label: '지원내용', value: '어학/자격시험 응시료 실비 지원' },
+          { label: '한도', value: '생애 최대 10만원' },
+          { label: '신청방법', value: '각 구청 홈페이지에서 신청' }
+        ],
+        link: 'https://youth.seoul.go.kr',
+        linkText: '서울청년포털 바로가기'
+      },
+      {
+        id: 'incheon',
+        title: '인천시 청년 자격증 응시료 지원',
+        icon: '⚓',
+        iconBg: 'rgba(6,182,212,0.1)',
+        region: '인천',
+        ageMin: 18, ageMax: 39,
+        employed: '미취업',
+        tags: [
+          { text: '인천', cls: 'region' },
+          { text: '18~39세', cls: 'age' },
+          { text: '미취업 청년', cls: 'type' }
+        ],
+        info: [
+          { label: '대상', value: '인천 거주 18~39세 미취업 청년' },
+          { label: '지원내용', value: '자격증/어학시험 응시료 지원' },
+          { label: '한도', value: '연 최대 10만원' },
+          { label: '신청기간', value: '2026.02 ~ 2026.11' }
+        ],
+        link: 'https://www.incheon.go.kr',
+        linkText: '인천시 홈페이지 바로가기'
+      },
+      {
+        id: 'gyeonggi',
+        title: '경기도 청년 어학·자격시험 응시료 지원',
+        icon: '🌿',
+        iconBg: 'rgba(5,150,105,0.1)',
+        region: '경기',
+        ageMin: 18, ageMax: 39,
+        employed: '미취업',
+        tags: [
+          { text: '경기도', cls: 'region' },
+          { text: '청년', cls: 'age' },
+          { text: '각 시별 상이', cls: 'type' }
+        ],
+        info: [
+          { label: '대상', value: '경기도 거주 청년' },
+          { label: '지원내용', value: '각 시별 상이 (안양시 연 최대 30만원 등)' },
+          { label: '신청방법', value: '각 시청 홈페이지에서 신청' }
+        ],
+        link: 'https://www.gg.go.kr',
+        linkText: '경기도 홈페이지 바로가기'
+      },
+      {
+        id: 'work',
+        title: '국민취업지원제도',
+        icon: '💼',
+        iconBg: 'rgba(234,179,8,0.1)',
+        region: '전국',
+        ageMin: 15, ageMax: 69,
+        employed: '미취업',
+        tags: [
+          { text: '전국', cls: 'region' },
+          { text: '미취업자', cls: 'type' }
+        ],
+        info: [
+          { label: '대상', value: '미취업자 구직활동 지원' },
+          { label: '지원내용', value: '월 50만원 구직촉진수당 6개월 + 취업활동비용 지원' },
+          { label: '신청방법', value: '고용센터 또는 워크넷에서 신청' }
+        ],
+        link: 'https://www.work.go.kr',
+        linkText: '워크넷 바로가기'
+      }
+    ];
+
+    function renderCards(data) {
+      const container = document.getElementById('subsidy-cards');
+      const countEl = document.getElementById('subsidy-count');
+      countEl.innerHTML = `총 <strong>${data.length}건</strong>의 지원금 정보`;
+
+      if (data.length === 0) {
+        container.innerHTML = `
+          <div class="subsidy-empty">
+            <div class="subsidy-empty-icon">🔍</div>
+            <p>조건에 맞는 지원금 정보가 없습니다.<br>필터 조건을 변경해보세요.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = data.map(s => `
+        <div class="subsidy-card">
+          <div class="subsidy-card-header">
+            <div class="subsidy-card-icon" style="background:${s.iconBg}">${s.icon}</div>
+            <div class="subsidy-card-title">${s.title}</div>
+          </div>
+          <div class="subsidy-card-tags">
+            ${s.tags.map(t => `<span class="subsidy-tag ${t.cls}">${t.text}</span>`).join('')}
+          </div>
+          <div class="subsidy-card-info">
+            ${s.info.map(i => `
+              <span class="subsidy-info-label">${i.label}</span>
+              <span class="subsidy-info-value">${i.value.replace(/\n/g, '<br>')}</span>
+            `).join('')}
+          </div>
+          <a href="${s.link}" target="_blank" rel="noopener noreferrer" class="subsidy-card-link">${s.linkText} →</a>
+        </div>
+      `).join('');
+    }
+
+    function applyFilter() {
+      const region = document.getElementById('filter-region').value;
+      const ageVal = document.getElementById('filter-age').value;
+      const employed = document.getElementById('filter-employed').value;
+      const age = ageVal ? parseInt(ageVal) : null;
+
+      let filtered = SUBSIDIES.filter(s => {
+        if (region && s.region !== region && s.region !== '전국') return false;
+        if (age !== null) {
+          if (age < s.ageMin || age > s.ageMax) return false;
+        }
+        if (employed) {
+          if (s.employed !== '무관' && s.employed !== employed) return false;
+        }
+        return true;
+      });
+      renderCards(filtered);
+    }
+
+    function resetFilter() {
+      document.getElementById('filter-region').value = '';
+      document.getElementById('filter-age').value = '';
+      document.getElementById('filter-employed').value = '';
+      renderCards(SUBSIDIES);
+    }
+
+    // Init
+    renderCards(SUBSIDIES);
+  </script>
+</body>
+</html>

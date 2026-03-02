@@ -67,8 +67,8 @@ body{font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystem
 .nav-user-name{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap}
 /* Hamburger menu */
 .nav-hamburger{display:none;background:none;border:none;font-size:24px;cursor:pointer;padding:8px;color:var(--text-primary);line-height:1}
-.nav-mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;opacity:0;transition:opacity 0.3s ease}
-.nav-mobile-overlay.open{display:block;opacity:1}
+.nav-mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;opacity:0;pointer-events:none;transition:opacity 0.3s ease}
+.nav-mobile-overlay.open{opacity:1;pointer-events:auto}
 .nav-mobile-menu{position:fixed;top:0;right:-300px;width:280px;height:100%;background:#fff;z-index:200;padding:24px;overflow-y:auto;transition:right 0.3s ease;box-shadow:-4px 0 24px rgba(0,0,0,0.1)}
 .nav-mobile-menu.open{right:0}
 .nav-mobile-close{display:flex;justify-content:flex-end;margin-bottom:20px}

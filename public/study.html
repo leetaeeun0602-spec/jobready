@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스터디 모집 - JobReady</title>
+  <meta name="description" content="자격증 스터디를 모집하고 참여하세요. 함께 공부하면 합격이 가까워집니다.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: #FFFFFF; color: #191F28; }
+    .study-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 140px 24px 60px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .study-hero::before {
+      content: '';position: absolute;inset: 0;
+      background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+      background-size:60px 60px;
+      mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black 20%,transparent 70%);
+      -webkit-mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black 20%,transparent 70%);
+      pointer-events:none;
+    }
+    .study-hero h1{font-size:clamp(28px,5vw,44px);font-weight:900;color:#fff;letter-spacing:-1.5px;margin-bottom:12px;position:relative}
+    .study-hero p{font-size:16px;color:rgba(255,255,255,0.75);position:relative}
+
+    /* Filter bar */
+    .study-filter-bar{background:#F8F9FA;padding:20px 24px;border-bottom:1px solid #E5E8EB}
+    .study-filter-inner{max-width:960px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .study-filter-select{padding:10px 14px;border-radius:10px;border:1px solid #E5E8EB;background:#fff;font-size:13px;font-weight:600;color:#191F28;font-family:inherit;outline:none;min-width:120px}
+    .study-filter-select:focus{border-color:#3182F6;box-shadow:0 0 0 3px rgba(49,130,246,0.1)}
+    .study-write-btn{margin-left:auto;padding:10px 24px;border-radius:10px;border:none;background:#3182F6;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s}
+    .study-write-btn:hover{background:#1B6DE8;transform:translateY(-1px)}
+
+    /* Cards grid */
+    .study-section{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+    .study-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .study-card{background:#fff;border:1px solid #E5E8EB;border-radius:16px;padding:24px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 2px 6px rgba(0,0,0,0.04)}
+    .study-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:#CED4DA;transform:translateY(-2px)}
+    .study-card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+    .study-tag{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700}
+    .study-tag.cert{background:rgba(49,130,246,0.08);color:#3182F6}
+    .study-tag.method{background:rgba(234,179,8,0.1);color:#d97706}
+    .study-tag.region{background:rgba(6,182,212,0.1);color:#0891b2}
+    .study-card-title{font-size:16px;font-weight:800;letter-spacing:-0.3px;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .study-card-preview{font-size:13px;color:#8B95A1;line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .study-card-bottom{display:flex;align-items:center;justify-content:space-between}
+    .study-card-meta{font-size:12px;color:#ADB5BD;font-weight:600}
+    .study-card-members{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:#059669}
+    .study-members-bar{width:60px;height:6px;border-radius:3px;background:#E5E8EB;overflow:hidden}
+    .study-members-fill{height:100%;border-radius:3px;background:#34C759;transition:width 0.3s}
+
+    .study-empty{text-align:center;padding:80px 24px;grid-column:1/-1}
+    .study-empty-icon{font-size:48px;margin-bottom:16px}
+    .study-empty p{font-size:15px;color:#8B95A1;font-weight:600;line-height:1.6}
+
+    /* Detail modal */
+    .study-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s}
+    .study-modal-overlay.active{opacity:1;pointer-events:auto}
+    .study-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:32px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;z-index:301;opacity:0;pointer-events:none;transition:opacity 0.3s}
+    .study-modal.active{opacity:1;pointer-events:auto}
+    .study-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .study-modal-title{font-size:20px;font-weight:900;letter-spacing:-0.5px;flex:1}
+    .study-modal-close{width:36px;height:36px;border-radius:8px;border:1px solid #E5E8EB;background:#F8F9FA;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .study-detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+    .study-detail-info{display:grid;grid-template-columns:80px 1fr;gap:10px 12px;margin-bottom:20px}
+    .study-detail-label{font-size:13px;font-weight:700;color:#8B95A1}
+    .study-detail-value{font-size:14px;font-weight:600;color:#4E5968}
+    .study-detail-content{font-size:15px;color:#4E5968;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-bottom:24px;padding:20px;background:#F8F9FA;border-radius:12px}
+    .study-detail-members{margin-bottom:20px}
+    .study-detail-members-title{font-size:14px;font-weight:800;margin-bottom:8px;color:#4E5968}
+    .study-member-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #F1F3F5}
+    .study-member-avatar{width:28px;height:28px;border-radius:50%;background:#E5E8EB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#8B95A1}
+    .study-member-name{font-size:14px;font-weight:600;color:#4E5968}
+    .study-join-btn{width:100%;padding:14px;border-radius:12px;border:none;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s}
+    .study-join-btn.join{background:#3182F6;color:#fff}
+    .study-join-btn.join:hover{background:#1B6DE8}
+    .study-join-btn.leave{background:#F8F9FA;color:#FF3B30;border:1px solid #FF3B30}
+    .study-join-btn.full{background:#E5E8EB;color:#8B95A1;cursor:default}
+
+    /* Write modal */
+    .study-write-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:32px;width:90%;max-width:520px;max-height:85vh;overflow-y:auto;z-index:301;opacity:0;pointer-events:none;transition:opacity 0.3s}
+    .study-write-modal.active{opacity:1;pointer-events:auto}
+    .study-write-form{display:flex;flex-direction:column;gap:14px}
+    .study-form-field{display:flex;flex-direction:column;gap:4px}
+    .study-form-label{font-size:13px;font-weight:700;color:#4E5968}
+    .study-form-input,.study-form-select,.study-form-textarea{padding:12px 14px;border-radius:10px;border:1px solid #E5E8EB;background:#F8F9FA;font-size:14px;font-weight:600;color:#191F28;font-family:inherit;outline:none}
+    .study-form-input:focus,.study-form-select:focus,.study-form-textarea:focus{border-color:#3182F6;box-shadow:0 0 0 3px rgba(49,130,246,0.1)}
+    .study-form-textarea{min-height:120px;resize:vertical;line-height:1.6}
+    .study-form-row{display:flex;gap:12px}
+    .study-form-row > *{flex:1}
+    .study-form-submit{padding:14px;border-radius:12px;border:none;background:#3182F6;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;transition:all 0.2s}
+    .study-form-submit:hover{background:#1B6DE8}
+
+    .study-toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(100px);background:#191F28;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999;transition:transform 0.3s;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+    .study-toast.show{transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:768px){
+      .study-grid{grid-template-columns:1fr}
+      .study-filter-inner{flex-direction:column}
+      .study-write-btn{margin-left:0;width:100%}
+      .study-form-row{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">자격증정보 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#certificates">자격증가이드</a>
+            <a href="/#calendar">시험일정</a>
+            <a href="/roi.html">자격증ROI</a>
+            <a href="/subsidy.html">시험지원금</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">취업준비 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/diagnosis.html">취업진단</a>
+            <a href="/analysis.html">직무분석</a>
+            <a href="/roadmap.html">로드맵</a>
+            <a href="/documents.html">서류체크</a>
+            <a href="/interview.html">면접준비</a>
+          </div>
+        </div>
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-toggle">커뮤니티 <span class="nav-dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="/#community">자유게시판</a>
+            <a href="/#ranking">출석랭킹</a>
+            <a href="/study.html" class="nav-link-active">스터디모집</a>
+          </div>
+        </div>
+      </div>
+      <button class="nav-hamburger" onclick="openMobileMenu()">☰</button>
+    </div>
+  </nav>
+  <div class="nav-mobile-overlay" id="nav-mobile-overlay" onclick="closeMobileMenu()"></div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <div class="nav-mobile-close"><button onclick="closeMobileMenu()">✕</button></div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">자격증정보</div>
+      <a href="/#certificates">자격증가이드</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/roi.html">자격증ROI</a>
+      <a href="/subsidy.html">시험지원금</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">취업준비</div>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html">로드맵</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html">면접준비</a>
+    </div>
+    <div class="nav-mobile-group">
+      <div class="nav-mobile-group-title">커뮤니티</div>
+      <a href="/#community">자유게시판</a>
+      <a href="/#ranking">출석랭킹</a>
+      <a href="/study.html" class="nav-link-active">스터디모집</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="study-hero">
+    <h1>스터디 모집</h1>
+    <p>함께 공부하면 합격이 가까워집니다</p>
+  </section>
+
+  <!-- Filter -->
+  <div class="study-filter-bar">
+    <div class="study-filter-inner">
+      <select class="study-filter-select" id="filter-cert" onchange="loadStudies()">
+        <option value="">자격증 전체</option>
+      </select>
+      <select class="study-filter-select" id="filter-region" onchange="loadStudies()">
+        <option value="">지역 전체</option>
+        <option value="서울">서울</option>
+        <option value="경기">경기</option>
+        <option value="인천">인천</option>
+      </select>
+      <select class="study-filter-select" id="filter-method" onchange="loadStudies()">
+        <option value="">방식 전체</option>
+        <option value="온라인">온라인</option>
+        <option value="오프라인">오프라인</option>
+        <option value="병행">온/오프 병행</option>
+      </select>
+      <button class="study-write-btn" onclick="openWriteModal()">✏️ 스터디 모집하기</button>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="study-section">
+    <div class="study-grid" id="study-grid"></div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="study-modal-overlay" id="detail-overlay" onclick="closeDetailModal()"></div>
+  <div class="study-modal" id="detail-modal"></div>
+
+  <!-- Write Modal -->
+  <div class="study-modal-overlay" id="write-overlay" onclick="closeWriteModal()"></div>
+  <div class="study-write-modal" id="write-modal">
+    <div class="study-modal-header">
+      <div class="study-modal-title">스터디 모집하기</div>
+      <button class="study-modal-close" onclick="closeWriteModal()">✕</button>
+    </div>
+    <form class="study-write-form" onsubmit="submitStudy(event)">
+      <div class="study-form-field">
+        <label class="study-form-label">제목</label>
+        <input type="text" class="study-form-input" id="w-title" placeholder="스터디 제목" maxlength="100" required>
+      </div>
+      <div class="study-form-row">
+        <div class="study-form-field">
+          <label class="study-form-label">자격증</label>
+          <select class="study-form-select" id="w-cert"></select>
+        </div>
+        <div class="study-form-field">
+          <label class="study-form-label">모집인원</label>
+          <input type="number" class="study-form-input" id="w-max" placeholder="2~20" min="2" max="20" required>
+        </div>
+      </div>
+      <div class="study-form-row">
+        <div class="study-form-field">
+          <label class="study-form-label">방식</label>
+          <select class="study-form-select" id="w-method" required>
+            <option value="">선택</option>
+            <option value="온라인">온라인</option>
+            <option value="오프라인">오프라인</option>
+            <option value="병행">온/오프 병행</option>
+          </select>
+        </div>
+        <div class="study-form-field">
+          <label class="study-form-label">지역</label>
+          <select class="study-form-select" id="w-region" onchange="onRegionChange()">
+            <option value="">선택</option>
+            <option value="서울">서울</option>
+            <option value="경기">경기</option>
+            <option value="인천">인천</option>
+          </select>
+        </div>
+      </div>
+      <div class="study-form-field" id="w-city-wrap" style="display:none">
+        <label class="study-form-label">상세지역</label>
+        <select class="study-form-select" id="w-city"><option value="">선택</option></select>
+      </div>
+      <div class="study-form-field">
+        <label class="study-form-label">상세 설명</label>
+        <textarea class="study-form-textarea" id="w-content" placeholder="스터디 계획, 목표, 일정 등을 자유롭게 작성하세요" maxlength="2000" required></textarea>
+      </div>
+      <button type="submit" class="study-form-submit">모집글 등록</button>
+    </form>
+  </div>
+
+  <!-- Toast -->
+  <div class="study-toast" id="study-toast"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/study.html">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/about.html">서비스소개</a>
+          <a href="/terms.html">이용약관</a>
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/contact.html">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="/privacy.html">개인정보처리방침</a><span>|</span><a href="/terms.html">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Mobile Menu =====
+    function openMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.add('open');document.getElementById('nav-mobile-menu')?.classList.add('open');document.body.style.overflow='hidden';}
+    function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.remove('open');document.getElementById('nav-mobile-menu')?.classList.remove('open');document.body.style.overflow='';}
+
+    // ===== Utils =====
+    function getSessionId(){let id=localStorage.getItem('jobready_session_id');if(!id){id='sess_'+Date.now()+'_'+Math.random().toString(36).substring(2,10);localStorage.setItem('jobready_session_id',id);}return id;}
+    function escapeHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+    function timeAgo(ds){const n=new Date(),d=new Date(ds),s=Math.floor((n-d)/1000);if(s<60)return '방금 전';if(s<3600)return Math.floor(s/60)+'분 전';if(s<86400)return Math.floor(s/3600)+'시간 전';return Math.floor(s/86400)+'일 전';}
+    function showToast(m){const t=document.getElementById('study-toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+    async function api(method,path,body){
+      try{const o={method,headers:{'Content-Type':'application/json'}};if(body)o.body=JSON.stringify(body);const r=await fetch(path,o);return r.json();}catch{return{error:'서버 오류'};}
+    }
+
+    // ===== Certs data =====
+    const CERTS = [
+      '컴활1급','컴활2급','MOS Excel Expert','워드프로세서','ITQ','한국사능력검정',
+      '정보처리기사','SQLD','ADsP','빅데이터분석기사','AWS Cloud Practitioner','네트워크관리사','리눅스마스터',
+      '산업안전기사','전기기사','전기산업기사','기계기사','소방설비기사','에너지관리기사','환경기사','건설안전기사',
+      'TOEIC','TOEIC Speaking','OPIc','JLPT','HSK','OPIC',
+      '공인중개사','한식조리기능사','제과기능사','사회복지사','요양보호사'
+    ];
+    const REGION_CITIES = {
+      '서울': ['강남구','강동구','강북구','강서구','관악구','광진구','구로구','금천구','노원구','도봉구','동대문구','동작구','마포구','서대문구','서초구','성동구','성북구','송파구','양천구','영등포구','용산구','은평구','종로구','중구','중랑구'],
+      '경기': ['수원시','성남시','고양시','용인시','부천시','안산시','안양시','남양주시','화성시','평택시','의정부시','시흥시','파주시','김포시','광명시','광주시','군포시','오산시','이천시','양주시','하남시'],
+      '인천': ['중구','동구','미추홀구','연수구','남동구','부평구','계양구','서구']
+    };
+
+    // Populate cert filter
+    (function(){
+      const s1=document.getElementById('filter-cert');
+      const s2=document.getElementById('w-cert');
+      CERTS.forEach(c=>{
+        s1.innerHTML+=`<option value="${c}">${c}</option>`;
+        s2.innerHTML+=`<option value="${c}">${c}</option>`;
+      });
+    })();
+
+    function onRegionChange(){
+      const r=document.getElementById('w-region').value;
+      const wrap=document.getElementById('w-city-wrap');
+      const sel=document.getElementById('w-city');
+      if(r && REGION_CITIES[r]){
+        wrap.style.display='block';
+        sel.innerHTML='<option value="">선택</option>'+REGION_CITIES[r].map(c=>`<option value="${c}">${c}</option>`).join('');
+      } else {
+        wrap.style.display='none';
+        sel.innerHTML='<option value="">선택</option>';
+      }
+    }
+
+    // ===== Load studies =====
+    async function loadStudies(){
+      const cert=document.getElementById('filter-cert').value;
+      const region=document.getElementById('filter-region').value;
+      const method=document.getElementById('filter-method').value;
+      let url='/api/posts?board=study';
+      if(region) url+=`&region=${encodeURIComponent(region)}`;
+      if(cert) url+=`&certTag=${encodeURIComponent(cert)}`;
+      const posts=await api('GET',url);
+      let list=Array.isArray(posts)?posts:[];
+      if(method) list=list.filter(p=>p.method===method);
+      renderStudies(list);
+    }
+
+    function renderStudies(posts){
+      const grid=document.getElementById('study-grid');
+      if(!posts.length){
+        grid.innerHTML=`<div class="study-empty"><div class="study-empty-icon">📖</div><p>아직 모집 중인 스터디가 없습니다.<br>첫 번째 스터디를 만들어보세요!</p></div>`;
+        return;
+      }
+      grid.innerHTML=posts.map(p=>{
+        const pct=p.maxMembers?Math.min((p.currentMembers/p.maxMembers)*100,100):0;
+        const regionText=p.regionCity?`${p.region} ${p.regionCity}`:p.region;
+        return `
+        <div class="study-card" onclick="openDetail(${p.id})">
+          <div class="study-card-tags">
+            ${p.certTag?`<span class="study-tag cert">${escapeHtml(p.certTag)}</span>`:''}
+            ${p.method?`<span class="study-tag method">${escapeHtml(p.method)}</span>`:''}
+            ${p.region?`<span class="study-tag region">${escapeHtml(regionText)}</span>`:''}
+          </div>
+          <div class="study-card-title">${escapeHtml(p.title)}</div>
+          <div class="study-card-preview">${escapeHtml(p.content)}</div>
+          <div class="study-card-bottom">
+            <span class="study-card-meta">${escapeHtml(p.nickname)} · ${timeAgo(p.createdAt)}</span>
+            ${p.maxMembers?`
+              <div class="study-card-members">
+                <span>${p.currentMembers}/${p.maxMembers}명</span>
+                <div class="study-members-bar"><div class="study-members-fill" style="width:${pct}%"></div></div>
+              </div>
+            `:''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ===== Detail modal =====
+    async function openDetail(id){
+      const post=await api('GET',`/api/posts/${id}`);
+      if(post.error) return;
+      const sid=getSessionId();
+      const isJoined=post.joinedMembers&&post.joinedMembers.some(m=>m.sessionId===sid);
+      const isFull=post.maxMembers&&(post.joinedMembers||[]).length>=post.maxMembers&&!isJoined;
+      const regionText=post.regionCity?`${post.region} ${post.regionCity}`:post.region||'';
+
+      let btnHtml='';
+      if(isFull) btnHtml='<button class="study-join-btn full" disabled>모집 완료</button>';
+      else if(isJoined) btnHtml=`<button class="study-join-btn leave" onclick="toggleJoin(${id})">참여 취소</button>`;
+      else btnHtml=`<button class="study-join-btn join" onclick="toggleJoin(${id})">참여하기</button>`;
+
+      document.getElementById('detail-modal').innerHTML=`
+        <div class="study-modal-header">
+          <div class="study-modal-title">${escapeHtml(post.title)}</div>
+          <button class="study-modal-close" onclick="closeDetailModal()">✕</button>
+        </div>
+        <div class="study-detail-tags">
+          ${post.certTag?`<span class="study-tag cert">${escapeHtml(post.certTag)}</span>`:''}
+          ${post.method?`<span class="study-tag method">${escapeHtml(post.method)}</span>`:''}
+          ${regionText?`<span class="study-tag region">${escapeHtml(regionText)}</span>`:''}
+        </div>
+        <div class="study-detail-info">
+          <span class="study-detail-label">작성자</span><span class="study-detail-value">${escapeHtml(post.nickname)}</span>
+          <span class="study-detail-label">작성일</span><span class="study-detail-value">${timeAgo(post.createdAt)}</span>
+          ${post.maxMembers?`<span class="study-detail-label">모집현황</span><span class="study-detail-value">${(post.joinedMembers||[]).length}/${post.maxMembers}명</span>`:''}
+        </div>
+        <div class="study-detail-content">${escapeHtml(post.content)}</div>
+        ${post.joinedMembers&&post.joinedMembers.length?`
+          <div class="study-detail-members">
+            <div class="study-detail-members-title">참여자 (${post.joinedMembers.length}명)</div>
+            ${post.joinedMembers.map((m,i)=>`
+              <div class="study-member-item">
+                <div class="study-member-avatar">${i+1}</div>
+                <div class="study-member-name">${escapeHtml(m.nickname)}</div>
+              </div>
+            `).join('')}
+          </div>
+        `:''}
+        ${btnHtml}
+      `;
+      document.getElementById('detail-overlay').classList.add('active');
+      document.getElementById('detail-modal').classList.add('active');
+    }
+
+    function closeDetailModal(){
+      document.getElementById('detail-overlay').classList.remove('active');
+      document.getElementById('detail-modal').classList.remove('active');
+    }
+
+    async function toggleJoin(id){
+      const res=await api('POST',`/api/posts/${id}/join`,{sessionId:getSessionId()});
+      if(res.error){showToast(res.error);return;}
+      showToast(res.joined?'참여 완료!':'참여가 취소되었습니다');
+      openDetail(id);
+      loadStudies();
+    }
+
+    // ===== Write modal =====
+    function openWriteModal(){
+      document.getElementById('write-overlay').classList.add('active');
+      document.getElementById('write-modal').classList.add('active');
+    }
+    function closeWriteModal(){
+      document.getElementById('write-overlay').classList.remove('active');
+      document.getElementById('write-modal').classList.remove('active');
+    }
+
+    async function submitStudy(e){
+      e.preventDefault();
+      const title=document.getElementById('w-title').value.trim();
+      const content=document.getElementById('w-content').value.trim();
+      const certTag=document.getElementById('w-cert').value;
+      const maxMembers=document.getElementById('w-max').value;
+      const method=document.getElementById('w-method').value;
+      const region=document.getElementById('w-region').value;
+      const regionCity=document.getElementById('w-city').value;
+      if(!title||!content)return;
+
+      const body={board:'study',title,content,certTag,maxMembers,method,region,regionCity,sessionId:getSessionId()};
+      const res=await api('POST','/api/posts',body);
+      if(res.error){showToast(res.error||'등록 실패');return;}
+      closeWriteModal();
+      document.getElementById('w-title').value='';
+      document.getElementById('w-content').value='';
+      document.getElementById('w-max').value='';
+      document.getElementById('w-method').value='';
+      document.getElementById('w-region').value='';
+      document.getElementById('w-city').innerHTML='<option value="">선택</option>';
+      document.getElementById('w-city-wrap').style.display='none';
+      showToast('스터디 모집글이 등록되었습니다');
+      loadStudies();
+    }
+
+    // Init
+    loadStudies();
+  </script>
+</body>
+</html>

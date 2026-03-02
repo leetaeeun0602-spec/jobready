@@ -846,6 +846,7 @@
             <a href="/#certificates">자격증가이드</a>
             <a href="/#calendar">시험일정</a>
             <a href="/roi.html">자격증ROI</a>
+            <a href="/subsidy.html">시험지원금</a>
           </div>
         </div>
         <div class="nav-dropdown">
@@ -863,7 +864,7 @@
           <div class="nav-dropdown-menu">
             <a href="/#community">자유게시판</a>
             <a href="/#ranking">출석랭킹</a>
-            <a href="/#community">스터디모집</a>
+            <a href="/study.html">스터디모집</a>
           </div>
         </div>
       </div>
@@ -878,6 +879,7 @@
       <a href="/#certificates">자격증가이드</a>
       <a href="/#calendar">시험일정</a>
       <a href="/roi.html">자격증ROI</a>
+      <a href="/subsidy.html">시험지원금</a>
     </div>
     <div class="nav-mobile-group">
       <div class="nav-mobile-group-title">취업준비</div>
@@ -891,7 +893,7 @@
       <div class="nav-mobile-group-title">커뮤니티</div>
       <a href="/#community">자유게시판</a>
       <a href="/#ranking">출석랭킹</a>
-      <a href="/#community">스터디모집</a>
+      <a href="/study.html">스터디모집</a>
     </div>
   </div>
 
@@ -1064,7 +1066,7 @@
           <a href="/#community">자유게시판</a>
           <a href="/#community">합격수기</a>
           <a href="/#community">시험꿀팁</a>
-          <a href="/#community">스터디모집</a>
+          <a href="/study.html">스터디모집</a>
         </div>
         <div class="footer-col">
           <h4>고객지원</h4>
@@ -1090,6 +1092,9 @@
   <canvas id="share-canvas" width="600" height="400" style="display:none;"></canvas>
 
 <script>
+// ===== Mobile Menu =====
+function openMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.add('open');document.getElementById('nav-mobile-menu')?.classList.add('open');document.body.style.overflow='hidden';}
+function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.remove('open');document.getElementById('nav-mobile-menu')?.classList.remove('open');document.body.style.overflow='';}
 /* ======================================================================
    JobReady Career Diagnosis Test - Complete Client-Side Logic
    ====================================================================== */
