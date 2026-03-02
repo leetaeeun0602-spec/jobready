@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>취업진단 테스트 - JobReady</title>
+  <meta name="description" content="나에게 딱 맞는 자격증을 찾아보세요. 5단계 취업진단 테스트로 맞춤 자격증과 학습 로드맵을 추천받으세요.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== Light Theme Override for Diagnosis Page ===== */
+    :root {
+      --diag-bg: #FFFFFF;
+      --diag-section-bg: #F8F9FA;
+      --diag-primary: #3182F6;
+      --diag-primary-light: rgba(49,130,246,0.08);
+      --diag-primary-hover: #1B6AE0;
+      --diag-text: #191F28;
+      --diag-text-secondary: #4E5968;
+      --diag-text-muted: #8B95A1;
+      --diag-card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --diag-card-radius: 16px;
+      --diag-btn-radius: 12px;
+    }
+
+    body.diagnosis-page {
+      background: var(--diag-bg);
+      color: var(--diag-text);
+    }
+
+    /* ===== Nav Override (light) ===== */
+    body.diagnosis-page .nav {
+      background: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 14px 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    body.diagnosis-page .nav-logo { color: var(--diag-text); }
+    body.diagnosis-page .nav-links a {
+      color: var(--diag-text-secondary);
+      font-weight: 600;
+    }
+    body.diagnosis-page .nav-links a:hover,
+    body.diagnosis-page .nav-links .nav-link-active {
+      color: var(--diag-primary);
+    }
+
+    /* ===== Diagnosis Container ===== */
+    .diag-wrapper {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 100px 20px 80px;
+      min-height: 100vh;
+    }
+
+    /* ===== Progress Bar ===== */
+    .diag-progress {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 48px;
+      padding: 0 8px;
+    }
+    .diag-progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .diag-progress-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #E5E8EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--diag-text-muted);
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .diag-progress-step.active .diag-progress-circle {
+      background: var(--diag-primary);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(49,130,246,0.3);
+    }
+    .diag-progress-step.done .diag-progress-circle {
+      background: var(--diag-primary);
+      color: #fff;
+    }
+    .diag-progress-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--diag-text-muted);
+      margin-top: 8px;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+    .diag-progress-step.active .diag-progress-label,
+    .diag-progress-step.done .diag-progress-label {
+      color: var(--diag-primary);
+    }
+    .diag-progress-line {
+      flex: 1;
+      height: 3px;
+      background: #E5E8EB;
+      margin: 0 -4px;
+      margin-bottom: 26px;
+      transition: background 0.4s ease;
+      z-index: 1;
+    }
+    .diag-progress-line.filled {
+      background: var(--diag-primary);
+    }
+
+    /* ===== Step Container ===== */
+    .diag-step {
+      display: none;
+      animation: diagFadeIn 0.5s ease;
+    }
+    .diag-step.active {
+      display: block;
+    }
+    @keyframes diagFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes diagSlideIn {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .diag-step-number {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--diag-primary);
+      margin-bottom: 8px;
+    }
+    .diag-step-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--diag-text);
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .diag-step-desc {
+      font-size: 15px;
+      color: var(--diag-text-muted);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    /* ===== Option Cards (single select) ===== */
+    .diag-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .diag-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      border: 2px solid #E5E8EB;
+      border-radius: var(--diag-card-radius);
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+    .diag-option:hover {
+      border-color: #D1D6DB;
+      background: #FAFBFC;
+    }
+    .diag-option.selected {
+      border-color: var(--diag-primary);
+      background: var(--diag-primary-light);
+    }
+    .diag-option-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--diag-section-bg);
+      border-radius: 12px;
+    }
+    .diag-option.selected .diag-option-icon {
+      background: rgba(49,130,246,0.12);
+    }
+    .diag-option-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--diag-text);
+    }
+    .diag-option-check {
+      margin-left: auto;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #D1D6DB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .diag-option.selected .diag-option-check {
+      border-color: var(--diag-primary);
+      background: var(--diag-primary);
+    }
+    .diag-option.selected .diag-option-check::after {
+      content: '';
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    /* ===== Chip Tags (multi-select for Q3) ===== */
+    .diag-chip-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--diag-text-muted);
+      margin-bottom: 12px;
+      margin-top: 20px;
+    }
+    .diag-chip-group-title:first-child {
+      margin-top: 0;
+    }
+    .diag-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .diag-chip {
+      padding: 10px 18px;
+      border: 1.5px solid #E5E8EB;
+      border-radius: 24px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--diag-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .diag-chip:hover {
+      border-color: #C5CCD2;
+      background: #F5F6F7;
+    }
+    .diag-chip.selected {
+      border-color: var(--diag-primary);
+      background: var(--diag-primary-light);
+      color: var(--diag-primary);
+    }
+
+    /* ===== Navigation Buttons ===== */
+    .diag-nav-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .diag-btn {
+      flex: 1;
+      padding: 16px 24px;
+      border: none;
+      border-radius: var(--diag-btn-radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+    .diag-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .diag-btn-prev {
+      background: #F2F4F6;
+      color: var(--diag-text-secondary);
+      flex: 0 0 auto;
+      padding: 16px 28px;
+    }
+    .diag-btn-prev:hover:not(:disabled) {
+      background: #E5E8EB;
+    }
+    .diag-btn-next {
+      background: var(--diag-primary);
+      color: #fff;
+    }
+    .diag-btn-next:hover:not(:disabled) {
+      background: var(--diag-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(49,130,246,0.3);
+    }
+
+    /* ===== Results Page ===== */
+    .diag-result {
+      display: none;
+      animation: diagFadeIn 0.6s ease;
+    }
+    .diag-result.active {
+      display: block;
+    }
+    .diag-result-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .diag-result-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 20px;
+      background: var(--diag-primary-light);
+      color: var(--diag-primary);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .diag-result-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--diag-text);
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .diag-result-sub {
+      font-size: 15px;
+      color: var(--diag-text-muted);
+    }
+
+    /* Score Circle */
+    .diag-score-card {
+      background: #fff;
+      border-radius: var(--diag-card-radius);
+      box-shadow: var(--diag-card-shadow);
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .diag-score-ring {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 20px;
+    }
+    .diag-score-ring svg {
+      transform: rotate(-90deg);
+    }
+    .diag-score-ring .ring-bg {
+      fill: none;
+      stroke: #F2F4F6;
+      stroke-width: 10;
+    }
+    .diag-score-ring .ring-fill {
+      fill: none;
+      stroke: var(--diag-primary);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 502;
+      stroke-dashoffset: 502;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .diag-score-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .diag-score-num {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--diag-text);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    .diag-score-unit {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--diag-text-muted);
+      margin-top: 4px;
+    }
+    .diag-score-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--diag-text-secondary);
+    }
+    .diag-score-msg {
+      font-size: 14px;
+      color: var(--diag-text-muted);
+      margin-top: 4px;
+    }
+
+    /* Result Cards */
+    .diag-result-card {
+      background: #fff;
+      border-radius: var(--diag-card-radius);
+      box-shadow: var(--diag-card-shadow);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .diag-result-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--diag-text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .diag-result-card-icon {
+      font-size: 20px;
+    }
+
+    /* Recommended Certs */
+    .diag-cert-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .diag-cert-item:last-child { margin-bottom: 0; }
+    .diag-cert-rank {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--diag-primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .diag-cert-rank.r2 { background: #4B9CF5; }
+    .diag-cert-rank.r3 { background: #8BBDF8; }
+    .diag-cert-info { flex: 1; min-width: 0; }
+    .diag-cert-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--diag-text);
+      margin-bottom: 6px;
+    }
+    .diag-cert-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #F2F4F6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .diag-cert-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--diag-primary);
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    .diag-cert-bar-fill.r2 { background: #4B9CF5; }
+    .diag-cert-bar-fill.r3 { background: #8BBDF8; }
+    .diag-cert-pct {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--diag-primary);
+      flex-shrink: 0;
+      min-width: 44px;
+      text-align: right;
+    }
+    .diag-cert-pct.r2 { color: #4B9CF5; }
+    .diag-cert-pct.r3 { color: #8BBDF8; }
+
+    /* Prep Period */
+    .diag-prep-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .diag-prep-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--diag-primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .diag-prep-text { flex: 1; }
+    .diag-prep-period {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--diag-primary);
+      letter-spacing: -0.5px;
+    }
+    .diag-prep-detail {
+      font-size: 13px;
+      color: var(--diag-text-muted);
+      margin-top: 2px;
+    }
+
+    /* Job Connection */
+    .diag-job-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .diag-job-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #FFF3E0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .diag-job-text { flex: 1; }
+    .diag-job-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--diag-text);
+      margin-bottom: 4px;
+    }
+    .diag-job-desc {
+      font-size: 14px;
+      color: var(--diag-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Action Buttons */
+    .diag-result-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .diag-action-btn {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      border-radius: var(--diag-btn-radius);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .diag-share-btn {
+      background: #F2F4F6;
+      color: var(--diag-text-secondary);
+    }
+    .diag-share-btn:hover {
+      background: #E5E8EB;
+    }
+    .diag-roadmap-btn {
+      background: var(--diag-primary);
+      color: #fff;
+    }
+    .diag-roadmap-btn:hover {
+      background: var(--diag-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(49,130,246,0.3);
+    }
+    .diag-retry-btn {
+      background: transparent;
+      color: var(--diag-text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      padding: 12px;
+      margin-top: 8px;
+      width: 100%;
+      text-align: center;
+      font-family: inherit;
+    }
+    .diag-retry-btn:hover {
+      color: var(--diag-text-secondary);
+    }
+
+    /* ===== Footer Override ===== */
+    body.diagnosis-page .footer {
+      background: var(--diag-section-bg);
+      border-top: 1px solid #E5E8EB;
+    }
+    body.diagnosis-page .footer-brand,
+    body.diagnosis-page .footer .logo-text {
+      color: var(--diag-text);
+    }
+    body.diagnosis-page .footer-desc {
+      color: var(--diag-text-muted);
+    }
+    body.diagnosis-page .footer-bottom {
+      color: var(--diag-text-muted);
+    }
+    body.diagnosis-page .footer-bottom span {
+      color: var(--diag-text-muted);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .diag-wrapper { padding: 80px 16px 60px; }
+      .diag-progress { gap: 0; padding: 0; }
+      .diag-progress-circle { width: 30px; height: 30px; font-size: 12px; }
+      .diag-progress-label { font-size: 10px; }
+      .diag-step-title { font-size: 20px; }
+      .diag-option { padding: 14px 16px; gap: 12px; }
+      .diag-option-icon { width: 38px; height: 38px; font-size: 22px; }
+      .diag-option-text { font-size: 14px; }
+      .diag-score-card { padding: 28px 20px; }
+      .diag-score-ring { width: 150px; height: 150px; }
+      .diag-score-num { font-size: 40px; }
+      .diag-result-card { padding: 20px; }
+      .diag-result-actions { flex-direction: column; }
+      .diag-result-title { font-size: 22px; }
+      .diag-nav-buttons { gap: 8px; }
+      .diag-btn { padding: 14px 16px; font-size: 15px; }
+    }
+
+    /* ===== Share Card Toast ===== */
+    .diag-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--diag-text);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+    }
+    .diag-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body class="diagnosis-page">
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <a href="/#certificates">자격증</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html" class="nav-link-active">취업진단</a>
+        <a href="/#ranking">랭킹</a>
+        <a href="/#community">커뮤니티</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Main Wrapper ===== -->
+  <div class="diag-wrapper">
+
+    <!-- Progress Bar -->
+    <div class="diag-progress" id="diag-progress"></div>
+
+    <!-- ===== Step 1: 관심분야 ===== -->
+    <div class="diag-step active" id="step-1">
+      <div class="diag-step-number">STEP 1 / 5</div>
+      <h2 class="diag-step-title">관심 분야를 선택하세요</h2>
+      <p class="diag-step-desc">가장 관심 있는 취업 분야를 하나 골라주세요.</p>
+      <div class="diag-options" id="q1-options"></div>
+      <div class="diag-nav-buttons">
+        <button class="diag-btn diag-btn-next" id="btn-next-1" disabled onclick="goStep(2)">다음으로</button>
+      </div>
+    </div>
+
+    <!-- ===== Step 2: 목표직무 ===== -->
+    <div class="diag-step" id="step-2">
+      <div class="diag-step-number">STEP 2 / 5</div>
+      <h2 class="diag-step-title">목표 직무를 선택하세요</h2>
+      <p class="diag-step-desc">선택한 분야에서 목표로 하는 직무를 골라주세요.</p>
+      <div class="diag-options" id="q2-options"></div>
+      <div class="diag-nav-buttons">
+        <button class="diag-btn diag-btn-prev" onclick="goStep(1)">이전</button>
+        <button class="diag-btn diag-btn-next" id="btn-next-2" disabled onclick="goStep(3)">다음으로</button>
+      </div>
+    </div>
+
+    <!-- ===== Step 3: 보유 자격증 ===== -->
+    <div class="diag-step" id="step-3">
+      <div class="diag-step-number">STEP 3 / 5</div>
+      <h2 class="diag-step-title">현재 보유 자격증을 선택하세요</h2>
+      <p class="diag-step-desc">이미 취득한 자격증을 모두 선택해주세요. 없으면 그냥 넘어가도 돼요.</p>
+      <div id="q3-chips"></div>
+      <div class="diag-nav-buttons">
+        <button class="diag-btn diag-btn-prev" onclick="goStep(2)">이전</button>
+        <button class="diag-btn diag-btn-next" onclick="goStep(4)">다음으로</button>
+      </div>
+    </div>
+
+    <!-- ===== Step 4: 목표 시기 ===== -->
+    <div class="diag-step" id="step-4">
+      <div class="diag-step-number">STEP 4 / 5</div>
+      <h2 class="diag-step-title">목표 취업 시기는 언제인가요?</h2>
+      <p class="diag-step-desc">취업을 목표로 하는 시기를 알려주세요.</p>
+      <div class="diag-options" id="q4-options"></div>
+      <div class="diag-nav-buttons">
+        <button class="diag-btn diag-btn-prev" onclick="goStep(3)">이전</button>
+        <button class="diag-btn diag-btn-next" id="btn-next-4" disabled onclick="goStep(5)">다음으로</button>
+      </div>
+    </div>
+
+    <!-- ===== Step 5: 공부 시간 ===== -->
+    <div class="diag-step" id="step-5">
+      <div class="diag-step-number">STEP 5 / 5</div>
+      <h2 class="diag-step-title">하루 공부 가능 시간은?</h2>
+      <p class="diag-step-desc">하루에 자격증 공부에 투자할 수 있는 시간을 알려주세요.</p>
+      <div class="diag-options" id="q5-options"></div>
+      <div class="diag-nav-buttons">
+        <button class="diag-btn diag-btn-prev" onclick="goStep(4)">이전</button>
+        <button class="diag-btn diag-btn-next" id="btn-next-5" disabled onclick="showResult()">결과 보기</button>
+      </div>
+    </div>
+
+    <!-- ===== Result ===== -->
+    <div class="diag-result" id="diag-result">
+      <div class="diag-result-header">
+        <div class="diag-result-badge">진단 완료</div>
+        <h2 class="diag-result-title" id="result-title"></h2>
+        <p class="diag-result-sub" id="result-sub"></p>
+      </div>
+
+      <!-- Score -->
+      <div class="diag-score-card">
+        <div class="diag-score-ring">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle class="ring-bg" cx="90" cy="90" r="80" />
+            <circle class="ring-fill" id="score-ring" cx="90" cy="90" r="80" />
+          </svg>
+          <div class="diag-score-value">
+            <div class="diag-score-num" id="score-num">0</div>
+            <div class="diag-score-unit">/ 100점</div>
+          </div>
+        </div>
+        <div class="diag-score-label">취업준비 점수</div>
+        <div class="diag-score-msg" id="score-msg"></div>
+      </div>
+
+      <!-- Recommended Certs -->
+      <div class="diag-result-card">
+        <div class="diag-result-card-title"><span class="diag-result-card-icon">🏅</span>추천 자격증 TOP 3</div>
+        <div id="cert-recommendations"></div>
+      </div>
+
+      <!-- Prep Period -->
+      <div class="diag-result-card">
+        <div class="diag-result-card-title"><span class="diag-result-card-icon">📅</span>예상 준비기간</div>
+        <div class="diag-prep-info">
+          <div class="diag-prep-icon">⏱️</div>
+          <div class="diag-prep-text">
+            <div class="diag-prep-period" id="prep-period"></div>
+            <div class="diag-prep-detail" id="prep-detail"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Connection -->
+      <div class="diag-result-card">
+        <div class="diag-result-card-title"><span class="diag-result-card-icon">💼</span>취업 연결 직무</div>
+        <div class="diag-job-info">
+          <div class="diag-job-icon">🎯</div>
+          <div class="diag-job-text">
+            <div class="diag-job-name" id="job-name"></div>
+            <div class="diag-job-desc" id="job-desc"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="diag-result-actions">
+        <button class="diag-action-btn diag-share-btn" onclick="generateShareCard()">📤 결과 공유하기</button>
+        <button class="diag-action-btn diag-roadmap-btn" onclick="alert('로드맵 기능은 준비 중입니다!')">🗺️ 로드맵 시작</button>
+      </div>
+      <button class="diag-retry-btn" onclick="resetTest()">다시 진단하기</button>
+    </div>
+
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></div>
+        <p class="footer-desc">취업 준비의 모든 것, 한 곳에서</p>
+        <div class="footer-bottom">
+          <span>&copy; 2026 JobReady. All rights reserved.</span>
+          <span>Built with Express.js</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="diag-toast" id="diag-toast"></div>
+
+  <!-- Hidden canvas for share card -->
+  <canvas id="share-canvas" width="600" height="400" style="display:none;"></canvas>
+
+<script>
+/* ======================================================================
+   JobReady Career Diagnosis Test - Complete Client-Side Logic
+   ====================================================================== */
+
+// ===== Data =====
+const FIELDS = [
+  { name: '사무·행정', icon: '🧾', jobs: ['일반사무','총무','비서'] },
+  { name: 'IT·데이터', icon: '💻', jobs: ['백엔드개발','프론트엔드개발','데이터분석','보안','클라우드'] },
+  { name: '기술·안전', icon: '🏗', jobs: ['전기','안전','기계','건설','에너지','환경'] },
+  { name: '경영·금융', icon: '📈', jobs: ['회계','재무','인사','마케팅','기획'] },
+  { name: '어학·글로벌', icon: '🌍', jobs: ['무역','통번역','해외영업'] }
+];
+
+const CERT_GROUPS = {
+  '사무기본': ['컴활1급','컴활2급','MOS Excel Expert','워드프로세서','ITQ','한국사능력검정'],
+  'IT·데이터': ['정보처리기사','SQLD','ADsP','빅데이터분석기사','AWS Cloud Practitioner','네트워크관리사','리눅스마스터'],
+  '기술·안전': ['산업안전기사','전기기사','전기산업기사','기계기사','소방설비기사','에너지관리기사','환경기사','건설안전기사'],
+  '경영·금융': ['재경관리사','전산회계1급','세무회계','ERP정보관리사','투자자산운용사','AFPK'],
+  '어학': ['TOEIC','OPIc','TOEIC Speaking','IELTS','TOEFL']
+};
+
+const TIMELINE_OPTIONS = ['3개월 이내','6개월 이내','1년 이내','미정'];
+const TIMELINE_ICONS = ['🚀','⏰','📆','🤔'];
+const STUDY_OPTIONS = ['1시간','2시간','3시간 이상'];
+const STUDY_ICONS = ['☕','📖','🔥'];
+
+const JOB_CERT_MAP = {
+  '일반사무': [['컴활1급',90],['워드프로세서',80],['MOS Excel Expert',70],['한국사능력검정',60],['ITQ',50]],
+  '총무': [['컴활1급',85],['워드프로세서',80],['한국사능력검정',65],['ERP정보관리사',55]],
+  '비서': [['컴활1급',80],['워드프로세서',85],['MOS Excel Expert',75],['TOEIC',60],['ITQ',50]],
+  '백엔드개발': [['정보처리기사',95],['SQLD',80],['리눅스마스터',60],['AWS Cloud Practitioner',55]],
+  '프론트엔드개발': [['정보처리기사',85],['컴활1급',50],['AWS Cloud Practitioner',45]],
+  '데이터분석': [['ADsP',90],['SQLD',85],['빅데이터분석기사',75],['컴활1급',50]],
+  '보안': [['정보처리기사',90],['리눅스마스터',80],['네트워크관리사',75],['AWS Cloud Practitioner',50]],
+  '클라우드': [['AWS Cloud Practitioner',95],['정보처리기사',70],['리눅스마스터',65],['네트워크관리사',55]],
+  '전기': [['전기기사',95],['전기산업기사',80],['에너지관리기사',50]],
+  '안전': [['산업안전기사',95],['건설안전기사',70],['환경기사',50]],
+  '기계': [['기계기사',95],['에너지관리기사',60],['산업안전기사',40]],
+  '건설': [['건설안전기사',90],['산업안전기사',65],['환경기사',45]],
+  '에너지': [['에너지관리기사',95],['전기기사',70],['환경기사',50]],
+  '환경': [['환경기사',95],['산업안전기사',55],['에너지관리기사',45]],
+  '회계': [['전산회계1급',90],['재경관리사',80],['ERP정보관리사',65],['세무회계',60]],
+  '재무': [['재경관리사',90],['투자자산운용사',75],['AFPK',70],['전산회계1급',50]],
+  '인사': [['컴활1급',65],['ERP정보관리사',60],['한국사능력검정',40]],
+  '마케팅': [['컴활1급',70],['ADsP',60],['TOEIC',55]],
+  '기획': [['컴활1급',75],['ADsP',55],['한국사능력검정',45],['ERP정보관리사',40]],
+  '무역': [['TOEIC',90],['OPIc',80],['TOEIC Speaking',60],['컴활1급',50]],
+  '통번역': [['TOEIC',95],['OPIc',90],['IELTS',70],['TOEFL',65]],
+  '해외영업': [['TOEIC',90],['OPIc',85],['TOEIC Speaking',70],['컴활1급',45]]
+};
+
+const JOB_DESC = {
+  '일반사무': '문서 작성, 데이터 관리, 업무 지원 등 기업의 핵심 행정 업무를 담당합니다. 엑셀과 문서 작성 역량이 중요합니다.',
+  '총무': '사무실 환경 관리, 비품 조달, 사내 행사 기획 등 조직 운영 전반을 지원합니다.',
+  '비서': '임원 스케줄 관리, 문서 작성, 의전 업무 등을 수행하며 글로벌 기업에서는 외국어 능력이 필수입니다.',
+  '백엔드개발': '서버, 데이터베이스, API 설계 등 시스템의 핵심 로직을 개발합니다. 정보처리기사 자격이 기본입니다.',
+  '프론트엔드개발': '웹/앱의 사용자 인터페이스를 개발합니다. 최신 기술 트렌드에 대한 지속적인 학습이 필요합니다.',
+  '데이터분석': '데이터를 수집·분석하여 비즈니스 인사이트를 도출합니다. SQL과 분석 도구 활용 능력이 핵심입니다.',
+  '보안': '정보보안 정책 수립, 취약점 점검, 보안 솔루션 운영 등 기업의 정보 자산을 보호합니다.',
+  '클라우드': 'AWS, Azure 등 클라우드 인프라를 설계·운영하며 DevOps 문화를 선도합니다.',
+  '전기': '전기설비 설계·시공·유지보수를 담당합니다. 전기기사 자격증은 채용 시 필수 요건입니다.',
+  '안전': '산업현장의 안전관리 계획 수립, 위험요소 점검, 안전교육 등을 담당합니다.',
+  '기계': '기계 설비의 설계, 제작, 유지보수를 담당하며 제조업의 핵심 기술직입니다.',
+  '건설': '건설 현장의 안전 관리, 품질 관리, 공정 관리 등을 수행합니다.',
+  '에너지': '에너지 효율 관리, 신재생에너지 시스템 운영, 에너지 진단 등을 담당합니다.',
+  '환경': '환경영향평가, 폐기물 관리, 대기·수질 오염 방지 등 환경 보전 업무를 수행합니다.',
+  '회계': '재무제표 작성, 세무 신고, 원가 계산 등 기업의 회계 업무를 전담합니다.',
+  '재무': '자금 조달, 투자 분석, 리스크 관리 등 기업의 재무 전략을 수립합니다.',
+  '인사': '채용, 교육, 평가, 급여 관리 등 인적자원 관리 전반을 담당합니다.',
+  '마케팅': '시장 조사, 브랜드 전략, 디지털 마케팅, 캠페인 기획 등을 수행합니다.',
+  '기획': '사업 전략 수립, 신사업 기획, 경영 분석 등 기업의 방향성을 설계합니다.',
+  '무역': '수출입 통관, 무역 서류 작성, 해외 바이어 관리 등 국제무역 업무를 담당합니다.',
+  '통번역': '문서 번역, 통역, 현지화 작업 등 언어 전문가로서 글로벌 커뮤니케이션을 지원합니다.',
+  '해외영업': '해외 시장 개척, 외국 고객 관리, 수출 전략 수립 등을 담당합니다.'
+};
+
+// Approximate study months per cert (for prep period estimation)
+const CERT_STUDY_MONTHS = {
+  '컴활1급': 2, '컴활2급': 1, 'MOS Excel Expert': 1.5, '워드프로세서': 1, 'ITQ': 1, '한국사능력검정': 1.5,
+  '정보처리기사': 3, 'SQLD': 2, 'ADsP': 2, '빅데이터분석기사': 3, 'AWS Cloud Practitioner': 2, '네트워크관리사': 2, '리눅스마스터': 2,
+  '산업안전기사': 3, '전기기사': 4, '전기산업기사': 3, '기계기사': 4, '소방설비기사': 3, '에너지관리기사': 3, '환경기사': 3, '건설안전기사': 3,
+  '재경관리사': 3, '전산회계1급': 2, '세무회계': 2.5, 'ERP정보관리사': 2, '투자자산운용사': 2.5, 'AFPK': 3,
+  'TOEIC': 2, 'OPIc': 2, 'TOEIC Speaking': 1.5, 'IELTS': 3, 'TOEFL': 3
+};
+
+// ===== State =====
+let currentStep = 1;
+let answers = {
+  field: null,    // Q1
+  job: null,      // Q2
+  certs: [],      // Q3
+  timeline: null, // Q4
+  study: null     // Q5
+};
+
+// ===== Initialize =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderProgress();
+  renderQ1();
+  renderQ3();
+  renderQ4();
+  renderQ5();
+});
+
+// ===== Progress Bar =====
+function renderProgress() {
+  const labels = ['분야','직무','자격증','시기','공부시간'];
+  const container = document.getElementById('diag-progress');
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    const cls = i === currentStep ? 'active' : (i < currentStep ? 'done' : '');
+    html += `<div class="diag-progress-step ${cls}">
+      <div class="diag-progress-circle">${i}</div>
+      <div class="diag-progress-label">${labels[i-1]}</div>
+    </div>`;
+    if (i < 5) {
+      html += `<div class="diag-progress-line ${i < currentStep ? 'filled' : ''}"></div>`;
+    }
+  }
+  container.innerHTML = html;
+}
+
+// ===== Q1: Field =====
+function renderQ1() {
+  const container = document.getElementById('q1-options');
+  container.innerHTML = FIELDS.map(f =>
+    `<div class="diag-option ${answers.field === f.name ? 'selected' : ''}" onclick="selectField('${f.name}')">
+      <div class="diag-option-icon">${f.icon}</div>
+      <div class="diag-option-text">${f.name}</div>
+      <div class="diag-option-check"></div>
+    </div>`
+  ).join('');
+}
+
+function selectField(name) {
+  answers.field = name;
+  answers.job = null; // reset job when field changes
+  renderQ1();
+  renderQ2();
+  document.getElementById('btn-next-1').disabled = false;
+}
+
+// ===== Q2: Job =====
+function renderQ2() {
+  const container = document.getElementById('q2-options');
+  const field = FIELDS.find(f => f.name === answers.field);
+  if (!field) { container.innerHTML = ''; return; }
+  container.innerHTML = field.jobs.map(j =>
+    `<div class="diag-option ${answers.job === j ? 'selected' : ''}" onclick="selectJob('${j}')">
+      <div class="diag-option-icon">💼</div>
+      <div class="diag-option-text">${j}</div>
+      <div class="diag-option-check"></div>
+    </div>`
+  ).join('');
+  document.getElementById('btn-next-2').disabled = !answers.job;
+}
+
+function selectJob(name) {
+  answers.job = name;
+  renderQ2();
+  document.getElementById('btn-next-2').disabled = false;
+}
+
+// ===== Q3: Certs (multi-select chips) =====
+function renderQ3() {
+  const container = document.getElementById('q3-chips');
+  let html = '';
+  for (const [group, certs] of Object.entries(CERT_GROUPS)) {
+    html += `<div class="diag-chip-group-title">${group}</div>`;
+    html += '<div class="diag-chips">';
+    for (const cert of certs) {
+      const sel = answers.certs.includes(cert) ? 'selected' : '';
+      html += `<div class="diag-chip ${sel}" onclick="toggleCert(this, '${cert}')">${cert}</div>`;
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function toggleCert(el, cert) {
+  const idx = answers.certs.indexOf(cert);
+  if (idx > -1) {
+    answers.certs.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    answers.certs.push(cert);
+    el.classList.add('selected');
+  }
+}
+
+// ===== Q4: Timeline =====
+function renderQ4() {
+  const container = document.getElementById('q4-options');
+  container.innerHTML = TIMELINE_OPTIONS.map((t, i) =>
+    `<div class="diag-option ${answers.timeline === t ? 'selected' : ''}" onclick="selectTimeline('${t}')">
+      <div class="diag-option-icon">${TIMELINE_ICONS[i]}</div>
+      <div class="diag-option-text">${t}</div>
+      <div class="diag-option-check"></div>
+    </div>`
+  ).join('');
+}
+
+function selectTimeline(val) {
+  answers.timeline = val;
+  renderQ4();
+  document.getElementById('btn-next-4').disabled = false;
+}
+
+// ===== Q5: Study Hours =====
+function renderQ5() {
+  const container = document.getElementById('q5-options');
+  container.innerHTML = STUDY_OPTIONS.map((s, i) =>
+    `<div class="diag-option ${answers.study === s ? 'selected' : ''}" onclick="selectStudy('${s}')">
+      <div class="diag-option-icon">${STUDY_ICONS[i]}</div>
+      <div class="diag-option-text">${s}</div>
+      <div class="diag-option-check"></div>
+    </div>`
+  ).join('');
+}
+
+function selectStudy(val) {
+  answers.study = val;
+  renderQ5();
+  document.getElementById('btn-next-5').disabled = false;
+}
+
+// ===== Step Navigation =====
+function goStep(step) {
+  // Validate before proceeding
+  if (step > currentStep) {
+    if (currentStep === 1 && !answers.field) return;
+    if (currentStep === 2 && !answers.job) return;
+    if (currentStep === 4 && !answers.timeline) return;
+    if (currentStep === 5 && !answers.study) return;
+  }
+
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  currentStep = step;
+  const nextEl = document.getElementById(`step-${currentStep}`);
+  nextEl.classList.remove('active');
+  // Force reflow for animation
+  void nextEl.offsetWidth;
+  nextEl.classList.add('active');
+
+  // Re-render dependent step
+  if (step === 2) renderQ2();
+
+  renderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Calculate & Show Result =====
+function showResult() {
+  if (!answers.study) return;
+
+  // Hide step 5
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  document.getElementById('diag-progress').style.display = 'none';
+
+  // Get relevant certs for the job
+  const jobCerts = JOB_CERT_MAP[answers.job] || [];
+  const userCerts = answers.certs;
+
+  // Calculate score
+  let score = 0;
+  let totalWeight = 0;
+  let earnedWeight = 0;
+
+  for (const [cert, relevance] of jobCerts) {
+    totalWeight += relevance;
+    if (userCerts.includes(cert)) {
+      earnedWeight += relevance;
+    }
+  }
+
+  // Base score from certs (0-80 range)
+  if (totalWeight > 0) {
+    score = Math.round((earnedWeight / totalWeight) * 80);
+  }
+
+  // Timeline bonus (0-15)
+  const timelineBonus = { '3개월 이내': 15, '6개월 이내': 12, '1년 이내': 8, '미정': 3 };
+  score += timelineBonus[answers.timeline] || 0;
+
+  // Study hours bonus (0-5)
+  const studyBonus = { '1시간': 2, '2시간': 4, '3시간 이상': 5 };
+  score += studyBonus[answers.study] || 0;
+
+  score = Math.min(100, Math.max(0, score));
+
+  // Get recommended certs (filter out owned ones)
+  const recommended = jobCerts
+    .filter(([cert]) => !userCerts.includes(cert))
+    .slice(0, 3);
+
+  // Calculate prep period
+  const studyHoursMap = { '1시간': 1, '2시간': 2, '3시간 이상': 3 };
+  const dailyHours = studyHoursMap[answers.study] || 2;
+  let totalStudyMonths = 0;
+  for (const [cert] of recommended) {
+    const baseMonths = CERT_STUDY_MONTHS[cert] || 2;
+    // Adjust based on study hours (base assumes 2hrs/day)
+    totalStudyMonths += baseMonths * (2 / dailyHours);
+  }
+  totalStudyMonths = Math.round(totalStudyMonths * 10) / 10;
+
+  // Score message
+  let scoreMsg = '';
+  if (score >= 80) scoreMsg = '이미 훌륭한 준비가 되어 있어요!';
+  else if (score >= 60) scoreMsg = '좋은 출발점이에요. 조금만 더 준비하면 완벽해요!';
+  else if (score >= 40) scoreMsg = '기본기를 갖추고 있어요. 추천 자격증을 취득해보세요!';
+  else if (score >= 20) scoreMsg = '지금 시작하면 충분해요. 한 걸음씩 나아가봐요!';
+  else scoreMsg = '걱정 마세요! 아래 로드맵을 따라가면 됩니다.';
+
+  // Render result
+  document.getElementById('result-title').textContent = `${answers.job} 직무 진단 결과`;
+  document.getElementById('result-sub').textContent = `${answers.field} 분야 · ${answers.timeline} 목표`;
+  document.getElementById('score-msg').textContent = scoreMsg;
+
+  // Cert recommendations
+  const certContainer = document.getElementById('cert-recommendations');
+  if (recommended.length === 0) {
+    certContainer.innerHTML = '<p style="color:var(--diag-text-muted);font-size:14px;text-align:center;padding:16px 0;">모든 관련 자격증을 보유하고 있습니다! 👏</p>';
+  } else {
+    certContainer.innerHTML = recommended.map(([cert, pct], i) => {
+      const rankCls = i === 0 ? '' : (i === 1 ? 'r2' : 'r3');
+      return `<div class="diag-cert-item">
+        <div class="diag-cert-rank ${rankCls}">${i + 1}</div>
+        <div class="diag-cert-info">
+          <div class="diag-cert-name">${cert}</div>
+          <div class="diag-cert-bar-track"><div class="diag-cert-bar-fill ${rankCls}" data-pct="${pct}"></div></div>
+        </div>
+        <div class="diag-cert-pct ${rankCls}">${pct}%</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Prep period
+  const prepEl = document.getElementById('prep-period');
+  const prepDetailEl = document.getElementById('prep-detail');
+  if (recommended.length === 0) {
+    prepEl.textContent = '추가 준비 불필요';
+    prepDetailEl.textContent = '이미 관련 자격증을 모두 보유하고 있습니다.';
+  } else {
+    const months = Math.ceil(totalStudyMonths);
+    prepEl.textContent = `약 ${months}개월`;
+    prepDetailEl.textContent = `하루 ${answers.study} 기준 · 추천 자격증 ${recommended.length}개 취득 시`;
+  }
+
+  // Job connection
+  document.getElementById('job-name').textContent = `${answers.job} 직무`;
+  document.getElementById('job-desc').textContent = JOB_DESC[answers.job] || '';
+
+  // Show result
+  const resultEl = document.getElementById('diag-result');
+  resultEl.classList.add('active');
+
+  // Animate score ring
+  setTimeout(() => {
+    const ring = document.getElementById('score-ring');
+    const circumference = 2 * Math.PI * 80; // ~502
+    const offset = circumference - (circumference * score / 100);
+    ring.style.strokeDashoffset = offset;
+
+    // Animate score number
+    animateNumber('score-num', 0, score, 1200);
+
+    // Animate cert bars
+    document.querySelectorAll('.diag-cert-bar-fill').forEach(bar => {
+      const pct = bar.getAttribute('data-pct');
+      bar.style.width = pct + '%';
+    });
+  }, 300);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function animateNumber(elementId, start, end, duration) {
+  const el = document.getElementById(elementId);
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (end - start) * eased);
+    el.textContent = current;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ===== Reset =====
+function resetTest() {
+  currentStep = 1;
+  answers = { field: null, job: null, certs: [], timeline: null, study: null };
+
+  document.getElementById('diag-result').classList.remove('active');
+  document.getElementById('diag-progress').style.display = 'flex';
+
+  // Reset score ring
+  document.getElementById('score-ring').style.strokeDashoffset = 502;
+  document.getElementById('score-num').textContent = '0';
+
+  renderProgress();
+  renderQ1();
+  renderQ3();
+  renderQ4();
+  renderQ5();
+
+  document.getElementById('btn-next-1').disabled = true;
+  document.getElementById('btn-next-4').disabled = true;
+  document.getElementById('btn-next-5').disabled = true;
+
+  const step1 = document.getElementById('step-1');
+  step1.classList.add('active');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Share Card Generation =====
+function generateShareCard() {
+  const canvas = document.getElementById('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 600, H = 400;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Gradient background (navy to blue)
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, '#0F1B33');
+  grad.addColorStop(0.5, '#162544');
+  grad.addColorStop(1, '#1E3A6E');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, W, H, 20);
+  ctx.fill();
+
+  // Decorative circles
+  ctx.globalAlpha = 0.06;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.beginPath(); ctx.arc(W - 60, 60, 120, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(80, H - 40, 80, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Logo
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = '600 13px Pretendard Variable, sans-serif';
+  ctx.fillText('📋 JobReady 취업진단', 32, 40);
+
+  // Score
+  const scoreVal = document.getElementById('score-num').textContent;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = '900 64px Pretendard Variable, sans-serif';
+  ctx.fillText(scoreVal, 32, 110);
+  ctx.font = '600 20px Pretendard Variable, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText('/ 100점', 32 + ctx.measureText(scoreVal).width + 8, 110);
+
+  // Job target
+  ctx.fillStyle = '#3182F6';
+  ctx.font = '700 16px Pretendard Variable, sans-serif';
+  ctx.fillText(`${answers.field} · ${answers.job}`, 32, 145);
+
+  // Divider
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(32, 168); ctx.lineTo(W - 32, 168); ctx.stroke();
+
+  // Recommended certs
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = '600 13px Pretendard Variable, sans-serif';
+  ctx.fillText('추천 자격증 TOP 3', 32, 198);
+
+  const jobCerts = JOB_CERT_MAP[answers.job] || [];
+  const recommended = jobCerts
+    .filter(([cert]) => !answers.certs.includes(cert))
+    .slice(0, 3);
+
+  recommended.forEach(([cert, pct], i) => {
+    const y = 225 + i * 44;
+
+    // Badge
+    const colors = ['#3182F6', '#4B9CF5', '#8BBDF8'];
+    ctx.fillStyle = colors[i];
+    ctx.beginPath();
+    ctx.roundRect(32, y - 12, 24, 24, 6);
+    ctx.fill();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '800 12px Pretendard Variable, sans-serif';
+    ctx.fillText(String(i + 1), 40, y + 5);
+
+    // Cert name
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 15px Pretendard Variable, sans-serif';
+    ctx.fillText(cert, 68, y + 4);
+
+    // Percentage bar bg
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.beginPath(); ctx.roundRect(68, y + 12, 400, 6, 3); ctx.fill();
+
+    // Percentage bar fill
+    ctx.fillStyle = colors[i];
+    ctx.beginPath(); ctx.roundRect(68, y + 12, 400 * pct / 100, 6, 3); ctx.fill();
+
+    // Percentage text
+    ctx.fillStyle = colors[i];
+    ctx.font = '800 13px Pretendard Variable, sans-serif';
+    ctx.fillText(`${pct}%`, W - 60, y + 4);
+  });
+
+  // Bottom text
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '500 11px Pretendard Variable, sans-serif';
+  ctx.fillText('jobready.kr에서 나만의 취업 진단 받기', 32, H - 20);
+
+  // Download
+  const link = document.createElement('a');
+  link.download = `JobReady_진단결과_${answers.job}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+
+  showToast('결과 카드가 저장되었습니다!');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('diag-toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+</script>
+
+</body>
+</html>
