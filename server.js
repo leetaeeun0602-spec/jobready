@@ -25,7 +25,7 @@ app.use('/api/roadmap', roadmapRouter);
 // ===== Contact API =====
 const {
   contactsDb, saveContacts,
-  createBackup, getStats, printStartupStatus, verifyAllFiles
+  createBackup, getStats, printStartupStatus, verifyAllFiles, seedSampleData
 } = require('./utils/dataStore');
 
 app.post('/api/contact', (req, res) => {
@@ -68,6 +68,7 @@ app.listen(PORT, () => {
   console.log(`  🚀 JobReady 서버 실행 중`);
   console.log(`  📍 http://localhost:${PORT}`);
   verifyAllFiles();
+  seedSampleData();
   printStartupStatus();
   console.log(`==========================================`);
 });
