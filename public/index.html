@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobReady - 취업 준비의 모든 것</title>
+  <meta name="description" content="취업 준비의 모든 것, 한 곳에서. 자격증 정보, 시험일정, 익명 커뮤니티">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">📋</span>
+        <span class="logo-text">JobReady</span>
+      </a>
+      <div class="nav-links">
+        <a href="#certificates">자격증</a>
+        <a href="#calendar">시험일정</a>
+        <a href="#ranking">랭킹</a>
+        <a href="#community">커뮤니티</a>
+      </div>
+      <div class="nav-auth" id="nav-auth">
+        <button class="nav-cta" onclick="openAuthModal('login')">로그인</button>
+        <button class="nav-cta nav-cta-register" onclick="openAuthModal('register')">회원가입</button>
+      </div>
+      <div class="nav-user" id="nav-user" style="display:none;">
+        <span class="nav-user-name" id="nav-user-name"></span>
+        <button class="nav-cta nav-cta-logout" onclick="doLogout()">로그아웃</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="hero" id="hero-section">
+    <canvas class="particle-canvas" id="particle-canvas"></canvas>
+    <div class="hero-bg-effects">
+      <div class="mesh-blob mesh-1"></div>
+      <div class="mesh-blob mesh-2"></div>
+      <div class="mesh-blob mesh-3"></div>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-scroll-overlay" id="hero-scroll-overlay"></div>
+    <div class="hero-content" id="hero-content">
+      <div class="hero-badge">🚀 취업 준비의 새로운 방법</div>
+      <h1 class="hero-title">
+        <span id="typing-line1"></span><span class="typing-cursor" id="typing-cursor">|</span><br>
+        <span id="typing-line2" style="opacity:0;transition:opacity 0.6s ease"></span>
+      </h1>
+      <p class="hero-desc" id="hero-desc" style="opacity:0;transition:opacity 0.8s ease">
+        자격증 정보, 시험 일정, 합격 수기까지<br>
+        취업 준비에 필요한 모든 것을 한곳에서 확인하세요
+      </p>
+      <div class="hero-actions" id="hero-actions" style="opacity:0;transition:opacity 0.8s ease">
+        <button class="btn-primary" onclick="scrollToSection('certificates')">자격증 둘러보기 →</button>
+        <button class="btn-secondary" onclick="scrollToSection('community')">커뮤니티 참여하기</button>
+      </div>
+      <div class="hero-stats" id="hero-stats" style="opacity:0;transition:opacity 0.8s ease">
+        <div class="hero-stat">
+          <div class="hero-stat-num">32</div>
+          <div class="hero-stat-label">자격증 정보</div>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">5</div>
+          <div class="hero-stat-label">분야 섹터</div>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">커뮤니티 게시판</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Daily Quote ===== -->
+  <div class="daily-quote-section" id="daily-quote">
+    <div class="container">
+      <div class="daily-quote-inner" id="daily-quote-inner"></div>
+    </div>
+  </div>
+
+  <!-- ===== 5대 자격증 섹터 ===== -->
+  <section class="section" id="certificates">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">📚 5대 자격증 섹터</span>
+        <h2 class="section-title">분야별 자격증 가이드</h2>
+        <p class="section-desc">자격증 태그를 클릭하면 상세 정보를 확인할 수 있어요</p>
+      </div>
+      <div class="sectors-list" id="sectors-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== 시험일정 캘린더 ===== -->
+  <section class="section" id="calendar">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">📅 시험일정</span>
+        <h2 class="section-title">시험일정 캘린더</h2>
+        <p class="section-desc">자격증 시험 접수일, 시험일, 발표일을 한눈에 확인하세요</p>
+      </div>
+      <div class="always-exam-box">
+        <div class="always-exam-header">
+          <span class="always-exam-icon">📌</span>
+          <h3 class="always-exam-title">상시시험 안내</h3>
+        </div>
+        <div class="always-exam-grid" id="always-exam-grid"></div>
+      </div>
+      <div class="calendar-filters" id="calendar-filters"></div>
+      <div class="calendar-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#eab308"></span>접수기간</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>필기시험</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>실기시험</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>합격발표</span>
+      </div>
+      <div class="calendar-wrapper">
+        <div class="calendar-nav">
+          <button class="cal-nav-btn" onclick="changeMonth(-1)">&#8592;</button>
+          <h3 class="cal-month-title" id="cal-month-title"></h3>
+          <button class="cal-nav-btn" onclick="changeMonth(1)">&#8594;</button>
+        </div>
+        <div class="calendar-day-headers">
+          <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+      <div class="upcoming-section">
+        <div class="upcoming-header">
+          <span class="upcoming-icon">⏰</span>
+          <h3 class="upcoming-title">다가오는 일정</h3>
+        </div>
+        <div class="upcoming-list" id="upcoming-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 랭킹보드 ===== -->
+  <section class="section" id="ranking">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">🏆 출석 랭킹</span>
+        <h2 class="section-title">출석 랭킹보드</h2>
+        <p class="section-desc">꾸준히 공부하는 취준생들의 출석 현황</p>
+      </div>
+      <div class="ranking-card">
+        <div class="ranking-list" id="ranking-list"></div>
+        <div class="ranking-actions">
+          <button class="share-card-btn" onclick="generateShareCard()">📤 내 출석현황 공유하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 커뮤니티 ===== -->
+  <section class="section" id="community">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">💬 커뮤니티</span>
+        <h2 class="section-title">익명 커뮤니티</h2>
+        <p class="section-desc">취업 준비생들과 정보를 나누고 응원하세요</p>
+      </div>
+      <div class="community-tabs">
+        <button class="comm-tab active" data-board="free" onclick="setBoardTab('free')">💬 자유게시판</button>
+        <button class="comm-tab" data-board="success" onclick="setBoardTab('success')">🎉 합격수기</button>
+        <button class="comm-tab" data-board="tips" onclick="setBoardTab('tips')">💡 시험꿀팁</button>
+        <button class="comm-tab" data-board="study" onclick="setBoardTab('study')">📖 스터디모집</button>
+      </div>
+      <div class="tips-filter" id="tips-filter" style="display:none;"></div>
+      <div class="study-filter" id="study-filter" style="display:none;"></div>
+      <div class="community-actions">
+        <button class="write-btn" onclick="openWriteModal()">✏️ 글쓰기</button>
+      </div>
+      <div class="posts-list" id="posts-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">💡 서비스 소개</span>
+        <h2 class="section-title">왜 JobReady인가요?</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card"><div class="about-icon">🎯</div><h3>통합 자격증 정보</h3><p>5대 분야 32개 자격증 정보를 한눈에 확인하세요.</p></div>
+        <div class="about-card"><div class="about-icon">📅</div><h3>시험일정 캘린더</h3><p>접수일, 시험일, 발표일을 캘린더에서 한 번에 확인하세요.</p></div>
+        <div class="about-card"><div class="about-icon">💬</div><h3>익명 커뮤니티</h3><p>합격수기, 꿀팁, 스터디모집까지 부담 없이 소통하세요.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></div>
+        <p class="footer-desc">취업 준비의 모든 것, 한 곳에서</p>
+        <div class="footer-bottom">
+          <span>&copy; 2026 JobReady. All rights reserved.</span>
+          <span>Built with Express.js</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Write Post Modal ===== -->
+  <div class="modal-overlay" id="write-modal">
+    <div class="modal-card write-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="write-modal-title">글쓰기</h2>
+        <button class="modal-close-btn" onclick="closeWriteModal()">✕</button>
+      </div>
+      <form class="write-form" onsubmit="submitPost(event)">
+        <div class="success-fields" id="success-fields" style="display:none;">
+          <div class="form-row">
+            <input type="text" class="form-input" id="post-company" placeholder="회사명" maxlength="30">
+            <input type="text" class="form-input" id="post-position" placeholder="직무" maxlength="30">
+          </div>
+        </div>
+        <div class="tips-fields" id="tips-fields-form" style="display:none;">
+          <select class="form-select" id="post-cert-tag"><option value="">자격증 태그 선택</option></select>
+        </div>
+        <div class="study-fields" id="study-fields-form" style="display:none;">
+          <select class="form-select" id="post-study-cert"><option value="">자격증 태그 선택</option></select>
+          <div class="form-row">
+            <input type="number" class="form-input" id="post-max-members" placeholder="모집인원" min="2" max="20">
+            <select class="form-select" id="post-method">
+              <option value="">방식 선택</option>
+              <option value="온라인">온라인</option>
+              <option value="오프라인">오프라인</option>
+              <option value="병행">온/오프 병행</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <select class="form-select" id="post-region" onchange="onRegionChange()">
+              <option value="">지역 선택</option>
+              <option value="서울">서울</option>
+              <option value="경기">경기</option>
+              <option value="인천">인천</option>
+            </select>
+            <select class="form-select" id="post-region-city"><option value="">상세지역 선택</option></select>
+          </div>
+        </div>
+        <input type="text" class="form-input" id="post-title" placeholder="제목을 입력하세요" maxlength="100" required>
+        <textarea class="form-textarea" id="post-content" placeholder="내용을 입력하세요" rows="6" maxlength="2000" required></textarea>
+        <button type="submit" class="modal-submit">게시하기</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Post Detail Modal ===== -->
+  <div class="modal-overlay" id="post-detail-modal">
+    <div class="modal-card post-detail-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="detail-title"></h2>
+        <button class="modal-close-btn" onclick="closeDetailModal()">✕</button>
+      </div>
+      <div class="detail-meta" id="detail-meta"></div>
+      <div class="detail-body" id="detail-body"></div>
+      <div class="detail-study-info" id="detail-study-info" style="display:none;"></div>
+      <div class="detail-actions" id="detail-actions"></div>
+      <div class="detail-comments" id="detail-comments"></div>
+      <form class="comment-form" onsubmit="submitComment(event)">
+        <input type="text" class="form-input" id="comment-input" placeholder="댓글을 입력하세요" maxlength="300" required>
+        <button type="submit" class="comment-submit-btn">등록</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Calendar Day Detail Modal ===== -->
+  <div class="modal-overlay" id="cal-day-modal">
+    <div class="modal-card cal-day-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="cal-day-title"></h2>
+        <button class="modal-close-btn" onclick="closeCalDayModal()">✕</button>
+      </div>
+      <div id="cal-day-events"></div>
+    </div>
+  </div>
+
+  <!-- ===== Certificate Detail Modal ===== -->
+  <div class="modal-overlay" id="cert-detail-modal">
+    <div class="modal-card cert-detail-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="cert-detail-name"></h2>
+        <button class="modal-close-btn" onclick="closeCertDetailModal()">✕</button>
+      </div>
+      <div id="cert-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== Ranker Detail Popup ===== -->
+  <div class="modal-overlay" id="ranker-modal">
+    <div class="modal-card ranker-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="ranker-name"></h2>
+        <button class="modal-close-btn" onclick="closeRankerModal()">✕</button>
+      </div>
+      <div id="ranker-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== Calendar Tooltip ===== -->
+  <div class="cal-tooltip" id="cal-tooltip"></div>
+
+  <!-- ===== Auth Modal ===== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="auth-modal-title">로그인</h2>
+        <button class="modal-close-btn" onclick="closeAuthModal()">✕</button>
+      </div>
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+        <div class="auth-field">
+          <label class="auth-label">이름</label>
+          <input type="text" class="form-input auth-input" id="login-name" placeholder="이름을 입력하세요" maxlength="20" required>
+          <span class="auth-error" id="login-name-error"></span>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">전화번호</label>
+          <input type="tel" class="form-input auth-input" id="login-phone" placeholder="010-0000-0000" maxlength="13" required>
+          <span class="auth-error" id="login-phone-error"></span>
+        </div>
+        <span class="auth-error auth-server-error" id="login-server-error"></span>
+        <button type="submit" class="modal-submit auth-submit">로그인</button>
+        <div class="auth-switch">
+          계정이 없으신가요? <a href="#" onclick="event.preventDefault(); switchAuthMode('register')">회원가입</a>
+        </div>
+      </form>
+      <!-- Register Form -->
+      <form class="auth-form" id="register-form" style="display:none;" onsubmit="handleRegister(event)">
+        <div class="auth-field">
+          <label class="auth-label">이름 <span class="auth-required">*</span></label>
+          <input type="text" class="form-input auth-input" id="register-name" placeholder="이름을 입력하세요" maxlength="20" required>
+          <span class="auth-error" id="register-name-error"></span>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">전화번호 <span class="auth-required">*</span></label>
+          <input type="tel" class="form-input auth-input" id="register-phone" placeholder="010-0000-0000" maxlength="13" required>
+          <span class="auth-error" id="register-phone-error"></span>
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">생년월일 <span class="auth-required">*</span></label>
+          <input type="date" class="form-input auth-input" id="register-birth" required>
+          <span class="auth-error" id="register-birth-error"></span>
+        </div>
+        <span class="auth-error auth-server-error" id="register-server-error"></span>
+        <button type="submit" class="modal-submit auth-submit">회원가입</button>
+        <div class="auth-switch">
+          이미 회원이신가요? <a href="#" onclick="event.preventDefault(); switchAuthMode('login')">로그인</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Hidden canvas for share card ===== -->
+  <canvas id="share-canvas" width="600" height="400" style="display:none;"></canvas>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
