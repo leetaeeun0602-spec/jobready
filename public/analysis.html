@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>직무분석 리포트 - JobReady</title>
+  <meta name="description" content="주요 직무별 요구 역량과 추천 자격증을 한눈에 확인하세요. 직무분석 리포트로 취업 준비를 체계적으로.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== Light Theme for Analysis Page ===== */
+    :root {
+      --an-bg: #FFFFFF;
+      --an-section-bg: #F8F9FA;
+      --an-primary: #3182F6;
+      --an-primary-light: rgba(49,130,246,0.08);
+      --an-primary-hover: #1B6AE0;
+      --an-navy: #1B1D6A;
+      --an-text: #191F28;
+      --an-text-secondary: #4E5968;
+      --an-text-muted: #8B95A1;
+      --an-card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --an-card-radius: 16px;
+      --an-btn-radius: 12px;
+    }
+
+    body.analysis-page {
+      background: var(--an-bg);
+      color: var(--an-text);
+      margin: 0;
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Nav Override (light) ===== */
+    body.analysis-page .nav {
+      background: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 14px 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    body.analysis-page .nav-logo { color: var(--an-text); }
+    body.analysis-page .nav-links a {
+      color: var(--an-text-secondary);
+      font-weight: 600;
+    }
+    body.analysis-page .nav-links a:hover,
+    body.analysis-page .nav-links .nav-link-active {
+      color: var(--an-primary);
+    }
+
+    /* ===== Hero Section ===== */
+    .analysis-hero {
+      padding: 140px 24px 80px;
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      text-align: center;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+    }
+    .analysis-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(255,255,255,0.03) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .analysis-hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      margin: 0 0 16px;
+      position: relative;
+      letter-spacing: -0.5px;
+    }
+    .analysis-hero p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      margin: 0;
+      position: relative;
+      font-weight: 400;
+    }
+
+    /* ===== Content Container ===== */
+    .analysis-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-header h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--an-text);
+      margin: 0 0 8px;
+    }
+    .section-header p {
+      font-size: 15px;
+      color: var(--an-text-muted);
+      margin: 0;
+    }
+
+    /* ===== Job Cards Grid ===== */
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .job-card {
+      background: #FFFFFF;
+      border-radius: var(--an-card-radius);
+      box-shadow: var(--an-card-shadow);
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+      position: relative;
+    }
+    .job-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .job-card.active {
+      border-color: var(--an-primary);
+      box-shadow: 0 4px 20px rgba(49,130,246,0.15);
+    }
+
+    .job-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .job-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--an-section-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .job-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .job-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--an-text);
+      margin: 0 0 4px;
+    }
+    .job-desc {
+      font-size: 13px;
+      color: var(--an-text-muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .job-arrow {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--an-text-muted);
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .job-card.active .job-arrow {
+      transform: rotate(180deg);
+      color: var(--an-primary);
+    }
+
+    /* ===== Job Detail Panel ===== */
+    .job-detail-wrapper {
+      grid-column: 1 / -1;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.4s ease,
+                  margin 0.4s ease;
+      margin: 0;
+    }
+    .job-detail-wrapper.open {
+      max-height: 800px;
+      opacity: 1;
+      margin: 4px 0 12px;
+    }
+
+    .job-detail {
+      background: #FFFFFF;
+      border-radius: var(--an-card-radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 36px 32px;
+      border: 1px solid rgba(49,130,246,0.12);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .detail-section {
+      margin-bottom: 0;
+    }
+    .detail-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--an-text);
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .detail-section-title .title-icon {
+      font-size: 18px;
+    }
+
+    /* ===== Skill Bars ===== */
+    .skill-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .skill-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--an-text-secondary);
+      width: 90px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .skill-bar-bg {
+      flex: 1;
+      height: 10px;
+      background: var(--an-section-bg);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--an-primary), #63a4ff);
+      border-radius: 5px;
+      width: 0;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .skill-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--an-primary);
+      width: 36px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ===== Cert Badges ===== */
+    .cert-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .cert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--an-primary-light);
+      color: var(--an-primary);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--an-btn-radius);
+      transition: all 0.2s ease;
+    }
+    .cert-badge:hover {
+      background: rgba(49,130,246,0.15);
+    }
+    .cert-badge::before {
+      content: '📜';
+      font-size: 14px;
+    }
+
+    /* ===== Salary & Trend ===== */
+    .info-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .info-card {
+      background: var(--an-section-bg);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .info-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .info-content {
+      flex: 1;
+    }
+    .info-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--an-text-muted);
+      margin: 0 0 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .info-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--an-text);
+      margin: 0;
+    }
+
+    .trend-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .trend-up {
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+    }
+    .trend-stable {
+      background: rgba(49, 130, 246, 0.1);
+      color: #3182F6;
+    }
+    .trend-down {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    /* ===== Footer ===== */
+    .site-footer { background: #1B1D6A; padding: 60px 0 30px; color: #fff; }
+    .footer-container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-logo { font-size: 20px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: rgba(255,255,255,0.9); }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: #3182F6; }
+    .footer-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 40px 0 20px; }
+    .footer-copyright { font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .analysis-hero {
+        padding: 120px 20px 60px;
+      }
+      .analysis-hero h1 {
+        font-size: 28px;
+      }
+      .analysis-hero p {
+        font-size: 15px;
+      }
+      .analysis-container {
+        padding: 32px 16px 60px;
+      }
+      .section-header h2 {
+        font-size: 22px;
+      }
+      .jobs-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .job-card {
+        padding: 22px 18px;
+      }
+      .job-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+      }
+      .job-name {
+        font-size: 15px;
+      }
+      .job-desc {
+        font-size: 12px;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .job-detail {
+        padding: 24px 18px;
+      }
+      .skill-label {
+        width: 72px;
+        font-size: 12px;
+      }
+      .cert-badge {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .analysis-hero h1 {
+        font-size: 24px;
+      }
+      .analysis-hero p {
+        font-size: 14px;
+      }
+      .job-desc {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="analysis-page">
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <a href="/#certificates">자격증</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html">취업진단</a>
+        <a href="/analysis.html" class="nav-link-active">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
+        <a href="/#ranking">랭킹</a>
+        <a href="/#community">커뮤니티</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="analysis-hero">
+    <h1>직무분석 리포트</h1>
+    <p>주요 직무별 요구 역량과 추천 자격증을 한눈에 확인하세요</p>
+  </section>
+
+  <!-- ===== Main Content ===== -->
+  <div class="analysis-container">
+    <div class="section-header">
+      <h2>주요 직무 카테고리</h2>
+      <p>관심있는 직무를 클릭하면 상세 분석을 확인할 수 있습니다</p>
+    </div>
+
+    <div class="jobs-grid" id="jobsGrid">
+      <!-- Cards & detail panels are rendered by JavaScript -->
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/#about">서비스소개</a>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Jobs Data =====
+    const JOBS = [
+      {
+        id: 'office', name: '사무·행정', icon: '🧾', desc: '문서 작성, 데이터 관리, 일정 관리 등 조직 운영 지원',
+        skills: [['문서작성',95],['엑셀활용',90],['데이터관리',80],['커뮤니케이션',75],['일정관리',70]],
+        certs: ['컴활1급','워드프로세서','MOS Excel Expert'],
+        salary: '2,800~3,500만원', trend: '유지', trendIcon: '➡️'
+      },
+      {
+        id: 'marketing', name: '마케팅', icon: '📢', desc: '시장 분석, 브랜드 관리, 디지털 마케팅 전략 수립',
+        skills: [['데이터분석',90],['콘텐츠기획',85],['SNS운영',80],['트렌드분석',75],['커뮤니케이션',70]],
+        certs: ['컴활1급','ADsP','TOEIC'],
+        salary: '3,000~4,000만원', trend: '증가', trendIcon: '📈'
+      },
+      {
+        id: 'itdev', name: 'IT·개발', icon: '💻', desc: '소프트웨어 설계, 개발, 테스트 및 유지보수',
+        skills: [['프로그래밍',95],['알고리즘',90],['데이터베이스',85],['시스템설계',80],['협업도구',70]],
+        certs: ['정보처리기사','SQLD','AWS Cloud Practitioner'],
+        salary: '3,500~5,500만원', trend: '증가', trendIcon: '📈'
+      },
+      {
+        id: 'data', name: '데이터분석', icon: '📊', desc: '데이터 수집, 분석, 시각화를 통한 비즈니스 인사이트 도출',
+        skills: [['통계분석',95],['Python/R',90],['SQL',88],['시각화',80],['비즈니스이해',75]],
+        certs: ['ADsP','SQLD','빅데이터분석기사'],
+        salary: '3,500~5,000만원', trend: '증가', trendIcon: '📈'
+      },
+      {
+        id: 'accounting', name: '회계·재무', icon: '💰', desc: '재무제표 작성, 세무 신고, 자금 관리 및 예산 편성',
+        skills: [['회계원리',95],['세무지식',90],['ERP활용',85],['재무분석',80],['엑셀활용',75]],
+        certs: ['전산회계1급','재경관리사','ERP정보관리사'],
+        salary: '3,000~4,200만원', trend: '유지', trendIcon: '➡️'
+      },
+      {
+        id: 'electrical', name: '전기·전자', icon: '⚡', desc: '전기 설비 설계, 시공, 감리 및 유지보수',
+        skills: [['회로설계',95],['전력시스템',90],['시퀀스제어',85],['안전관리',80],['도면해석',75]],
+        certs: ['전기기사','전기산업기사','에너지관리기사'],
+        salary: '3,200~4,500만원', trend: '증가', trendIcon: '📈'
+      },
+      {
+        id: 'safety', name: '안전관리', icon: '🛡️', desc: '산업 현장 안전 점검, 위험성 평가, 안전 교육',
+        skills: [['위험성평가',95],['안전법규',90],['사고조사',85],['교육훈련',80],['보고서작성',70]],
+        certs: ['산업안전기사','건설안전기사','환경기사'],
+        salary: '3,200~4,500만원', trend: '증가', trendIcon: '📈'
+      },
+      {
+        id: 'mechanical', name: '기계·설비', icon: '⚙️', desc: '기계 설비 설계, 제작, 설치 및 품질 관리',
+        skills: [['CAD설계',95],['기계가공',90],['품질관리',85],['설비보전',80],['재료역학',75]],
+        certs: ['기계기사','에너지관리기사','산업안전기사'],
+        salary: '3,000~4,200만원', trend: '유지', trendIcon: '➡️'
+      },
+      {
+        id: 'sales', name: '영업', icon: '🤝', desc: '고객 관리, 신규 거래처 발굴, 매출 목표 달성',
+        skills: [['커뮤니케이션',95],['협상력',90],['시장분석',85],['CRM활용',75],['프레젠테이션',70]],
+        certs: ['TOEIC','OPIc','컴활1급'],
+        salary: '3,000~5,000만원(인센티브별도)', trend: '유지', trendIcon: '➡️'
+      },
+      {
+        id: 'planning', name: '기획', icon: '📝', desc: '사업 전략 수립, 프로젝트 관리, 성과 분석',
+        skills: [['전략수립',95],['데이터분석',90],['보고서작성',88],['프로젝트관리',80],['프레젠테이션',75]],
+        certs: ['컴활1급','ADsP','한국사능력검정'],
+        salary: '3,200~4,500만원', trend: '유지', trendIcon: '➡️'
+      }
+    ];
+
+    // ===== State =====
+    let activeJobId = null;
+
+    // ===== Render =====
+    function renderGrid() {
+      const grid = document.getElementById('jobsGrid');
+      grid.innerHTML = '';
+
+      // Determine after which row index (0-based pair) the detail panel goes.
+      // Cards are in a 2-col grid. We need to insert the detail panel after the row
+      // containing the active card.
+      let activeIndex = -1;
+      if (activeJobId) {
+        activeIndex = JOBS.findIndex(j => j.id === activeJobId);
+      }
+      // The detail should appear after the row containing activeIndex.
+      // Row pair: indices 0-1 = row 0, 2-3 = row 1, etc.
+      // We insert the detail wrapper after index: (floor(activeIndex/2)*2 + 1) in the card list,
+      // but since CSS grid handles ordering, we use order + a single detail element.
+
+      // Build cards
+      JOBS.forEach((job, i) => {
+        const card = document.createElement('div');
+        card.className = 'job-card' + (job.id === activeJobId ? ' active' : '');
+        card.setAttribute('data-id', job.id);
+        // Use CSS order to keep grid layout correct
+        // Each card gets order = row * 3 + position
+        const row = Math.floor(i / 2);
+        const col = i % 2;
+        card.style.order = row * 3 + col;
+
+        card.innerHTML = `
+          <div class="job-card-top">
+            <div class="job-icon">${job.icon}</div>
+            <div class="job-info">
+              <p class="job-name">${job.name}</p>
+              <p class="job-desc">${job.desc}</p>
+            </div>
+            <div class="job-arrow">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => toggleJob(job.id));
+        grid.appendChild(card);
+
+        // If this card's row just ended (col === 1) or it's the last card,
+        // and the active card is in this row, insert the detail panel
+        const activeRow = activeIndex >= 0 ? Math.floor(activeIndex / 2) : -1;
+        if (row === activeRow && (col === 1 || i === JOBS.length - 1)) {
+          const wrapper = createDetailPanel(JOBS[activeIndex]);
+          wrapper.style.order = row * 3 + 2;
+          grid.appendChild(wrapper);
+          // Trigger open animation after append
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              wrapper.classList.add('open');
+              animateSkillBars(wrapper);
+            });
+          });
+        }
+      });
+    }
+
+    function createDetailPanel(job) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'job-detail-wrapper';
+      wrapper.setAttribute('data-detail', job.id);
+
+      const trendClass = job.trend === '증가' ? 'trend-up' : job.trend === '감소' ? 'trend-down' : 'trend-stable';
+
+      wrapper.innerHTML = `
+        <div class="job-detail">
+          <div class="detail-grid">
+            <div class="detail-section">
+              <div class="detail-section-title">
+                <span class="title-icon">📊</span> 요구 스킬 TOP 5
+              </div>
+              <div class="skill-bars">
+                ${job.skills.map(([name, pct]) => `
+                  <div class="skill-row">
+                    <span class="skill-label">${name}</span>
+                    <div class="skill-bar-bg">
+                      <div class="skill-bar-fill" data-target="${pct}"></div>
+                    </div>
+                    <span class="skill-pct">${pct}%</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div class="detail-section">
+              <div class="detail-section-title">
+                <span class="title-icon">🏆</span> 추천 자격증 TOP 3
+              </div>
+              <div class="cert-badges">
+                ${job.certs.map(c => `<span class="cert-badge">${c}</span>`).join('')}
+              </div>
+
+              <div class="info-cards" style="margin-top: 24px;">
+                <div class="info-card">
+                  <div class="info-icon">💵</div>
+                  <div class="info-content">
+                    <p class="info-label">평균 연봉 범위</p>
+                    <p class="info-value">${job.salary}</p>
+                  </div>
+                </div>
+                <div class="info-card">
+                  <div class="info-icon">${job.trendIcon}</div>
+                  <div class="info-content">
+                    <p class="info-label">채용 트렌드</p>
+                    <p class="info-value">
+                      <span class="trend-badge ${trendClass}">${job.trendIcon} ${job.trend}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return wrapper;
+    }
+
+    function animateSkillBars(container) {
+      const bars = container.querySelectorAll('.skill-bar-fill');
+      bars.forEach((bar, i) => {
+        const target = bar.getAttribute('data-target');
+        setTimeout(() => {
+          bar.style.width = target + '%';
+        }, i * 80);
+      });
+    }
+
+    function toggleJob(jobId) {
+      if (activeJobId === jobId) {
+        // Close the current panel
+        const wrapper = document.querySelector(`.job-detail-wrapper[data-detail="${jobId}"]`);
+        const card = document.querySelector(`.job-card[data-id="${jobId}"]`);
+        if (wrapper) {
+          wrapper.classList.remove('open');
+          // Reset bar widths so the close transition looks clean
+          wrapper.querySelectorAll('.skill-bar-fill').forEach(b => b.style.width = '0');
+        }
+        if (card) card.classList.remove('active');
+        activeJobId = null;
+
+        // Remove wrapper after transition
+        setTimeout(() => {
+          if (wrapper && wrapper.parentNode) {
+            wrapper.parentNode.removeChild(wrapper);
+          }
+        }, 500);
+      } else {
+        // If another panel is open, close it first then open new
+        activeJobId = jobId;
+        renderGrid();
+
+        // Scroll to the card smoothly
+        setTimeout(() => {
+          const activeCard = document.querySelector(`.job-card[data-id="${jobId}"]`);
+          if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 100);
+      }
+    }
+
+    // ===== Init =====
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGrid();
+    });
+  </script>
+</body>
+</html>

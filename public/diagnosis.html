@@ -596,23 +596,7 @@
     }
 
     /* ===== Footer Override ===== */
-    body.diagnosis-page .footer {
-      background: var(--diag-section-bg);
-      border-top: 1px solid #E5E8EB;
-    }
-    body.diagnosis-page .footer-brand,
-    body.diagnosis-page .footer .logo-text {
-      color: var(--diag-text);
-    }
-    body.diagnosis-page .footer-desc {
-      color: var(--diag-text-muted);
-    }
-    body.diagnosis-page .footer-bottom {
-      color: var(--diag-text-muted);
-    }
-    body.diagnosis-page .footer-bottom span {
-      color: var(--diag-text-muted);
-    }
+    /* The new site-footer uses its own navy styling, no overrides needed */
 
     /* ===== Responsive ===== */
     @media (max-width: 600px) {
@@ -667,6 +651,8 @@
         <a href="/#certificates">자격증</a>
         <a href="/#calendar">시험일정</a>
         <a href="/diagnosis.html" class="nav-link-active">취업진단</a>
+        <a href="/analysis.html">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
         <a href="/#ranking">랭킹</a>
         <a href="/#community">커뮤니티</a>
       </div>
@@ -795,7 +781,7 @@
       <!-- Actions -->
       <div class="diag-result-actions">
         <button class="diag-action-btn diag-share-btn" onclick="generateShareCard()">📤 결과 공유하기</button>
-        <button class="diag-action-btn diag-roadmap-btn" onclick="alert('로드맵 기능은 준비 중입니다!')">🗺️ 로드맵 시작</button>
+        <button class="diag-action-btn diag-roadmap-btn" onclick="window.location.href='/roadmap.html'">🗺️ 로드맵 시작</button>
       </div>
       <button class="diag-retry-btn" onclick="resetTest()">다시 진단하기</button>
     </div>
@@ -803,16 +789,38 @@
   </div>
 
   <!-- ===== Footer ===== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></div>
-        <p class="footer-desc">취업 준비의 모든 것, 한 곳에서</p>
-        <div class="footer-bottom">
-          <span>&copy; 2026 JobReady. All rights reserved.</span>
-          <span>Built with Express.js</span>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/#about">서비스소개</a>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
         </div>
       </div>
+      <div class="footer-divider"></div>
+      <div class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</div>
     </div>
   </footer>
 
@@ -1175,6 +1183,18 @@ function showResult() {
   // Job connection
   document.getElementById('job-name').textContent = `${answers.job} 직무`;
   document.getElementById('job-desc').textContent = JOB_DESC[answers.job] || '';
+
+  // Save diagnosis result to localStorage for roadmap page
+  const diagnosisResult = {
+    field: answers.field,
+    job: answers.job,
+    ownedCerts: answers.certs.slice(),
+    timeline: answers.timeline,
+    studyHours: answers.study,
+    score: score,
+    recommendedCerts: recommended.map(([certName, relevance]) => [certName, relevance])
+  };
+  localStorage.setItem('jobready_diagnosis_result', JSON.stringify(diagnosisResult));
 
   // Show result
   const resultEl = document.getElementById('diag-result');

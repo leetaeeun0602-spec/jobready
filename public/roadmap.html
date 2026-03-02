@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 학습 로드맵 - JobReady</title>
+  <meta name="description" content="취업진단 결과를 기반으로 생성된 맞춤 학습 로드맵입니다. 단계별 자격증 준비와 취업 준비 과정을 확인하세요.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== Roadmap Page Styles ===== */
+    body {
+      background: #FFFFFF;
+      color: #191F28;
+    }
+
+    /* ===== Hero Section ===== */
+    .roadmap-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 120px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .roadmap-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .roadmap-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 2;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;
+      background-size: 1440px 100%;
+    }
+    .roadmap-hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .roadmap-hero-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .roadmap-hero-title {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .roadmap-hero-subtitle {
+      font-size: 17px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 600;
+    }
+
+    /* ===== No Result State ===== */
+    .no-result {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .no-result-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.6;
+    }
+    .no-result-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #191F28;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .no-result-desc {
+      font-size: 15px;
+      color: #8B95A1;
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 400px;
+    }
+    .no-result-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: #3182F6;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(49,130,246,0.25);
+    }
+    .no-result-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(49,130,246,0.35);
+      background: #1B6AE0;
+    }
+
+    /* ===== Roadmap Content ===== */
+    .roadmap-content {
+      display: none;
+    }
+    .roadmap-content.active {
+      display: block;
+    }
+
+    /* ===== Progress Section ===== */
+    .progress-section {
+      padding: 60px 24px 40px;
+      background: #F8F9FA;
+    }
+    .progress-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .progress-circle-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 16px;
+    }
+    .progress-svg {
+      width: 180px;
+      height: 180px;
+      transform: rotate(-90deg);
+    }
+    .progress-bg {
+      fill: none;
+      stroke: #E5E8EB;
+      stroke-width: 10;
+    }
+    .progress-fill {
+      fill: none;
+      stroke: #3182F6;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .progress-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-percent {
+      font-size: 42px;
+      font-weight: 900;
+      color: #191F28;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    .progress-percent-sign {
+      font-size: 22px;
+      font-weight: 700;
+      color: #8B95A1;
+    }
+    .progress-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #4E5968;
+      margin-top: 8px;
+    }
+    .progress-steps-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #8B95A1;
+    }
+
+    /* ===== Summary Cards ===== */
+    .summary-section {
+      padding: 0 24px 40px;
+      background: #F8F9FA;
+    }
+    .summary-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .summary-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .summary-card-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .summary-card-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: #191F28;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .summary-card-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #8B95A1;
+    }
+
+    /* ===== Timeline Section ===== */
+    .timeline-section {
+      padding: 60px 24px 80px;
+      background: #FFFFFF;
+    }
+    .timeline-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .timeline-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .timeline-title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #191F28;
+      margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font-size: 14px;
+      color: #8B95A1;
+      font-weight: 600;
+    }
+
+    /* ===== Timeline Steps ===== */
+    .timeline-steps {
+      position: relative;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #E5E8EB;
+      border-radius: 2px;
+    }
+
+    .step-item {
+      position: relative;
+      padding-left: 68px;
+      padding-bottom: 40px;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .step-item:last-child {
+      padding-bottom: 0;
+    }
+    .step-item:nth-child(1) { animation-delay: 0.1s; }
+    .step-item:nth-child(2) { animation-delay: 0.2s; }
+    .step-item:nth-child(3) { animation-delay: 0.3s; }
+    .step-item:nth-child(4) { animation-delay: 0.4s; }
+    .step-item:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Step Circle */
+    .step-circle {
+      position: absolute;
+      left: 10px;
+      top: 4px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      background: #CED4DA;
+      z-index: 2;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .step-item.waiting .step-circle {
+      background: #CED4DA;
+      color: #fff;
+    }
+    .step-item.current .step-circle {
+      background: #3182F6;
+      color: #fff;
+      box-shadow: 0 0 0 6px rgba(49,130,246,0.15);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .step-item.completed .step-circle {
+      background: #34C759;
+      color: #fff;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 6px rgba(49,130,246,0.15); }
+      50% { box-shadow: 0 0 0 12px rgba(49,130,246,0.08); }
+    }
+
+    /* Step Card */
+    .step-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 3px solid #E5E8EB;
+    }
+    .step-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .step-item.waiting .step-card {
+      border-left-color: #CED4DA;
+    }
+    .step-item.current .step-card {
+      border-left-color: #3182F6;
+      border-color: rgba(49,130,246,0.2);
+      box-shadow: 0 2px 12px rgba(49,130,246,0.1);
+    }
+    .step-item.completed .step-card {
+      border-left-color: #34C759;
+      opacity: 0.85;
+    }
+
+    .step-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .step-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .step-number {
+      font-size: 11px;
+      font-weight: 800;
+      color: #3182F6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .step-item.completed .step-number {
+      color: #34C759;
+    }
+    .step-item.waiting .step-number {
+      color: #8B95A1;
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #191F28;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: #4E5968;
+      line-height: 1.6;
+    }
+    .step-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .step-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .step-badge.completed {
+      background: rgba(52,199,89,0.1);
+      color: #34C759;
+    }
+    .step-badge.current {
+      background: rgba(49,130,246,0.1);
+      color: #3182F6;
+    }
+    .step-badge.waiting {
+      background: rgba(139,149,161,0.1);
+      color: #8B95A1;
+    }
+    .step-duration {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8B95A1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Step Checkbox */
+    .step-checkbox-wrapper {
+      flex-shrink: 0;
+    }
+    .step-checkbox {
+      display: none;
+    }
+    .step-checkbox-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 2px solid #CED4DA;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #FFFFFF;
+    }
+    .step-checkbox-label:hover {
+      border-color: #3182F6;
+      background: rgba(49,130,246,0.04);
+    }
+    .step-checkbox-label svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .step-checkbox:checked + .step-checkbox-label {
+      background: #34C759;
+      border-color: #34C759;
+    }
+    .step-checkbox:checked + .step-checkbox-label svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ===== Actions Section ===== */
+    .actions-section {
+      padding: 0 24px 80px;
+      background: #FFFFFF;
+    }
+    .actions-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .reset-btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      border: 1px solid #E5E8EB;
+      background: #FFFFFF;
+      color: #4E5968;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reset-btn:hover {
+      border-color: #CED4DA;
+      color: #191F28;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .retake-btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      border: none;
+      background: #3182F6;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(49,130,246,0.2);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .retake-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(49,130,246,0.3);
+      background: #1B6AE0;
+    }
+
+    /* ===== Footer ===== */
+    .site-footer { background: #1B1D6A; padding: 60px 0 30px; color: #fff; }
+    .footer-container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-logo { font-size: 20px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: rgba(255,255,255,0.9); }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: #3182F6; }
+    .footer-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 40px 0 20px; }
+    .footer-copyright { font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+    @media(max-width:768px) { .footer-grid { grid-template-columns: 1fr; gap: 30px; } }
+
+    /* ===== Responsive ===== */
+    @media(max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .step-item {
+        padding-left: 56px;
+      }
+      .timeline-line {
+        left: 18px;
+      }
+      .step-circle {
+        left: 4px;
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+      .step-card {
+        padding: 20px;
+      }
+      .step-title {
+        font-size: 16px;
+      }
+      .progress-circle-wrapper {
+        width: 150px;
+        height: 150px;
+      }
+      .progress-svg {
+        width: 150px;
+        height: 150px;
+      }
+      .progress-percent {
+        font-size: 36px;
+      }
+    }
+    @media(max-width: 480px) {
+      .roadmap-hero {
+        padding: 100px 16px 50px;
+      }
+      .step-item {
+        padding-left: 48px;
+        padding-bottom: 28px;
+      }
+      .timeline-line {
+        left: 14px;
+      }
+      .step-circle {
+        left: 0;
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span class="logo-icon">📋</span><span class="logo-text">JobReady</span></a>
+      <div class="nav-links">
+        <a href="/#certificates">자격증</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html">취업진단</a>
+        <a href="/analysis.html">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
+        <a href="/#ranking">랭킹</a>
+        <a href="/#community">커뮤니티</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- No Result State -->
+  <div class="no-result" id="noResult">
+    <div class="no-result-icon">📝</div>
+    <div class="no-result-title">아직 진단 결과가 없습니다</div>
+    <p class="no-result-desc">
+      취업진단 테스트를 먼저 진행해주세요!<br>
+      진단 결과를 기반으로 맞춤형 학습 로드맵을 생성해드립니다.
+    </p>
+    <a href="/diagnosis.html" class="no-result-btn">취업진단 시작하기</a>
+  </div>
+
+  <!-- Roadmap Content (shown when diagnosis result exists) -->
+  <div class="roadmap-content" id="roadmapContent">
+
+    <!-- Hero -->
+    <div class="roadmap-hero">
+      <div class="roadmap-hero-content">
+        <div class="roadmap-hero-badge">맞춤 학습 로드맵</div>
+        <h1 class="roadmap-hero-title">나의 학습 로드맵</h1>
+        <p class="roadmap-hero-subtitle" id="heroSubtitle">목표 직무를 향한 단계별 가이드</p>
+      </div>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+      <div class="progress-inner">
+        <div class="progress-circle-wrapper">
+          <svg class="progress-svg" viewBox="0 0 180 180">
+            <circle class="progress-bg" cx="90" cy="90" r="75"></circle>
+            <circle class="progress-fill" id="progressCircle" cx="90" cy="90" r="75"
+              stroke-dasharray="471.24"
+              stroke-dashoffset="471.24"></circle>
+          </svg>
+          <div class="progress-text">
+            <span class="progress-percent" id="progressPercent">0</span>
+            <span class="progress-percent-sign">%</span>
+          </div>
+        </div>
+        <div class="progress-steps-text" id="progressStepsText">0 / 5 단계 완료</div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-section">
+      <div class="summary-inner">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-card-icon">🎯</div>
+            <div class="summary-card-value" id="summaryField">-</div>
+            <div class="summary-card-label">목표 분야</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-icon">📊</div>
+            <div class="summary-card-value" id="summaryScore">-</div>
+            <div class="summary-card-label">진단 점수</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-icon">⏰</div>
+            <div class="summary-card-value" id="summaryTimeline">-</div>
+            <div class="summary-card-label">목표 기간</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline Section -->
+    <div class="timeline-section">
+      <div class="timeline-inner">
+        <div class="timeline-header">
+          <h2 class="timeline-title">단계별 학습 가이드</h2>
+          <p class="timeline-desc">순서대로 하나씩 완료해 나가세요</p>
+        </div>
+        <div class="timeline-steps" id="timelineSteps">
+          <div class="timeline-line"></div>
+          <!-- Steps will be dynamically generated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-section">
+      <div class="actions-inner">
+        <button class="reset-btn" id="resetBtn" type="button">로드맵 초기화</button>
+        <a href="/diagnosis.html" class="retake-btn">진단 다시하기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/#about">서비스소개</a>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ===== Constants =====
+      const DIAGNOSIS_KEY = 'jobready_diagnosis_result';
+      const PROGRESS_KEY = 'jobready_roadmap_progress';
+
+      // ===== DOM Elements =====
+      const noResultEl = document.getElementById('noResult');
+      const roadmapContentEl = document.getElementById('roadmapContent');
+      const heroSubtitleEl = document.getElementById('heroSubtitle');
+      const progressCircleEl = document.getElementById('progressCircle');
+      const progressPercentEl = document.getElementById('progressPercent');
+      const progressStepsTextEl = document.getElementById('progressStepsText');
+      const summaryFieldEl = document.getElementById('summaryField');
+      const summaryScoreEl = document.getElementById('summaryScore');
+      const summaryTimelineEl = document.getElementById('summaryTimeline');
+      const timelineStepsEl = document.getElementById('timelineSteps');
+      const resetBtnEl = document.getElementById('resetBtn');
+
+      const CIRCUMFERENCE = 2 * Math.PI * 75; // ~471.24
+
+      // ===== Estimated durations for certs =====
+      function estimateDuration(relevance) {
+        if (relevance >= 90) return '2~3개월';
+        if (relevance >= 70) return '2개월';
+        if (relevance >= 50) return '1~2개월';
+        return '1개월';
+      }
+
+      // ===== Build Steps =====
+      function buildSteps(diagnosis) {
+        var steps = [];
+        var certs = diagnosis.recommendedCerts || [];
+
+        for (var i = 0; i < certs.length; i++) {
+          var cert = certs[i];
+          var certName = cert[0];
+          var relevance = cert[1];
+          steps.push({
+            id: 'cert-' + i,
+            title: certName,
+            desc: '관련도 ' + relevance + '% | 예상 준비기간: ' + estimateDuration(relevance),
+            duration: estimateDuration(relevance),
+            type: 'cert'
+          });
+        }
+
+        steps.push({
+          id: 'portfolio',
+          title: '포트폴리오 준비',
+          desc: '자격증과 프로젝트를 정리하여 포트폴리오를 완성하세요',
+          duration: '2~4주',
+          type: 'fixed'
+        });
+
+        steps.push({
+          id: 'apply',
+          title: '취업 지원 시작',
+          desc: '채용 사이트에서 적극적으로 지원을 시작하세요',
+          duration: '지속',
+          type: 'fixed'
+        });
+
+        return steps;
+      }
+
+      // ===== Get Saved Progress =====
+      function getSavedProgress() {
+        try {
+          var raw = localStorage.getItem(PROGRESS_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (e) { /* ignore */ }
+        return {};
+      }
+
+      // ===== Save Progress =====
+      function saveProgress(progress) {
+        try {
+          localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+        } catch (e) { /* ignore */ }
+      }
+
+      // ===== Render Step HTML =====
+      function renderStep(step, index, isCompleted, isCurrent) {
+        var stepNum = index + 1;
+        var statusClass = isCompleted ? 'completed' : (isCurrent ? 'current' : 'waiting');
+        var badgeText = isCompleted ? '완료' : (isCurrent ? '진행중' : '대기');
+        var badgeClass = isCompleted ? 'completed' : (isCurrent ? 'current' : 'waiting');
+
+        var circleContent = isCompleted
+          ? '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 8.5L6.5 11.5L12.5 5.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          : stepNum;
+
+        var html = '<div class="step-item ' + statusClass + '" data-step-id="' + step.id + '">';
+        html += '<div class="step-circle">' + circleContent + '</div>';
+        html += '<div class="step-card">';
+        html += '<div class="step-top">';
+        html += '<div class="step-info">';
+        html += '<div class="step-number">STEP ' + stepNum + '</div>';
+        html += '<div class="step-title">' + step.title + '</div>';
+        html += '<div class="step-desc">' + step.desc + '</div>';
+        html += '</div>';
+        html += '<div class="step-checkbox-wrapper">';
+        html += '<input type="checkbox" class="step-checkbox" id="check-' + step.id + '"' + (isCompleted ? ' checked' : '') + '>';
+        html += '<label class="step-checkbox-label" for="check-' + step.id + '">';
+        html += '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.5 8.5L6.5 11.5L12.5 5.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        html += '</label>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="step-meta">';
+        html += '<span class="step-badge ' + badgeClass + '">' + badgeText + '</span>';
+        html += '<span class="step-duration">&#128337; ' + step.duration + '</span>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        return html;
+      }
+
+      // ===== Update Progress Circle =====
+      function updateProgress(steps, progress, animate) {
+        var completed = 0;
+        var total = steps.length;
+
+        for (var i = 0; i < steps.length; i++) {
+          if (progress[steps[i].id]) completed++;
+        }
+
+        var percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+        var offset = CIRCUMFERENCE - (CIRCUMFERENCE * percent / 100);
+
+        progressCircleEl.style.strokeDashoffset = offset;
+        progressStepsTextEl.textContent = completed + ' / ' + total + ' 단계 완료';
+
+        // Animate percent number
+        if (animate) {
+          animateNumber(progressPercentEl, percent);
+        } else {
+          progressPercentEl.textContent = percent;
+        }
+      }
+
+      // ===== Animate Number =====
+      function animateNumber(el, target) {
+        var current = parseInt(el.textContent) || 0;
+        var diff = target - current;
+        var duration = 600;
+        var start = null;
+
+        function tick(timestamp) {
+          if (!start) start = timestamp;
+          var elapsed = timestamp - start;
+          var progress = Math.min(elapsed / duration, 1);
+          // Ease out cubic
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(current + diff * eased);
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            el.textContent = target;
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+
+      // ===== Render Timeline =====
+      function renderTimeline(steps, progress) {
+        // Keep the timeline line element
+        var html = '<div class="timeline-line"></div>';
+        var foundCurrent = false;
+
+        for (var i = 0; i < steps.length; i++) {
+          var isCompleted = !!progress[steps[i].id];
+          var isCurrent = false;
+          if (!isCompleted && !foundCurrent) {
+            isCurrent = true;
+            foundCurrent = true;
+          }
+          html += renderStep(steps[i], i, isCompleted, isCurrent);
+        }
+
+        timelineStepsEl.innerHTML = html;
+
+        // Bind checkbox events
+        var checkboxes = timelineStepsEl.querySelectorAll('.step-checkbox');
+        for (var j = 0; j < checkboxes.length; j++) {
+          checkboxes[j].addEventListener('change', function() {
+            var stepId = this.id.replace('check-', '');
+            var currentProgress = getSavedProgress();
+            if (this.checked) {
+              currentProgress[stepId] = true;
+            } else {
+              delete currentProgress[stepId];
+            }
+            saveProgress(currentProgress);
+            renderTimeline(steps, currentProgress);
+            updateProgress(steps, currentProgress, true);
+          });
+        }
+      }
+
+      // ===== Initialize =====
+      function init() {
+        var diagnosisRaw = null;
+        try {
+          diagnosisRaw = localStorage.getItem(DIAGNOSIS_KEY);
+        } catch (e) { /* ignore */ }
+
+        if (!diagnosisRaw) {
+          // No diagnosis result
+          noResultEl.style.display = 'flex';
+          roadmapContentEl.classList.remove('active');
+          return;
+        }
+
+        var diagnosis;
+        try {
+          diagnosis = JSON.parse(diagnosisRaw);
+        } catch (e) {
+          noResultEl.style.display = 'flex';
+          roadmapContentEl.classList.remove('active');
+          return;
+        }
+
+        // Show roadmap content
+        noResultEl.style.display = 'none';
+        roadmapContentEl.classList.add('active');
+
+        // Hero subtitle
+        var jobName = diagnosis.job || '목표 직무';
+        heroSubtitleEl.textContent = '목표 직무: ' + jobName + ' | 나만의 단계별 가이드';
+
+        // Summary cards
+        summaryFieldEl.textContent = diagnosis.field || '-';
+        summaryScoreEl.textContent = (diagnosis.score != null ? diagnosis.score + '점' : '-');
+        summaryTimelineEl.textContent = diagnosis.timeline || '-';
+
+        // Build steps
+        var steps = buildSteps(diagnosis);
+        var progress = getSavedProgress();
+
+        // Render timeline
+        renderTimeline(steps, progress);
+
+        // Animate progress on load
+        setTimeout(function() {
+          updateProgress(steps, progress, true);
+        }, 300);
+
+        // Reset button
+        resetBtnEl.addEventListener('click', function() {
+          if (confirm('로드맵 진행 상태를 초기화하시겠습니까?')) {
+            try {
+              localStorage.removeItem(PROGRESS_KEY);
+            } catch (e) { /* ignore */ }
+            var emptyProgress = {};
+            renderTimeline(steps, emptyProgress);
+            updateProgress(steps, emptyProgress, true);
+          }
+        });
+      }
+
+      // ===== Nav scroll effect =====
+      window.addEventListener('scroll', function() {
+        var nav = document.getElementById('nav');
+        if (window.scrollY > 20) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      });
+
+      // Run on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <!--
+    NOTE: The diagnosis page (/diagnosis.html) should save its results to
+    localStorage with the key 'jobready_diagnosis_result' in the following format:
+
+    {
+      "field": "IT·데이터",
+      "job": "백엔드개발",
+      "ownedCerts": ["컴활1급"],
+      "timeline": "6개월 이내",
+      "studyHours": "2시간",
+      "score": 45,
+      "recommendedCerts": [["정보처리기사",95],["SQLD",80],["리눅스마스터",60]]
+    }
+
+    If no result exists in localStorage, this page will display a prompt
+    directing the user to take the diagnosis test first.
+  -->
+</body>
+</html>
