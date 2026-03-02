@@ -167,14 +167,138 @@ const CERT_DETAILS = {
     dailyStudy: '이론 1시간 + 실습 30분 (일 1.5시간)',
     studyTips: 'AWS 공식 무료 교육(Cloud Practitioner Essentials)부터 시작하세요. 핵심 서비스(EC2, S3, RDS, Lambda, IAM)의 개념을 이해하고, 클라우드 장점·요금 모델·공유 책임 모델·Well-Architected Framework를 중점 학습하세요. 65문항 선택형(90분)으로 시간은 넉넉합니다. 한국어 시험을 지원하며, 추가 30분 연장(ESL)도 가능합니다.',
     schedule: '상시시험 (온라인 또는 테스트센터)', nextExam: '상시 응시 가능 (Pearson VUE 예약)'
+  },
+  'MOS Excel Expert': {
+    fullName: 'MOS Excel Expert', org: 'Microsoft (시행: YBM)',
+    examType: '상시시험 (CBT)', fee: '77,000원',
+    passCriteria: '1,000점 만점 700점 이상', prepPeriod: '2~4주', difficulty: '중하',
+    dailyStudy: '실습 1.5시간 (일 1.5시간)',
+    studyTips: 'Excel 고급 기능(피벗 테이블, 매크로, 조건부 서식, 고급 함수)을 중심으로 학습하세요. CBT 형태로 실제 Excel에서 직접 작업하므로 실습 위주 준비가 필수입니다.',
+    schedule: '상시시험 (CBT)', nextExam: '상시 응시 가능'
+  },
+  'ITQ': {
+    fullName: 'ITQ (정보기술자격)', org: '한국생산성본부',
+    examType: '정기시험 (매월)', fee: '각 과목 18,000원',
+    passCriteria: 'A등급 400점 이상', prepPeriod: '2~4주', difficulty: '하',
+    dailyStudy: '실습 1시간 (일 1시간)',
+    studyTips: '한글, 엑셀, 파워포인트 중 선택하여 응시합니다. 기출문제 유형이 반복되므로 기출 위주 실습으로 단기간에 A등급 취득이 가능합니다.',
+    schedule: '매월 정기시험', nextExam: '한국생산성본부 홈페이지 참고'
+  },
+  '네트워크관리사': {
+    fullName: '네트워크관리사', org: '한국정보통신진흥협회',
+    examType: '정기시험 (연 4회, 필기+실기)', fee: '필기+실기 약 40,000원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '1~2개월', difficulty: '중',
+    dailyStudy: '이론 1시간 + 실습 30분 (일 1.5시간)',
+    studyTips: 'TCP/IP, 서브넷팅, 네트워크 장비(라우터, 스위치) 설정이 핵심입니다. 실기는 Windows Server와 Linux 네트워크 설정을 반복 실습하세요.',
+    schedule: '연 4회 정기시험', nextExam: '한국정보통신진흥협회 홈페이지 참고'
+  },
+  '리눅스마스터': {
+    fullName: '리눅스마스터', org: '한국정보통신진흥협회',
+    examType: '정기시험 (연 2회, 1급 필기+실기)', fee: '1급 필기/실기 각 22,000원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '2~3개월', difficulty: '중상',
+    dailyStudy: '이론 1시간 + 실습 1시간 (일 2시간)',
+    studyTips: '리눅스 명령어(파일 관리, 프로세스, 네트워크)를 완벽히 숙지하고, 서버 구축(Apache, DNS, 메일)을 직접 실습하세요. 가상머신으로 실습 환경을 구축하면 효과적입니다.',
+    schedule: '연 2회 정기시험', nextExam: '한국정보통신진흥협회 홈페이지 참고'
+  },
+  '전기산업기사': {
+    fullName: '전기산업기사', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '3~4개월', difficulty: '중상',
+    dailyStudy: '이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)',
+    studyTips: '전기이론, 전력공학, 전기기기 3과목을 중점 학습하세요. 기사에 비해 범위가 좁으므로 기출문제 반복으로 효율적으로 준비할 수 있습니다.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '기계기사': {
+    fullName: '기계기사', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '4~6개월', difficulty: '상',
+    dailyStudy: '이론 2시간 + 기출풀이 1시간 (일 3시간)',
+    studyTips: '재료역학, 열역학, 유체역학, 기계설계가 핵심 과목입니다. 공식 암기와 계산문제 반복 풀이가 중요하며, 실기는 도면 해석과 기계가공법을 중점 학습하세요.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '소방설비기사': {
+    fullName: '소방설비기사 (전기/기계)', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '4~6개월', difficulty: '상',
+    dailyStudy: '이론 2시간 + 기출풀이 1시간 (일 3시간)',
+    studyTips: '소방원론, 소방관계법규를 기본으로 하고, 전기분야(경보·피난설비)와 기계분야(수계·가스소화설비) 중 선택하세요. 법규 개정사항을 반드시 확인하고, 실기는 설계도면 해석에 집중하세요.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '에너지관리기사': {
+    fullName: '에너지관리기사', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '4~6개월', difficulty: '상',
+    dailyStudy: '이론 2시간 + 기출풀이 1시간 (일 3시간)',
+    studyTips: '열역학, 연소공학, 보일러가 핵심 과목입니다. 에너지관련법규는 최신 개정사항을 확인하세요. 실기는 계산문제 비중이 높으므로 공식 정리와 반복 풀이가 중요합니다.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '환경기사': {
+    fullName: '환경기사', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '3~4개월', difficulty: '중상',
+    dailyStudy: '이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)',
+    studyTips: '수질, 대기, 폐기물 분야별 처리 공정을 이해하고, 환경관계법규를 정리하세요. 계산문제가 많으므로 단위환산과 공식 적용을 반복 연습하세요.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '건설안전기사': {
+    fullName: '건설안전기사', org: '한국산업인력공단',
+    examType: '정기시험 (연 3회, 필기+실기)', fee: '필기 19,400원 / 실기 22,600원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '3~4개월', difficulty: '중상',
+    dailyStudy: '이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)',
+    studyTips: '건설안전관리론, 건설시공학, 건설재료학을 중점 학습하세요. 산업안전보건법규는 최신 개정사항을 확인하고, 실기는 시공 현장 안전관리 사례 중심으로 준비하세요.',
+    schedule: '연 3회 (기사시험 일정 참고)', nextExam: '캘린더에서 기사시험 일정 확인'
+  },
+  '세무회계': {
+    fullName: '세무회계', org: '한국세무사회',
+    examType: '정기시험 (연 5회)', fee: '20,000원',
+    passCriteria: '70점 이상', prepPeriod: '2~3개월', difficulty: '중',
+    dailyStudy: '이론 1.5시간 + 기출풀이 30분 (일 2시간)',
+    studyTips: '세법(소득세, 부가가치세, 법인세) 기본 개념을 탄탄히 다지고, KcLep 프로그램으로 세무 실무를 연습하세요. 전산세무와 병행 학습하면 효율적입니다.',
+    schedule: '연 5회 정기시험', nextExam: '한국세무사회 홈페이지 참고'
+  },
+  'ERP정보관리사': {
+    fullName: 'ERP정보관리사', org: '한국생산성본부',
+    examType: '정기시험 (연 4회)', fee: '20,000원',
+    passCriteria: '70점 이상', prepPeriod: '1~2개월', difficulty: '중하',
+    dailyStudy: '이론 1시간 + 실습 30분 (일 1.5시간)',
+    studyTips: '회계, 인사, 물류, 생산 중 선택하여 응시합니다. ERP 프로그램(iCUBE 등) 실습이 핵심이며, 기출문제 유형을 파악하면 단기 합격이 가능합니다.',
+    schedule: '연 4회 정기시험', nextExam: '한국생산성본부 홈페이지 참고'
+  },
+  '투자자산운용사': {
+    fullName: '투자자산운용사', org: '한국금융투자협회',
+    examType: '정기시험 (연 4회)', fee: '70,000원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 70점 이상', prepPeriod: '2~3개월', difficulty: '중상',
+    dailyStudy: '이론 2시간 + 기출풀이 30분 (일 2.5시간)',
+    studyTips: '금융시장론, 투자분석, 파생상품, 부동산을 체계적으로 학습하세요. 금융투자 관련 법규 비중도 높습니다. 기출문제 패턴이 일정하므로 반복 학습이 효과적입니다.',
+    schedule: '연 4회 정기시험', nextExam: '한국금융투자협회 홈페이지 참고'
+  },
+  'AFPK': {
+    fullName: 'AFPK (Associate Financial Planner Korea)', org: '한국FPSB',
+    examType: '정기시험 (연 6회)', fee: '80,000원',
+    passCriteria: '과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod: '2~3개월', difficulty: '중상',
+    dailyStudy: '이론 2시간 + 기출풀이 30분 (일 2.5시간)',
+    studyTips: '재무설계 개론, 금융상품, 세금, 부동산, 보험을 균형있게 학습하세요. CFP의 전단계로 재무설계 전반에 대한 이해가 필요합니다. 사전교육 이수가 응시 필수요건입니다.',
+    schedule: '연 6회 정기시험', nextExam: '한국FPSB 홈페이지 참고'
+  },
+  'IELTS': {
+    fullName: 'IELTS (International English Language Testing System)', org: '영국문화원/IDP',
+    examType: '정기시험 (매주)', fee: '295,000원',
+    passCriteria: '만점 9.0 (밴드 스코어)', prepPeriod: '2~3개월', difficulty: '중상',
+    dailyStudy: '영역별 1시간씩 (일 2~4시간)',
+    studyTips: 'Writing Task 2와 Speaking Part 2가 고득점 핵심입니다. Cambridge 공식 교재를 활용하고, Writing은 다양한 에세이 구조를 연습하세요. Academic과 General 중 목적에 맞는 유형을 선택하세요.',
+    schedule: '매주 토요일', nextExam: '영국문화원/IDP 홈페이지 참고'
+  },
+  'TOEFL': {
+    fullName: 'TOEFL iBT', org: 'ETS',
+    examType: '정기시험 (매주)', fee: 'US$245 (약 32만원)',
+    passCriteria: '만점 120점 (각 영역 30점)', prepPeriod: '2~3개월', difficulty: '중상',
+    dailyStudy: '영역별 1시간씩 (일 2~4시간)',
+    studyTips: 'Reading은 학술 지문에 익숙해지고, Listening은 노트테이킹 연습이 중요합니다. Speaking은 템플릿을 만들어 연습하고, Writing은 Integrated Essay에 집중하세요. ETS 공식 모의고사를 반드시 풀어보세요.',
+    schedule: '매주 토·일', nextExam: 'ETS 홈페이지 참고'
   }
 };
 
-const PLACEHOLDER_CERTS = [
-  'MOS Excel Expert', 'ITQ', '네트워크관리사', '리눅스마스터',
-  '전기산업기사', '기계기사', '소방설비기사', '에너지관리기사', '환경기사', '건설안전기사',
-  '세무회계', 'ERP정보관리사', '투자자산운용사', 'AFPK', 'IELTS', 'TOEFL'
-];
+const PLACEHOLDER_CERTS = [];
 
 // ===== 자격증 ROI 데이터 =====
 const CERT_ROI_DATA = {
@@ -193,7 +317,23 @@ const CERT_ROI_DATA = {
   'TOEIC Speaking':  { sector: '어학', demand: 0.68, trend: 0.50, difficulty: 0.30, supply: 0.55, passRate: 'N/A', applicants: '20만', jobMention: '30%' },
   '재경관리사':      { sector: '경영/회계', demand: 0.65, trend: 0.50, difficulty: 0.45, supply: 0.35, passRate: '40%', applicants: '3만', jobMention: '15%' },
   '전산회계1급':     { sector: '경영/회계', demand: 0.70, trend: 0.40, difficulty: 0.30, supply: 0.60, passRate: '45%', applicants: '10만', jobMention: '20%' },
-  'AWS Cloud Practitioner': { sector: 'IT', demand: 0.78, trend: 0.90, difficulty: 0.25, supply: 0.35, passRate: '85%', applicants: '2만', jobMention: '15%' }
+  'AWS Cloud Practitioner': { sector: 'IT', demand: 0.78, trend: 0.90, difficulty: 0.25, supply: 0.35, passRate: '85%', applicants: '2만', jobMention: '15%' },
+  'MOS Excel Expert': { sector: 'IT', demand: 0.55, trend: 0.30, difficulty: 0.25, supply: 0.70, passRate: '70%', applicants: '5만', jobMention: '15%' },
+  'ITQ':             { sector: 'IT', demand: 0.45, trend: 0.20, difficulty: 0.15, supply: 0.75, passRate: '65%', applicants: '8만', jobMention: '10%' },
+  '네트워크관리사':    { sector: 'IT', demand: 0.68, trend: 0.50, difficulty: 0.35, supply: 0.45, passRate: '40%', applicants: '3만', jobMention: '10%' },
+  '리눅스마스터':     { sector: 'IT', demand: 0.72, trend: 0.65, difficulty: 0.40, supply: 0.35, passRate: '30%', applicants: '2만', jobMention: '12%' },
+  '전기산업기사':     { sector: '전기/안전', demand: 0.72, trend: 0.50, difficulty: 0.45, supply: 0.55, passRate: '35%', applicants: '5만', jobMention: '22%' },
+  '기계기사':        { sector: '전기/안전', demand: 0.75, trend: 0.45, difficulty: 0.55, supply: 0.50, passRate: '28%', applicants: '6만', jobMention: '20%' },
+  '소방설비기사':     { sector: '전기/안전', demand: 0.82, trend: 0.75, difficulty: 0.55, supply: 0.30, passRate: '28%', applicants: '5만', jobMention: '20%' },
+  '에너지관리기사':   { sector: '전기/안전', demand: 0.65, trend: 0.50, difficulty: 0.55, supply: 0.40, passRate: '25%', applicants: '2만', jobMention: '12%' },
+  '환경기사':        { sector: '전기/안전', demand: 0.68, trend: 0.55, difficulty: 0.50, supply: 0.42, passRate: '30%', applicants: '3만', jobMention: '15%' },
+  '건설안전기사':     { sector: '전기/안전', demand: 0.85, trend: 0.68, difficulty: 0.50, supply: 0.40, passRate: '32%', applicants: '4만', jobMention: '25%' },
+  '세무회계':        { sector: '경영/회계', demand: 0.68, trend: 0.48, difficulty: 0.40, supply: 0.45, passRate: '40%', applicants: '3만', jobMention: '14%' },
+  'ERP정보관리사':   { sector: '경영/회계', demand: 0.62, trend: 0.45, difficulty: 0.30, supply: 0.50, passRate: '50%', applicants: '4만', jobMention: '12%' },
+  '투자자산운용사':   { sector: '경영/회계', demand: 0.70, trend: 0.55, difficulty: 0.50, supply: 0.35, passRate: '45%', applicants: '2만', jobMention: '15%' },
+  'AFPK':           { sector: '경영/회계', demand: 0.68, trend: 0.52, difficulty: 0.50, supply: 0.30, passRate: '40%', applicants: '2만', jobMention: '12%' },
+  'IELTS':          { sector: '어학', demand: 0.65, trend: 0.55, difficulty: 0.45, supply: 0.40, passRate: 'N/A', applicants: '10만', jobMention: '25%' },
+  'TOEFL':          { sector: '어학', demand: 0.60, trend: 0.40, difficulty: 0.50, supply: 0.35, passRate: 'N/A', applicants: '5만', jobMention: '20%' }
 };
 
 function calcCertROI(r) {

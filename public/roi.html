@@ -738,6 +738,17 @@
     </div>
   </section>
 
+  <!-- Certificate Detail Modal -->
+  <div class="modal-overlay" id="cert-detail-modal" onclick="if(event.target===this)closeCertDetailModal()">
+    <div class="modal-card cert-detail-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="cert-detail-name"></h2>
+        <button class="modal-close-btn" onclick="closeCertDetailModal()">✕</button>
+      </div>
+      <div id="cert-detail-content"></div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="site-footer">
     <div class="footer-container">
@@ -784,6 +795,141 @@
   // ===== Mobile Menu =====
   function openMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.add('open');document.getElementById('nav-mobile-menu')?.classList.add('open');document.body.style.overflow='hidden';}
   function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.remove('open');document.getElementById('nav-mobile-menu')?.classList.remove('open');document.body.style.overflow='';}
+
+  // ===== Certificate Detail Data for ROI Page =====
+  var CERT_DETAILS_ROI = {
+    '정보처리기사': { fullName:'정보처리기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3~4개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 기출 1시간 + 실기코딩 0.5시간 (일 3시간)', studyTips:'필기는 수제비 또는 시나공 교재로 이론을 정리하고 기출 반복이 핵심입니다. 실기는 SQL, 프로그래밍 언어(C/Java/Python), UML 다이어그램에 집중하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    'SQLD': { fullName:'SQL 개발자 (SQLD)', org:'한국데이터산업진흥원', examType:'정기시험 (연 4회, CBT)', fee:'50,000원', passCriteria:'총점 60점 이상, 과목당 40점 이상', prepPeriod:'1~2개월', difficulty:'중', dailyStudy:'SQL문법 1시간 + 기출풀이 0.5시간 (일 1.5시간)', studyTips:'SQL 기본 문법(SELECT, JOIN, 서브쿼리)을 완벽히 익히고, 데이터 모델링 기초를 학습하세요.', schedule:'연 4회', nextExam:'한국데이터산업진흥원 홈페이지 참고' },
+    'ADsP': { fullName:'데이터분석 준전문가 (ADsP)', org:'한국데이터산업진흥원', examType:'정기시험 (연 4회)', fee:'50,000원', passCriteria:'총점 60점 이상, 과목당 40점 이상', prepPeriod:'3~4주', difficulty:'중하', dailyStudy:'이론 1시간 + 기출풀이 0.5시간 (일 1.5시간)', studyTips:'데이터 분석 기획, 분석, 시각화 3과목을 골고루 학습하세요. 통계 기초가 중요합니다.', schedule:'연 4회', nextExam:'한국데이터산업진흥원 홈페이지 참고' },
+    '컴활1급': { fullName:'컴퓨터활용능력 1급', org:'대한상공회의소', examType:'CBT 상시시험 (필기+실기)', fee:'필기 19,400원 / 실기 22,500원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3개월', difficulty:'중상', dailyStudy:'이론 1시간 + 실기연습 1.5시간 (일 2.5시간)', studyTips:'스프레드시트와 데이터베이스 실기에 집중하세요. 기출문제를 최소 10회분 반복 풀이가 핵심입니다.', schedule:'매주 토요일 상시시험', nextExam:'매주 토요일 응시 가능' },
+    '전기기사': { fullName:'전기기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'4~6개월', difficulty:'상', dailyStudy:'이론 2시간 + 기출풀이 1시간 (일 3시간)', studyTips:'회로이론, 전력공학, 전기기기가 핵심입니다. 원리 이해에 집중하고 실기는 계산문제를 반복하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '산업안전기사': { fullName:'산업안전기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3~4개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)', studyTips:'산업안전관리론, 인간공학, 위험방지기술을 균형있게 학습하세요. 법규 최신 개정을 확인하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    'TOEIC': { fullName:'TOEIC', org:'YBM', examType:'정기시험 (매월 2~3회)', fee:'22,500원', passCriteria:'만점 990점', prepPeriod:'2~3개월', difficulty:'중', dailyStudy:'LC 1시간 + RC 1시간 (일 2시간)', studyTips:'LC는 패러프레이징에 집중, RC는 Part 5를 빠르게 풀어 Part 7에 시간을 확보하세요.', schedule:'매월 2~3회 일요일', nextExam:'YBM 홈페이지 참고' },
+    '빅데이터분석기사': { fullName:'빅데이터분석기사', org:'한국데이터산업진흥원', examType:'정기시험 (연 2회, 필기+실기)', fee:'필기 24,800원 / 실기 25,400원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3개월', difficulty:'상', dailyStudy:'이론 1.5시간 + Python/R 실습 1시간 (일 2.5시간)', studyTips:'실기는 Python 또는 R로 데이터 분석 실습이 필수입니다. Kaggle 데이터셋으로 연습하세요.', schedule:'연 2회', nextExam:'한국데이터산업진흥원 홈페이지 참고' },
+    '전산회계1급': { fullName:'전산회계 1급', org:'한국세무사회', examType:'정기시험 (연 5회)', fee:'20,000원', passCriteria:'70점 이상', prepPeriod:'1~2개월', difficulty:'중하', dailyStudy:'이론 1시간 + 실습(KcLep) 1시간 (일 2시간)', studyTips:'회계원리 기초를 먼저 학습하고 KcLep 프로그램 실습에 집중하세요.', schedule:'연 5회', nextExam:'한국세무사회 홈페이지 참고' },
+    '재경관리사': { fullName:'재경관리사', org:'삼일회계법인', examType:'정기시험 (연 4회)', fee:'70,000원', passCriteria:'과목당 40점 이상, 전과목 평균 70점 이상', prepPeriod:'2~3개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)', studyTips:'재무회계, 세무회계, 원가관리회계 3과목을 균형있게 학습하세요.', schedule:'연 4회', nextExam:'삼일회계법인 홈페이지 참고' },
+    '정보보안기사': { fullName:'정보보안기사', org:'한국인터넷진흥원', examType:'정기시험 (연 2회, 필기+실기)', fee:'필기 18,800원 / 실기 20,800원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'4~6개월', difficulty:'상', dailyStudy:'이론 2시간 + 실습 1시간 (일 3시간)', studyTips:'시스템·네트워크 보안, 암호학, 관련 법규를 체계적으로 학습하세요. 실기는 실무 시나리오 중심으로 준비하세요.', schedule:'연 2회', nextExam:'한국인터넷진흥원 홈페이지 참고' },
+    '리눅스마스터1급': { fullName:'리눅스마스터 1급', org:'한국정보통신진흥협회', examType:'정기시험 (연 2회, 필기+실기)', fee:'필기/실기 각 22,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3개월', difficulty:'중상', dailyStudy:'이론 1시간 + 실습 1시간 (일 2시간)', studyTips:'리눅스 명령어와 서버 구축(Apache, DNS, 메일)을 직접 실습하세요. 가상머신 활용을 추천합니다.', schedule:'연 2회', nextExam:'한국정보통신진흥협회 홈페이지 참고' },
+    '네트워크관리사': { fullName:'네트워크관리사', org:'한국정보통신진흥협회', examType:'정기시험 (연 4회, 필기+실기)', fee:'필기+실기 약 40,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'1~2개월', difficulty:'중', dailyStudy:'이론 1시간 + 실습 30분 (일 1.5시간)', studyTips:'TCP/IP, 서브넷팅, 라우터/스위치 설정이 핵심입니다. 네트워크 설정 실습을 반복하세요.', schedule:'연 4회', nextExam:'한국정보통신진흥협회 홈페이지 참고' },
+    'AWS SAA': { fullName:'AWS Solutions Architect Associate', org:'Amazon Web Services (AWS)', examType:'상시시험 (Pearson VUE)', fee:'US$150 (약 20만원)', passCriteria:'1,000점 만점 720점 이상', prepPeriod:'2~3개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 실습 1시간 (일 2.5시간)', studyTips:'VPC, EC2, S3, RDS, Lambda, IAM 등 핵심 서비스를 이해하고, Well-Architected Framework 원칙을 숙지하세요.', schedule:'상시시험', nextExam:'상시 응시 가능' },
+    '정보처리산업기사': { fullName:'정보처리산업기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 기출 1시간 (일 2.5시간)', studyTips:'기사에 비해 범위가 좁으므로 기출문제 반복으로 효율적 준비가 가능합니다. 실기 코딩 연습은 필수입니다.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    'ADP': { fullName:'데이터분석 전문가 (ADP)', org:'한국데이터산업진흥원', examType:'정기시험 (연 2회, 필기+실기)', fee:'필기 50,000원 / 실기 80,000원', passCriteria:'총점 60점 이상', prepPeriod:'3~4개월', difficulty:'상', dailyStudy:'이론 1.5시간 + 실습 1시간 (일 2.5시간)', studyTips:'ADsP 합격 후 도전을 추천합니다. 실기는 R/Python으로 실제 데이터 분석 프로젝트를 수행하는 형태입니다.', schedule:'연 2회', nextExam:'한국데이터산업진흥원 홈페이지 참고' },
+    'CISSP': { fullName:'CISSP (Certified Information Systems Security Professional)', org:'(ISC)²', examType:'상시시험 (Pearson VUE)', fee:'US$749 (약 100만원)', passCriteria:'1,000점 만점 700점 이상', prepPeriod:'4~6개월', difficulty:'최상', dailyStudy:'이론 2시간 + 문제풀이 1시간 (일 3시간)', studyTips:'8개 도메인(보안관리, 자산보안, 네트워크보안 등)을 균형있게 학습하세요. 5년 이상 실무경력이 필요합니다.', schedule:'상시시험', nextExam:'상시 응시 가능' },
+    '전기산업기사': { fullName:'전기산업기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3~4개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)', studyTips:'전기이론, 전력공학, 전기기기를 중점 학습하세요. 기사에 비해 범위가 좁아 기출 반복으로 효율적 준비 가능합니다.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '소방설비기사(전기)': { fullName:'소방설비기사 (전기분야)', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'4~6개월', difficulty:'상', dailyStudy:'이론 2시간 + 기출풀이 1시간 (일 3시간)', studyTips:'소방원론, 소방관계법규 + 경보설비·피난설비를 중점 학습하세요. 법규 개정사항 확인 필수입니다.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '소방설비기사(기계)': { fullName:'소방설비기사 (기계분야)', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'4~6개월', difficulty:'상', dailyStudy:'이론 2시간 + 기출풀이 1시간 (일 3시간)', studyTips:'소방원론, 소방관계법규 + 수계·가스소화설비를 중점 학습하세요. 실기는 설계도면 해석에 집중하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '건설안전기사': { fullName:'건설안전기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3~4개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)', studyTips:'건설안전관리론, 건설시공학을 중점 학습하고, 산업안전보건법규 최신 개정을 확인하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '위험물산업기사': { fullName:'위험물산업기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 기출풀이 0.5시간 (일 2시간)', studyTips:'위험물 화학, 소방관계법규를 중심으로 학습하세요. 위험물 종류별 특성과 취급방법을 정리하면 효과적입니다.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    '산업안전산업기사': { fullName:'산업안전산업기사', org:'한국산업인력공단', examType:'정기시험 (연 3회, 필기+실기)', fee:'필기 19,400원 / 실기 22,600원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 기출풀이 0.5시간 (일 2시간)', studyTips:'산업안전기사의 축소 범위입니다. 안전관리론과 법규를 기본으로 하고 기출 반복으로 준비하세요.', schedule:'연 3회', nextExam:'캘린더에서 기사시험 일정 확인' },
+    'ERP정보관리사': { fullName:'ERP정보관리사', org:'한국생산성본부', examType:'정기시험 (연 4회)', fee:'20,000원', passCriteria:'70점 이상', prepPeriod:'1~2개월', difficulty:'중하', dailyStudy:'이론 1시간 + 실습 30분 (일 1.5시간)', studyTips:'ERP 프로그램(iCUBE 등) 실습이 핵심이며, 기출 유형 파악으로 단기 합격 가능합니다.', schedule:'연 4회', nextExam:'한국생산성본부 홈페이지 참고' },
+    '세무회계': { fullName:'세무회계', org:'한국세무사회', examType:'정기시험 (연 5회)', fee:'20,000원', passCriteria:'70점 이상', prepPeriod:'2~3개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 기출풀이 30분 (일 2시간)', studyTips:'소득세, 부가가치세, 법인세 기본 개념을 다지고 KcLep으로 세무 실무를 연습하세요.', schedule:'연 5회', nextExam:'한국세무사회 홈페이지 참고' },
+    '전산세무1급': { fullName:'전산세무 1급', org:'한국세무사회', examType:'정기시험 (연 5회)', fee:'20,000원', passCriteria:'70점 이상', prepPeriod:'3~4개월', difficulty:'중상', dailyStudy:'이론 1.5시간 + 실습 1시간 (일 2.5시간)', studyTips:'세무회계 전 과목(소득세, 부가세, 법인세)과 재무회계를 학습하고, KcLep 실무를 꼼꼼히 연습하세요.', schedule:'연 5회', nextExam:'한국세무사회 홈페이지 참고' },
+    'CPA': { fullName:'공인회계사 (CPA)', org:'금융감독원', examType:'정기시험 (연 1회, 1차+2차)', fee:'1차 50,000원 / 2차 60,000원', passCriteria:'1차 영어 제외 전과목 평균 60점, 2차 과목별 60점', prepPeriod:'2~3년', difficulty:'최상', dailyStudy:'이론 4시간 + 문제풀이 2시간 (일 6시간 이상)', studyTips:'회계학(재무·원가·관리), 세법, 상법, 경제학을 체계적으로 장기 학습하세요. 학원 수강을 강력 권장합니다.', schedule:'연 1회', nextExam:'금융감독원 홈페이지 참고' },
+    '감정평가사': { fullName:'감정평가사', org:'국토교통부', examType:'정기시험 (연 1회, 1차+2차)', fee:'1차 30,000원 / 2차 30,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'2~3년', difficulty:'최상', dailyStudy:'이론 3시간 + 문제풀이 2시간 (일 5시간 이상)', studyTips:'감정평가이론, 부동산학, 민법, 경제학을 체계적으로 학습하세요. 장기 계획이 필수입니다.', schedule:'연 1회', nextExam:'국토교통부 홈페이지 참고' },
+    '한국사능력검정': { fullName:'한국사능력검정시험', org:'국사편찬위원회', examType:'정기시험 (PBT, 연 6회)', fee:'심화 32,000원', passCriteria:'1급 80점/2급 70점/3급 60점 이상', prepPeriod:'1~2개월', difficulty:'중', dailyStudy:'개념정리 1시간 + 기출풀이 1시간 (일 2시간)', studyTips:'시대별 흐름을 잡고, 근현대사에 집중하세요. EBS 강의와 기출앱을 병행하면 효과적입니다.', schedule:'연 6회', nextExam:'국사편찬위원회 홈페이지 참고' },
+    '사회복지사1급': { fullName:'사회복지사 1급', org:'한국산업인력공단', examType:'정기시험 (연 1회)', fee:'32,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'3~4개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 기출풀이 1시간 (일 2.5시간)', studyTips:'사회복지 기초, 실천론, 정책론, 법제론을 균형있게 학습하세요. 대학 전공 이수가 응시요건입니다.', schedule:'연 1회', nextExam:'한국산업인력공단 홈페이지 참고' },
+    '공인중개사': { fullName:'공인중개사', org:'한국산업인력공단', examType:'정기시험 (연 1회)', fee:'20,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'6개월~1년', difficulty:'상', dailyStudy:'이론 2시간 + 기출풀이 1시간 (일 3시간)', studyTips:'민법, 부동산학, 부동산공법, 중개사법을 체계적으로 학습하세요. 민법 비중이 높으므로 기초를 탄탄히 하세요.', schedule:'연 1회 (10월경)', nextExam:'한국산업인력공단 홈페이지 참고' },
+    '유통관리사': { fullName:'유통관리사', org:'대한상공회의소', examType:'정기시험 (연 2회)', fee:'20,000원', passCriteria:'과목당 40점 이상, 전과목 평균 60점 이상', prepPeriod:'1~2개월', difficulty:'중하', dailyStudy:'이론 1시간 + 기출풀이 30분 (일 1.5시간)', studyTips:'유통경영, 물류관리, 상권분석을 학습하세요. 기출문제 패턴이 반복되므로 기출 위주 학습이 효율적입니다.', schedule:'연 2회', nextExam:'대한상공회의소 홈페이지 참고' },
+    '한국어교원': { fullName:'한국어교원', org:'국립국어원', examType:'정기시험 (연 1회) + 양성과정', fee:'양성과정 비용 별도', passCriteria:'양성과정 이수 + 시험 합격', prepPeriod:'3~6개월', difficulty:'중', dailyStudy:'이론 1.5시간 + 교안작성 30분 (일 2시간)', studyTips:'한국어학, 한국어교육학, 한국문화를 학습하세요. 3급은 양성과정(120시간)만으로도 취득 가능합니다.', schedule:'양성과정 수시', nextExam:'국립국어원 홈페이지 참고' }
+  };
+
+  function escapeHtmlRoi(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function calcCertROIScore(r) {
+    return Math.round(((0.45 * r.demand + 0.20 * r.trend - 0.20 * r.difficulty - 0.15 * r.supply) + 1) / 2 * 100);
+  }
+
+  function certRoiScoreColor(score) {
+    if (score >= 70) return 'green';
+    if (score >= 50) return 'amber';
+    return 'red';
+  }
+
+  function openRoiCertDetail(certName) {
+    document.getElementById('cert-detail-name').textContent = certName;
+    var detail = CERT_DETAILS_ROI[certName];
+    var container = document.getElementById('cert-detail-content');
+
+    // Find ROI data from the certificates array inside the IIFE - we'll pass it via a data attribute
+    var roiData = null;
+    var cards = document.querySelectorAll('.roi-card');
+    // We need the ROI data. Let's store it in a global lookup.
+    if (window._roiCertLookup && window._roiCertLookup[certName]) {
+      roiData = window._roiCertLookup[certName];
+    }
+
+    var basicHTML = '';
+    if (detail) {
+      basicHTML = '<div class="cert-detail-section"><div class="cert-section-title">📌 기본 정보</div><div class="cert-info-grid">' +
+        '<div class="cert-info-item"><div class="cert-info-label">주관기관</div><div class="cert-info-value">' + detail.org + '</div></div>' +
+        '<div class="cert-info-item"><div class="cert-info-label">시험유형</div><div class="cert-info-value">' + detail.examType + '</div></div>' +
+        '<div class="cert-info-item"><div class="cert-info-label">응시료</div><div class="cert-info-value">' + detail.fee + '</div></div>' +
+        '<div class="cert-info-item"><div class="cert-info-label">합격기준</div><div class="cert-info-value">' + detail.passCriteria + '</div></div>' +
+      '</div></div>' +
+      '<div class="cert-detail-section"><div class="cert-section-title">📅 시험일정</div><div class="cert-info-grid">' +
+        '<div class="cert-info-item full-width"><div class="cert-info-label">일정</div><div class="cert-info-value">' + detail.schedule + '</div></div>' +
+        '<div class="cert-info-item full-width"><div class="cert-info-label">다음 시험</div><div class="cert-info-value">' + detail.nextExam + '</div></div>' +
+      '</div></div>' +
+      '<div class="cert-detail-section"><div class="cert-section-title">💡 공부 팁</div><div class="cert-info-grid" style="margin-bottom:10px">' +
+        '<div class="cert-info-item"><div class="cert-info-label">예상 준비기간</div><div class="cert-info-value">' + detail.prepPeriod + '</div></div>' +
+        '<div class="cert-info-item"><div class="cert-info-label">난이도</div><div class="cert-info-value">' + detail.difficulty + '</div></div>' +
+      '</div><div class="cert-study-tip">' + detail.studyTips + '</div></div>' +
+      '<div class="cert-detail-section"><div class="cert-section-title">⏰ 하루 추천 공부량</div><div class="cert-daily-box">' + detail.dailyStudy + '</div></div>';
+    } else {
+      basicHTML = '<div class="cert-placeholder"><div class="cert-placeholder-icon">📋</div><p><strong>' + escapeHtmlRoi(certName) + '</strong></p><p style="margin-top:8px">상세 정보 준비 중입니다.</p></div>';
+    }
+
+    var roiHTML = '';
+    if (roiData) {
+      var roiScore = calcCertROIScore(roiData);
+      var color = certRoiScoreColor(roiScore);
+      roiHTML = '<div class="cert-roi-score-wrap"><div class="cert-roi-score-num cert-roi-score-' + color + '">' + roiScore + '</div><div class="cert-roi-score-label">ROI 점수 (100점 환산)</div></div>' +
+        '<div class="cert-detail-section"><div class="cert-section-title">📊 핵심 지표</div><div class="cert-roi-bars">' +
+        '<div class="cert-roi-bar-row"><span class="cert-roi-bar-label">수요지수</span><div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-demand" data-width="' + (roiData.demand * 100).toFixed(0) + '"></div></div><span class="cert-roi-bar-num">' + (roiData.demand * 100).toFixed(0) + '</span></div>' +
+        '<div class="cert-roi-bar-row"><span class="cert-roi-bar-label">트렌드</span><div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-trend" data-width="' + (roiData.trend * 100).toFixed(0) + '"></div></div><span class="cert-roi-bar-num">' + (roiData.trend * 100).toFixed(0) + '</span></div>' +
+        '<div class="cert-roi-bar-row"><span class="cert-roi-bar-label">난이도</span><div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-difficulty" data-width="' + (roiData.difficulty * 100).toFixed(0) + '"></div></div><span class="cert-roi-bar-num">' + (roiData.difficulty * 100).toFixed(0) + '</span></div>' +
+        '<div class="cert-roi-bar-row"><span class="cert-roi-bar-label">공급과열</span><div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-supply" data-width="' + (roiData.supply * 100).toFixed(0) + '"></div></div><span class="cert-roi-bar-num">' + (roiData.supply * 100).toFixed(0) + '</span></div>' +
+        '</div></div>' +
+        '<div class="cert-detail-section"><div class="cert-section-title">📈 시장 데이터</div><div class="cert-roi-stats">' +
+        '<div class="cert-roi-stat"><div class="cert-roi-stat-value">' + roiData.jobMention + '</div><div class="cert-roi-stat-key">공고언급률</div></div>' +
+        '<div class="cert-roi-stat"><div class="cert-roi-stat-value">' + roiData.passRate + '</div><div class="cert-roi-stat-key">합격률</div></div>' +
+        '<div class="cert-roi-stat"><div class="cert-roi-stat-value">' + roiData.applicants + '</div><div class="cert-roi-stat-key">연간응시자</div></div>' +
+        '</div></div>';
+    } else {
+      roiHTML = '<div class="cert-placeholder"><div class="cert-placeholder-icon">📊</div><p>ROI 분석 데이터 준비 중입니다.</p></div>';
+    }
+
+    container.innerHTML = '<div class="cert-modal-tabs"><button class="cert-modal-tab active" data-tab="basic" onclick="switchRoiCertTab(\'basic\')">기본정보</button><button class="cert-modal-tab" data-tab="roi" onclick="switchRoiCertTab(\'roi\')">ROI분석</button></div>' +
+      '<div class="cert-tab-content" id="cert-tab-basic">' + basicHTML + '</div>' +
+      '<div class="cert-tab-content" id="cert-tab-roi" style="display:none">' + roiHTML + '</div>';
+
+    document.getElementById('cert-detail-modal').classList.add('active');
+  }
+
+  function closeCertDetailModal() {
+    document.getElementById('cert-detail-modal').classList.remove('active');
+  }
+
+  function switchRoiCertTab(tab) {
+    var tabs = document.querySelectorAll('.cert-modal-tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    document.querySelector('.cert-modal-tab[data-tab="' + tab + '"]').classList.add('active');
+    document.getElementById('cert-tab-basic').style.display = tab === 'basic' ? 'block' : 'none';
+    document.getElementById('cert-tab-roi').style.display = tab === 'roi' ? 'block' : 'none';
+    if (tab === 'roi') {
+      setTimeout(function() {
+        var bars = document.querySelectorAll('#cert-tab-roi .cert-roi-bar-fill');
+        for (var j = 0; j < bars.length; j++) {
+          bars[j].style.width = bars[j].getAttribute('data-width') + '%';
+        }
+      }, 50);
+    }
+  }
+
   (function() {
     'use strict';
 
@@ -846,6 +992,12 @@
       c.roiScore = calcROI(c);
     });
 
+    // Store cert lookup for modal
+    window._roiCertLookup = {};
+    certificates.forEach(function(c) {
+      window._roiCertLookup[c.name] = c;
+    });
+
     /* ===== Sector class mapping ===== */
     function sectorClass(sector) {
       if (sector === 'IT') return 'sector-IT';
@@ -865,7 +1017,7 @@
     /* ===== Build a card HTML ===== */
     function buildCard(cert, index) {
       var color = scoreColor(cert.roiScore);
-      return '<div class="roi-card roi-' + color + '" data-sector="' + cert.sector + '" data-index="' + index + '">' +
+      return '<div class="roi-card roi-' + color + '" data-sector="' + cert.sector + '" data-index="' + index + '" style="cursor:pointer" onclick="openRoiCertDetail(\'' + cert.name.replace(/'/g, "\\'") + '\')">' +
         '<div class="roi-card-header">' +
           '<div class="roi-card-title-wrap">' +
             '<div class="roi-card-name">' + cert.name + '</div>' +
