@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자격증 ROI 분석 - JobReady</title>
+  <meta name="description" content="32개 주요 자격증의 투자 대비 효과(ROI)를 분석합니다. 수요, 트렌드, 난이도, 공급을 종합해 최적의 자격증을 찾아보세요.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== ROI Page Light Theme ===== */
+    :root {
+      --roi-bg: #FFFFFF;
+      --roi-section-bg: #F8F9FA;
+      --roi-primary: #3182F6;
+      --roi-primary-light: rgba(49,130,246,0.08);
+      --roi-primary-hover: #1B6AE0;
+      --roi-navy: #1B1D6A;
+      --roi-text: #191F28;
+      --roi-text-secondary: #4E5968;
+      --roi-text-muted: #8B95A1;
+      --roi-card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --roi-card-radius: 16px;
+      --roi-btn-radius: 12px;
+      --roi-green: #34C759;
+      --roi-amber: #FF9500;
+      --roi-red: #FF3B30;
+    }
+
+    body.roi-page {
+      background: var(--roi-bg);
+      color: var(--roi-text);
+      margin: 0;
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Nav Override (light) ===== */
+    body.roi-page .nav {
+      background: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 14px 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    body.roi-page .nav-logo { color: var(--roi-text); }
+    body.roi-page .nav-links a {
+      color: var(--roi-text-secondary);
+      font-weight: 600;
+    }
+    body.roi-page .nav-links a:hover,
+    body.roi-page .nav-links .nav-link-active {
+      color: var(--roi-primary);
+    }
+
+    /* ===== Hero Section ===== */
+    .roi-hero {
+      padding: 140px 24px 80px;
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      text-align: center;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+    }
+    .roi-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .roi-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 2;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;
+      background-size: 1440px 100%;
+    }
+    .roi-hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .roi-hero-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 24px;
+      backdrop-filter: blur(4px);
+      animation: roiFadeInUp 0.6s ease both;
+    }
+    .roi-hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      margin: 0 0 16px;
+      letter-spacing: -0.5px;
+      animation: roiFadeInUp 0.6s ease 0.1s both;
+    }
+    .roi-hero p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.8);
+      margin: 0;
+      font-weight: 400;
+      line-height: 1.6;
+      animation: roiFadeInUp 0.6s ease 0.2s both;
+    }
+    .roi-hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 36px;
+      animation: roiFadeInUp 0.6s ease 0.3s both;
+    }
+    .roi-hero-stat {
+      text-align: center;
+    }
+    .roi-hero-stat-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+    .roi-hero-stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .roi-hero-stat-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.25);
+      align-self: center;
+    }
+
+    /* ===== Controls Section ===== */
+    .roi-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .roi-controls {
+      padding: 40px 0 8px;
+    }
+    .roi-controls-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .roi-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .roi-filter-btn {
+      padding: 8px 20px;
+      border-radius: 24px;
+      border: 1px solid #E5E8EB;
+      background: #fff;
+      color: var(--roi-text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+    .roi-filter-btn:hover {
+      border-color: var(--roi-primary);
+      color: var(--roi-primary);
+      background: var(--roi-primary-light);
+    }
+    .roi-filter-btn.active {
+      background: var(--roi-primary);
+      color: #fff;
+      border-color: var(--roi-primary);
+    }
+    .roi-sort-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .roi-sort-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--roi-text-muted);
+    }
+    .roi-sort-select {
+      padding: 8px 36px 8px 14px;
+      border-radius: var(--roi-btn-radius);
+      border: 1px solid #E5E8EB;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234E5968' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--roi-text);
+      cursor: pointer;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+    .roi-sort-select:focus {
+      outline: none;
+      border-color: var(--roi-primary);
+    }
+
+    /* ===== Results Count ===== */
+    .roi-results-count {
+      padding: 12px 0 24px;
+      font-size: 14px;
+      color: var(--roi-text-muted);
+      font-weight: 500;
+    }
+    .roi-results-count strong {
+      color: var(--roi-primary);
+      font-weight: 700;
+    }
+
+    /* ===== Card Grid ===== */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding-bottom: 64px;
+    }
+
+    /* ===== Individual Card ===== */
+    .roi-card {
+      background: #fff;
+      border: 1px solid #E5E8EB;
+      border-radius: var(--roi-card-radius);
+      padding: 28px;
+      box-shadow: var(--roi-card-shadow);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .roi-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .roi-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+      border-color: rgba(49,130,246,0.3);
+    }
+    .roi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+      transition: opacity 0.3s;
+    }
+    .roi-card.roi-green::before { background: var(--roi-green); }
+    .roi-card.roi-amber::before { background: var(--roi-amber); }
+    .roi-card.roi-red::before { background: var(--roi-red); }
+
+    /* Card Header */
+    .roi-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .roi-card-title-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+    .roi-card-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--roi-text);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    .roi-card-sector {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .sector-IT { background: rgba(49,130,246,0.1); color: #3182F6; }
+    .sector-전기안전 { background: rgba(255,149,0,0.1); color: #E08600; }
+    .sector-경영회계 { background: rgba(52,199,89,0.1); color: #28A745; }
+    .sector-어학 { background: rgba(175,82,222,0.1); color: #AF52DE; }
+    .sector-기타 { background: rgba(139,149,161,0.1); color: #6B7684; }
+
+    /* ROI Score */
+    .roi-card-score {
+      text-align: center;
+      flex-shrink: 0;
+      min-width: 72px;
+    }
+    .roi-score-value {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+    .roi-score-value.score-green { color: var(--roi-green); }
+    .roi-score-value.score-amber { color: var(--roi-amber); }
+    .roi-score-value.score-red { color: var(--roi-red); }
+    .roi-score-label {
+      font-size: 11px;
+      color: var(--roi-text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Card Stats Row */
+    .roi-card-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px 0;
+      border-top: 1px solid #F1F3F5;
+      border-bottom: 1px solid #F1F3F5;
+      margin-bottom: 16px;
+    }
+    .roi-stat-item {
+      text-align: center;
+    }
+    .roi-stat-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--roi-text);
+      letter-spacing: -0.5px;
+    }
+    .roi-stat-key {
+      font-size: 11px;
+      color: var(--roi-text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Bar Charts */
+    .roi-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .roi-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .roi-bar-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--roi-text-secondary);
+      width: 42px;
+      flex-shrink: 0;
+    }
+    .roi-bar-track {
+      flex: 1;
+      height: 6px;
+      background: #F1F3F5;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .roi-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0;
+    }
+    .roi-bar-fill.bar-demand { background: var(--roi-primary); }
+    .roi-bar-fill.bar-trend { background: #34C759; }
+    .roi-bar-fill.bar-difficulty { background: #FF9500; }
+    .roi-bar-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--roi-text-muted);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ===== TOP 5 Summary Section ===== */
+    .roi-top5-section {
+      background: var(--roi-section-bg);
+      padding: 72px 0 80px;
+    }
+    .roi-top5-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .roi-top5-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: rgba(49,130,246,0.08);
+      border: 1px solid rgba(49,130,246,0.15);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--roi-primary);
+      margin-bottom: 16px;
+    }
+    .roi-top5-header h2 {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      color: var(--roi-text);
+      margin: 0 0 8px;
+    }
+    .roi-top5-header p {
+      font-size: 15px;
+      color: var(--roi-text-muted);
+      margin: 0;
+    }
+    .roi-top5-list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .roi-top5-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #fff;
+      border: 1px solid #E5E8EB;
+      border-radius: var(--roi-card-radius);
+      padding: 20px 24px;
+      box-shadow: var(--roi-card-shadow);
+      transition: all 0.3s ease;
+    }
+    .roi-top5-item:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    .roi-top5-rank {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .roi-top5-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #fff; }
+    .roi-top5-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); color: #fff; }
+    .roi-top5-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #B8690E); color: #fff; }
+    .roi-top5-rank.rank-4,
+    .roi-top5-rank.rank-5 { background: #F1F3F5; color: var(--roi-text-secondary); }
+    .roi-top5-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .roi-top5-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--roi-text);
+      margin-bottom: 4px;
+    }
+    .roi-top5-meta {
+      font-size: 13px;
+      color: var(--roi-text-muted);
+      font-weight: 500;
+    }
+    .roi-top5-score {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+    .roi-top5-score.score-green { color: var(--roi-green); }
+    .roi-top5-score.score-amber { color: var(--roi-amber); }
+
+    /* ===== Info Box ===== */
+    .roi-info-section {
+      padding: 48px 0 0;
+    }
+    .roi-info-box {
+      background: var(--roi-section-bg);
+      border: 1px solid #E5E8EB;
+      border-radius: var(--roi-card-radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+    }
+    .roi-info-box h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--roi-text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .roi-info-box p {
+      font-size: 14px;
+      color: var(--roi-text-secondary);
+      line-height: 1.8;
+      margin: 0;
+    }
+    .roi-formula {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      background: #fff;
+      border: 1px solid #E5E8EB;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--roi-primary);
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes roiFadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes roiCardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .roi-hero { padding: 120px 20px 60px; }
+      .roi-hero h1 { font-size: 28px; }
+      .roi-hero p { font-size: 15px; }
+      .roi-hero-stats { gap: 20px; }
+      .roi-hero-stat-num { font-size: 22px; }
+      .roi-grid { grid-template-columns: 1fr; gap: 16px; }
+      .roi-controls-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .roi-top5-item { padding: 16px 20px; }
+      .roi-top5-score { font-size: 24px; }
+      .roi-info-box { padding: 20px 20px; }
+    }
+    @media (max-width: 480px) {
+      .roi-hero { padding: 110px 16px 50px; }
+      .roi-hero h1 { font-size: 24px; }
+      .roi-hero p { font-size: 14px; }
+      .roi-hero-stats { flex-direction: column; gap: 12px; }
+      .roi-hero-stat-divider { display: none; }
+      .roi-card { padding: 20px; }
+      .roi-card-name { font-size: 16px; }
+      .roi-score-value { font-size: 30px; }
+      .roi-card-stats { gap: 8px; }
+      .roi-stat-value { font-size: 14px; }
+      .roi-filters { gap: 6px; }
+      .roi-filter-btn { padding: 6px 14px; font-size: 13px; }
+      .roi-top5-item { gap: 12px; }
+      .roi-top5-rank { width: 36px; height: 36px; font-size: 16px; }
+    }
+
+    /* Smooth transitions for filter/sort */
+    .roi-card.hiding {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="roi-page">
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">📋</span>
+        <span class="logo-text">JobReady</span>
+      </a>
+      <div class="nav-links">
+        <a href="/#certificates">자격증</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html">취업진단</a>
+        <a href="/analysis.html">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
+        <a href="/roi.html" class="nav-link-active">자격증ROI</a>
+        <a href="/documents.html">서류체크</a>
+        <a href="/interview.html">면접준비</a>
+        <a href="/#ranking">랭킹</a>
+        <a href="/#community">커뮤니티</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="roi-hero">
+    <div class="roi-hero-content">
+      <div class="roi-hero-badge">투자 대비 효과 분석</div>
+      <h1>자격증 ROI 분석</h1>
+      <p>수요, 트렌드, 난이도, 공급량을 종합 분석하여<br>투자 대비 가장 효과적인 자격증을 찾아드립니다</p>
+      <div class="roi-hero-stats">
+        <div class="roi-hero-stat">
+          <div class="roi-hero-stat-num">32</div>
+          <div class="roi-hero-stat-label">분석 자격증</div>
+        </div>
+        <div class="roi-hero-stat-divider"></div>
+        <div class="roi-hero-stat">
+          <div class="roi-hero-stat-num">5</div>
+          <div class="roi-hero-stat-label">분석 분야</div>
+        </div>
+        <div class="roi-hero-stat-divider"></div>
+        <div class="roi-hero-stat">
+          <div class="roi-hero-stat-num">4</div>
+          <div class="roi-hero-stat-label">핵심 지표</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls -->
+  <div class="roi-container">
+    <div class="roi-controls">
+      <div class="roi-controls-inner">
+        <div class="roi-filters" id="roiFilters">
+          <button class="roi-filter-btn active" data-sector="전체">전체</button>
+          <button class="roi-filter-btn" data-sector="IT">IT</button>
+          <button class="roi-filter-btn" data-sector="전기/안전">전기/안전</button>
+          <button class="roi-filter-btn" data-sector="경영/회계">경영/회계</button>
+          <button class="roi-filter-btn" data-sector="어학">어학</button>
+          <button class="roi-filter-btn" data-sector="기타">기타</button>
+        </div>
+        <div class="roi-sort-wrap">
+          <span class="roi-sort-label">정렬</span>
+          <select class="roi-sort-select" id="roiSort">
+            <option value="roi">ROI순</option>
+            <option value="passRate">합격률순</option>
+            <option value="applicants">응시자순</option>
+            <option value="jobMention">공고언급률순</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROI Formula Info -->
+    <div class="roi-info-section">
+      <div class="roi-info-box">
+        <h3>📊 ROI 산출 공식</h3>
+        <p>수요(채용시장 반영도), 트렌드(성장세), 난이도(취득 난이도), 공급(보유자 수)을 가중치로 종합하여 투자 대비 효과를 100점 만점으로 환산합니다.</p>
+        <div class="roi-formula">
+          ROI = 0.45 × 수요 + 0.20 × 트렌드 − 0.20 × 난이도 − 0.15 × 공급 → 100점 환산
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Count -->
+    <div class="roi-results-count" id="roiResultsCount">
+      전체 <strong>32</strong>개 자격증
+    </div>
+
+    <!-- Card Grid -->
+    <div class="roi-grid" id="roiGrid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </div>
+
+  <!-- TOP 5 Section -->
+  <section class="roi-top5-section">
+    <div class="roi-container">
+      <div class="roi-top5-header">
+        <div class="roi-top5-badge">TOP 5</div>
+        <h2>TOP 5 ROI 자격증</h2>
+        <p>투자 대비 효과가 가장 높은 자격증 BEST 5</p>
+      </div>
+      <div class="roi-top5-list" id="roiTop5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/#about">서비스소개</a>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="#">개인정보처리방침</a><span>|</span><a href="#">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* ===== Certificate Data (32 total) ===== */
+    const certificates = [
+      // ---- Provided 10 ----
+      { name: '정보처리기사',     sector: 'IT',       demand: 0.90, trend: 0.80, difficulty: 0.50, supply: 0.70, passRate: '40%', applicants: '15만', jobMention: '35%' },
+      { name: 'SQLD',            sector: 'IT',       demand: 0.85, trend: 0.90, difficulty: 0.35, supply: 0.50, passRate: '48%', applicants: '5만',  jobMention: '25%' },
+      { name: 'ADsP',            sector: 'IT',       demand: 0.80, trend: 0.85, difficulty: 0.30, supply: 0.45, passRate: '55%', applicants: '6만',  jobMention: '20%' },
+      { name: '컴활1급',          sector: 'IT',       demand: 0.75, trend: 0.30, difficulty: 0.45, supply: 0.80, passRate: '38%', applicants: '20만', jobMention: '40%' },
+      { name: '전기기사',         sector: '전기/안전', demand: 0.85, trend: 0.60, difficulty: 0.60, supply: 0.50, passRate: '30%', applicants: '8만',  jobMention: '30%' },
+      { name: '산업안전기사',      sector: '전기/안전', demand: 0.90, trend: 0.70, difficulty: 0.50, supply: 0.45, passRate: '35%', applicants: '6만',  jobMention: '28%' },
+      { name: 'TOEIC',           sector: '어학',     demand: 0.70, trend: 0.20, difficulty: 0.20, supply: 0.90, passRate: 'N/A', applicants: '170만', jobMention: '55%' },
+      { name: '빅데이터분석기사',   sector: 'IT',       demand: 0.80, trend: 0.95, difficulty: 0.55, supply: 0.30, passRate: '35%', applicants: '3만',  jobMention: '15%' },
+      { name: '전산회계1급',       sector: '경영/회계', demand: 0.70, trend: 0.40, difficulty: 0.30, supply: 0.60, passRate: '45%', applicants: '10만', jobMention: '20%' },
+      { name: '재경관리사',        sector: '경영/회계', demand: 0.65, trend: 0.50, difficulty: 0.45, supply: 0.35, passRate: '40%', applicants: '3만',  jobMention: '15%' },
+
+      // ---- IT (7 more) ----
+      { name: '정보보안기사',      sector: 'IT',       demand: 0.88, trend: 0.92, difficulty: 0.65, supply: 0.25, passRate: '18%', applicants: '2만',  jobMention: '18%' },
+      { name: '리눅스마스터1급',    sector: 'IT',       demand: 0.72, trend: 0.65, difficulty: 0.40, supply: 0.35, passRate: '42%', applicants: '2만',  jobMention: '12%' },
+      { name: '네트워크관리사',     sector: 'IT',       demand: 0.68, trend: 0.50, difficulty: 0.35, supply: 0.45, passRate: '50%', applicants: '3만',  jobMention: '10%' },
+      { name: 'AWS SAA',         sector: 'IT',       demand: 0.92, trend: 0.95, difficulty: 0.50, supply: 0.20, passRate: '30%', applicants: '1만',  jobMention: '22%' },
+      { name: '정보처리산업기사',   sector: 'IT',       demand: 0.70, trend: 0.55, difficulty: 0.35, supply: 0.60, passRate: '45%', applicants: '7만',  jobMention: '18%' },
+      { name: 'ADP',             sector: 'IT',       demand: 0.78, trend: 0.88, difficulty: 0.60, supply: 0.20, passRate: '22%', applicants: '1.5만', jobMention: '12%' },
+      { name: 'CISSP',           sector: 'IT',       demand: 0.85, trend: 0.80, difficulty: 0.75, supply: 0.15, passRate: '25%', applicants: '0.5만', jobMention: '10%' },
+
+      // ---- 전기/안전 (6 more) ----
+      { name: '전기산업기사',      sector: '전기/안전', demand: 0.72, trend: 0.50, difficulty: 0.45, supply: 0.55, passRate: '35%', applicants: '5만',  jobMention: '22%' },
+      { name: '소방설비기사(전기)', sector: '전기/안전', demand: 0.82, trend: 0.75, difficulty: 0.55, supply: 0.30, passRate: '28%', applicants: '3만',  jobMention: '20%' },
+      { name: '소방설비기사(기계)', sector: '전기/안전', demand: 0.80, trend: 0.72, difficulty: 0.55, supply: 0.32, passRate: '30%', applicants: '2.5만', jobMention: '18%' },
+      { name: '건설안전기사',      sector: '전기/안전', demand: 0.85, trend: 0.68, difficulty: 0.50, supply: 0.40, passRate: '32%', applicants: '4만',  jobMention: '25%' },
+      { name: '위험물산업기사',     sector: '전기/안전', demand: 0.65, trend: 0.45, difficulty: 0.35, supply: 0.55, passRate: '45%', applicants: '5만',  jobMention: '15%' },
+      { name: '산업안전산업기사',   sector: '전기/안전', demand: 0.75, trend: 0.55, difficulty: 0.40, supply: 0.50, passRate: '38%', applicants: '4만',  jobMention: '18%' },
+
+      // ---- 경영/회계 (5 more) ----
+      { name: 'ERP정보관리사',    sector: '경영/회계', demand: 0.62, trend: 0.45, difficulty: 0.30, supply: 0.50, passRate: '52%', applicants: '4만',  jobMention: '12%' },
+      { name: '세무회계',         sector: '경영/회계', demand: 0.68, trend: 0.48, difficulty: 0.40, supply: 0.45, passRate: '40%', applicants: '3만',  jobMention: '14%' },
+      { name: '전산세무1급',       sector: '경영/회계', demand: 0.72, trend: 0.52, difficulty: 0.50, supply: 0.40, passRate: '32%', applicants: '4만',  jobMention: '18%' },
+      { name: 'CPA',             sector: '경영/회계', demand: 0.90, trend: 0.55, difficulty: 0.90, supply: 0.10, passRate: '10%', applicants: '2만',  jobMention: '25%' },
+      { name: '감정평가사',        sector: '경영/회계', demand: 0.75, trend: 0.48, difficulty: 0.85, supply: 0.08, passRate: '8%',  applicants: '1만',  jobMention: '10%' },
+
+      // ---- 어학 (0 more, TOEIC already listed) ----
+
+      // ---- 기타 (4 more) ----
+      { name: '한국사능력검정',    sector: '기타',     demand: 0.55, trend: 0.35, difficulty: 0.20, supply: 0.80, passRate: '65%', applicants: '30만', jobMention: '30%' },
+      { name: '사회복지사1급',     sector: '기타',     demand: 0.72, trend: 0.60, difficulty: 0.45, supply: 0.50, passRate: '35%', applicants: '7만',  jobMention: '15%' },
+      { name: '공인중개사',        sector: '기타',     demand: 0.60, trend: 0.42, difficulty: 0.55, supply: 0.65, passRate: '25%', applicants: '25만', jobMention: '8%' },
+      { name: '유통관리사',        sector: '기타',     demand: 0.58, trend: 0.40, difficulty: 0.25, supply: 0.55, passRate: '55%', applicants: '3만',  jobMention: '10%' },
+      { name: '한국어교원',        sector: '기타',     demand: 0.55, trend: 0.62, difficulty: 0.40, supply: 0.30, passRate: '38%', applicants: '1만',  jobMention: '5%' }
+    ];
+
+    /* ===== Calculate ROI Score ===== */
+    function calcROI(cert) {
+      var raw = 0.45 * cert.demand + 0.20 * cert.trend - 0.20 * cert.difficulty - 0.15 * cert.supply;
+      return Math.round(((raw + 1) / 2) * 100);
+    }
+
+    // Attach ROI score to each
+    certificates.forEach(function(c) {
+      c.roiScore = calcROI(c);
+    });
+
+    /* ===== Sector class mapping ===== */
+    function sectorClass(sector) {
+      if (sector === 'IT') return 'sector-IT';
+      if (sector === '전기/안전') return 'sector-전기안전';
+      if (sector === '경영/회계') return 'sector-경영회계';
+      if (sector === '어학') return 'sector-어학';
+      return 'sector-기타';
+    }
+
+    /* ===== Score color ===== */
+    function scoreColor(score) {
+      if (score >= 70) return 'green';
+      if (score >= 50) return 'amber';
+      return 'red';
+    }
+
+    /* ===== Build a card HTML ===== */
+    function buildCard(cert, index) {
+      var color = scoreColor(cert.roiScore);
+      return '<div class="roi-card roi-' + color + '" data-sector="' + cert.sector + '" data-index="' + index + '">' +
+        '<div class="roi-card-header">' +
+          '<div class="roi-card-title-wrap">' +
+            '<div class="roi-card-name">' + cert.name + '</div>' +
+            '<span class="roi-card-sector ' + sectorClass(cert.sector) + '">' + cert.sector + '</span>' +
+          '</div>' +
+          '<div class="roi-card-score">' +
+            '<div class="roi-score-value score-' + color + '">' + cert.roiScore + '</div>' +
+            '<div class="roi-score-label">ROI 점수</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="roi-card-stats">' +
+          '<div class="roi-stat-item">' +
+            '<div class="roi-stat-value">' + cert.passRate + '</div>' +
+            '<div class="roi-stat-key">합격률</div>' +
+          '</div>' +
+          '<div class="roi-stat-item">' +
+            '<div class="roi-stat-value">' + cert.applicants + '</div>' +
+            '<div class="roi-stat-key">응시자수</div>' +
+          '</div>' +
+          '<div class="roi-stat-item">' +
+            '<div class="roi-stat-value">' + cert.jobMention + '</div>' +
+            '<div class="roi-stat-key">공고언급률</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="roi-bars">' +
+          '<div class="roi-bar-row">' +
+            '<span class="roi-bar-label">수요</span>' +
+            '<div class="roi-bar-track"><div class="roi-bar-fill bar-demand" data-width="' + (cert.demand * 100) + '"></div></div>' +
+            '<span class="roi-bar-num">' + (cert.demand * 100).toFixed(0) + '</span>' +
+          '</div>' +
+          '<div class="roi-bar-row">' +
+            '<span class="roi-bar-label">트렌드</span>' +
+            '<div class="roi-bar-track"><div class="roi-bar-fill bar-trend" data-width="' + (cert.trend * 100) + '"></div></div>' +
+            '<span class="roi-bar-num">' + (cert.trend * 100).toFixed(0) + '</span>' +
+          '</div>' +
+          '<div class="roi-bar-row">' +
+            '<span class="roi-bar-label">난이도</span>' +
+            '<div class="roi-bar-track"><div class="roi-bar-fill bar-difficulty" data-width="' + (cert.difficulty * 100) + '"></div></div>' +
+            '<span class="roi-bar-num">' + (cert.difficulty * 100).toFixed(0) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    /* ===== Sort Logic ===== */
+    function sortCerts(list, method) {
+      var sorted = list.slice();
+      if (method === 'roi') {
+        sorted.sort(function(a, b) { return b.roiScore - a.roiScore; });
+      } else if (method === 'passRate') {
+        sorted.sort(function(a, b) {
+          var pa = parseFloat(a.passRate) || 0;
+          var pb = parseFloat(b.passRate) || 0;
+          return pb - pa;
+        });
+      } else if (method === 'applicants') {
+        sorted.sort(function(a, b) {
+          var parseApp = function(s) {
+            var n = parseFloat(s);
+            return isNaN(n) ? 0 : n;
+          };
+          return parseApp(b.applicants) - parseApp(a.applicants);
+        });
+      } else if (method === 'jobMention') {
+        sorted.sort(function(a, b) {
+          return parseFloat(b.jobMention) - parseFloat(a.jobMention);
+        });
+      }
+      return sorted;
+    }
+
+    /* ===== Render Cards ===== */
+    var grid = document.getElementById('roiGrid');
+    var resultsCount = document.getElementById('roiResultsCount');
+    var currentSector = '전체';
+    var currentSort = 'roi';
+
+    function renderCards() {
+      var filtered = currentSector === '전체'
+        ? certificates.slice()
+        : certificates.filter(function(c) { return c.sector === currentSector; });
+
+      var sorted = sortCerts(filtered, currentSort);
+
+      resultsCount.innerHTML = (currentSector === '전체' ? '전체' : currentSector) +
+        ' <strong>' + sorted.length + '</strong>개 자격증';
+
+      var html = '';
+      sorted.forEach(function(cert, i) {
+        html += buildCard(cert, i);
+      });
+      grid.innerHTML = html;
+
+      // Animate cards in with stagger
+      var cards = grid.querySelectorAll('.roi-card');
+      cards.forEach(function(card, i) {
+        setTimeout(function() {
+          card.classList.add('visible');
+          // Animate bar fills
+          var bars = card.querySelectorAll('.roi-bar-fill');
+          bars.forEach(function(bar) {
+            bar.style.width = bar.getAttribute('data-width') + '%';
+          });
+        }, i * 60);
+      });
+    }
+
+    /* ===== Filter Buttons ===== */
+    var filterBtns = document.querySelectorAll('.roi-filter-btn');
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentSector = btn.getAttribute('data-sector');
+        renderCards();
+      });
+    });
+
+    /* ===== Sort Select ===== */
+    var sortSelect = document.getElementById('roiSort');
+    sortSelect.addEventListener('change', function() {
+      currentSort = sortSelect.value;
+      renderCards();
+    });
+
+    /* ===== Render TOP 5 ===== */
+    function renderTop5() {
+      var sorted = sortCerts(certificates, 'roi');
+      var top5 = sorted.slice(0, 5);
+      var container = document.getElementById('roiTop5');
+      var html = '';
+      top5.forEach(function(cert, i) {
+        var color = scoreColor(cert.roiScore);
+        var rankNum = i + 1;
+        html += '<div class="roi-top5-item">' +
+          '<div class="roi-top5-rank rank-' + rankNum + '">' + rankNum + '</div>' +
+          '<div class="roi-top5-info">' +
+            '<div class="roi-top5-name">' + cert.name + '</div>' +
+            '<div class="roi-top5-meta">' + cert.sector + ' · 합격률 ' + cert.passRate + ' · 공고언급 ' + cert.jobMention + '</div>' +
+          '</div>' +
+          '<div class="roi-top5-score score-' + color + '">' + cert.roiScore + '</div>' +
+        '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    /* ===== Init ===== */
+    renderCards();
+    renderTop5();
+
+    /* ===== Scroll observer for TOP 5 animation ===== */
+    if ('IntersectionObserver' in window) {
+      var top5Observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var items = entry.target.querySelectorAll('.roi-top5-item');
+            items.forEach(function(item, i) {
+              item.style.opacity = '0';
+              item.style.transform = 'translateY(16px)';
+              item.style.transition = 'all 0.4s ease ' + (i * 0.08) + 's';
+              setTimeout(function() {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+              }, 50);
+            });
+            top5Observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      var top5List = document.getElementById('roiTop5');
+      if (top5List) top5Observer.observe(top5List);
+    }
+
+  })();
+  </script>
+</body>
+</html>

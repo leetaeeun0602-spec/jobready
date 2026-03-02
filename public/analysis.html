@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     /* ===== Light Theme for Analysis Page ===== */
     :root {
@@ -193,7 +194,7 @@
       margin: 0;
     }
     .job-detail-wrapper.open {
-      max-height: 800px;
+      max-height: 2000px;
       opacity: 1;
       margin: 4px 0 12px;
     }
@@ -363,6 +364,25 @@
       color: #ef4444;
     }
 
+    /* ===== Charts Grid ===== */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .chart-box {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .chart-box canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
     /* ===== Footer ===== */
     .site-footer { background: #1B1D6A; padding: 60px 0 30px; color: #fff; }
     .footer-container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
@@ -425,6 +445,9 @@
         font-size: 13px;
         padding: 8px 14px;
       }
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
       .footer-grid {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -456,6 +479,9 @@
         <a href="/diagnosis.html">취업진단</a>
         <a href="/analysis.html" class="nav-link-active">직무분석</a>
         <a href="/roadmap.html">로드맵</a>
+        <a href="/roi.html">자격증ROI</a>
+        <a href="/documents.html">서류체크</a>
+        <a href="/interview.html">면접준비</a>
         <a href="/#ranking">랭킹</a>
         <a href="/#community">커뮤니티</a>
       </div>
@@ -495,6 +521,9 @@
           <a href="/diagnosis.html">취업진단</a>
           <a href="/analysis.html">직무분석</a>
           <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
         </div>
         <div class="footer-col">
           <h4>커뮤니티</h4>
@@ -584,6 +613,79 @@
         salary: '3,200~4,500만원', trend: '유지', trendIcon: '➡️'
       }
     ];
+
+    // ===== Chart Data for Each Job =====
+    const CHART_DATA = {
+      'itdev': {
+        skills: { labels: ['Java','Spring','SQL','AWS','Docker'], data: [85,78,75,60,55] },
+        certs: { labels: ['정보처리기사','SQLD','AWS SAA','리눅스마스터'], data: [40,25,20,15] },
+        salary: { low: 3200, avg: 4500, high: 7000 },
+        trend: [120, 135, 128, 142, 155, 168]
+      },
+      'frontend': {
+        skills: { labels: ['React','JavaScript','TypeScript','CSS','Next.js'], data: [88,85,72,65,55] },
+        certs: { labels: ['정보처리기사','웹디자인기능사','SQLD','ADsP'], data: [45,25,20,10] },
+        salary: { low: 3000, avg: 4200, high: 6500 },
+        trend: [110, 118, 125, 130, 142, 150]
+      },
+      'data': {
+        skills: { labels: ['Python','SQL','통계','Tableau','R'], data: [90,82,75,60,45] },
+        certs: { labels: ['빅데이터분석기사','ADsP','SQLD','정보처리기사'], data: [35,30,20,15] },
+        salary: { low: 3000, avg: 4300, high: 6800 },
+        trend: [80, 95, 105, 118, 130, 145]
+      },
+      'accounting': {
+        skills: { labels: ['세무신고','ERP','엑셀','재무분석','원가관리'], data: [85,80,78,65,55] },
+        certs: { labels: ['전산세무1급','재경관리사','전산회계1급','CPA'], data: [30,25,25,20] },
+        salary: { low: 2800, avg: 3800, high: 5500 },
+        trend: [90, 88, 92, 95, 98, 102]
+      },
+      'electrical': {
+        skills: { labels: ['전기설계','CAD','PLC','전력계통','감리'], data: [88,80,70,65,55] },
+        certs: { labels: ['전기기사','전기산업기사','소방설비기사','전기공사기사'], data: [50,25,15,10] },
+        salary: { low: 3000, avg: 4000, high: 5800 },
+        trend: [100, 105, 108, 112, 118, 125]
+      },
+      'safety': {
+        skills: { labels: ['위험성평가','안전교육','법규해석','점검관리','MSDS'], data: [90,82,78,70,60] },
+        certs: { labels: ['산업안전기사','건설안전기사','위험물산업기사','소방설비기사'], data: [45,25,20,10] },
+        salary: { low: 3200, avg: 4200, high: 6000 },
+        trend: [95, 102, 110, 120, 132, 140]
+      },
+      'marketing': {
+        skills: { labels: ['디지털마케팅','콘텐츠기획','SNS운영','GA분석','광고운용'], data: [85,80,75,65,60] },
+        certs: { labels: ['컴활1급','ADsP','구글애널리틱스','TOEIC'], data: [30,25,25,20] },
+        salary: { low: 2800, avg: 3800, high: 5500 },
+        trend: [88, 92, 98, 95, 100, 108]
+      },
+      'sales': {
+        skills: { labels: ['고객관리','협상','CRM','프레젠테이션','시장분석'], data: [90,82,70,68,55] },
+        certs: { labels: ['TOEIC','유통관리사','컴활1급','ERP정보관리사'], data: [35,25,20,20] },
+        salary: { low: 2600, avg: 3800, high: 6500 },
+        trend: [105, 100, 98, 102, 108, 115]
+      },
+      'office': {
+        skills: { labels: ['문서작성','엑셀','일정관리','ERP','회의록'], data: [88,85,75,65,55] },
+        certs: { labels: ['컴활1급','워드프로세서','ERP정보관리사','TOEIC'], data: [40,25,20,15] },
+        salary: { low: 2400, avg: 3200, high: 4500 },
+        trend: [95, 92, 90, 88, 90, 92]
+      },
+      'planning': {
+        skills: { labels: ['기획서작성','데이터분석','PPT','시장조사','프로젝트관리'], data: [90,78,75,70,65] },
+        certs: { labels: ['ADsP','컴활1급','TOEIC','빅데이터분석기사'], data: [30,25,25,20] },
+        salary: { low: 2800, avg: 4000, high: 6000 },
+        trend: [85, 90, 95, 100, 108, 115]
+      },
+      'mechanical': {
+        skills: { labels: ['CAD설계','기계가공','품질관리','설비보전','재료역학'], data: [88,82,78,72,60] },
+        certs: { labels: ['기계기사','에너지관리기사','산업안전기사','품질관리기사'], data: [40,25,20,15] },
+        salary: { low: 2800, avg: 3800, high: 5500 },
+        trend: [92, 90, 94, 96, 100, 105]
+      }
+    };
+
+    // ===== Active Chart Instances (for destruction) =====
+    let activeCharts = [];
 
     // ===== State =====
     let activeJobId = null;
@@ -706,6 +808,12 @@
               </div>
             </div>
           </div>
+          <div class="charts-grid" data-charts-for="${job.id}">
+            <div class="chart-box"><canvas id="skills-chart-${job.id}"></canvas></div>
+            <div class="chart-box"><canvas id="certs-chart-${job.id}"></canvas></div>
+            <div class="chart-box"><canvas id="salary-chart-${job.id}"></canvas></div>
+            <div class="chart-box"><canvas id="trend-chart-${job.id}"></canvas></div>
+          </div>
         </div>
       `;
 
@@ -722,8 +830,154 @@
       });
     }
 
+    // ===== Chart Functions =====
+    function destroyActiveCharts() {
+      activeCharts.forEach(chart => {
+        if (chart && typeof chart.destroy === 'function') {
+          chart.destroy();
+        }
+      });
+      activeCharts = [];
+    }
+
+    function initChartsForJob(jobId) {
+      const chartData = CHART_DATA[jobId];
+      if (!chartData) return;
+
+      // Wait for Chart.js to be available
+      if (typeof Chart === 'undefined') return;
+
+      // Set Chart.js defaults
+      Chart.defaults.font.family = "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif";
+      Chart.defaults.responsive = true;
+      Chart.defaults.maintainAspectRatio = true;
+
+      const skillColors = ['#3182F6', '#4264FB', '#4A5BFF', '#5B8DEF', '#6B9BFA'];
+      const certColors = ['#3182F6', '#4A5BFF', '#1B6AE0', '#6B9BFA', '#A8C8FF'];
+
+      // Chart 1: Horizontal Bar - Skills TOP 5
+      const skillsCtx = document.getElementById('skills-chart-' + jobId);
+      if (skillsCtx) {
+        activeCharts.push(new Chart(skillsCtx, {
+          type: 'bar',
+          data: {
+            labels: chartData.skills.labels,
+            datasets: [{
+              label: '요구 비율 (%)',
+              data: chartData.skills.data,
+              backgroundColor: skillColors,
+              borderRadius: 6,
+              borderSkipped: false
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            plugins: {
+              title: { display: true, text: '요구 스킬 TOP 5', font: { size: 14, weight: '700' }, color: '#191F28', padding: { bottom: 12 } },
+              legend: { display: false }
+            },
+            scales: {
+              x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', color: '#8B95A1' }, grid: { color: 'rgba(0,0,0,0.04)' } },
+              y: { ticks: { color: '#4E5968', font: { weight: '600' } }, grid: { display: false } }
+            }
+          }
+        }));
+      }
+
+      // Chart 2: Doughnut - Cert Distribution
+      const certsCtx = document.getElementById('certs-chart-' + jobId);
+      if (certsCtx) {
+        activeCharts.push(new Chart(certsCtx, {
+          type: 'doughnut',
+          data: {
+            labels: chartData.certs.labels,
+            datasets: [{
+              data: chartData.certs.data,
+              backgroundColor: certColors.slice(0, chartData.certs.labels.length),
+              borderWidth: 0,
+              hoverOffset: 8
+            }]
+          },
+          options: {
+            plugins: {
+              title: { display: true, text: '자격증 분포', font: { size: 14, weight: '700' }, color: '#191F28', padding: { bottom: 12 } },
+              legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, pointStyle: 'circle', font: { size: 11 }, color: '#4E5968' } }
+            },
+            cutout: '55%'
+          }
+        }));
+      }
+
+      // Chart 3: Bar - Salary Range
+      const salaryCtx = document.getElementById('salary-chart-' + jobId);
+      if (salaryCtx) {
+        activeCharts.push(new Chart(salaryCtx, {
+          type: 'bar',
+          data: {
+            labels: ['하한', '평균', '상한'],
+            datasets: [{
+              label: '연봉 (만원)',
+              data: [chartData.salary.low, chartData.salary.avg, chartData.salary.high],
+              backgroundColor: ['#A8C8FF', '#3182F6', '#1B6AE0'],
+              borderRadius: 6,
+              borderSkipped: false
+            }]
+          },
+          options: {
+            plugins: {
+              title: { display: true, text: '연봉 범위', font: { size: 14, weight: '700' }, color: '#191F28', padding: { bottom: 12 } },
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() + '만', color: '#8B95A1' }, grid: { color: 'rgba(0,0,0,0.04)' } },
+              x: { ticks: { color: '#4E5968', font: { weight: '600' } }, grid: { display: false } }
+            }
+          }
+        }));
+      }
+
+      // Chart 4: Line - Hiring Trend (6 months)
+      const trendCtx = document.getElementById('trend-chart-' + jobId);
+      if (trendCtx) {
+        const months = ['10월', '11월', '12월', '1월', '2월', '3월'];
+        activeCharts.push(new Chart(trendCtx, {
+          type: 'line',
+          data: {
+            labels: months,
+            datasets: [{
+              label: '채용 공고 수',
+              data: chartData.trend,
+              borderColor: '#3182F6',
+              backgroundColor: 'rgba(49,130,246,0.1)',
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: '#3182F6',
+              pointBorderColor: '#FFFFFF',
+              pointBorderWidth: 2,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              pointStyle: 'circle'
+            }]
+          },
+          options: {
+            plugins: {
+              title: { display: true, text: '채용 트렌드 (최근 6개월)', font: { size: 14, weight: '700' }, color: '#191F28', padding: { bottom: 12 } },
+              legend: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: false, ticks: { color: '#8B95A1' }, grid: { color: 'rgba(0,0,0,0.04)' } },
+              x: { ticks: { color: '#4E5968', font: { weight: '600' } }, grid: { display: false } }
+            }
+          }
+        }));
+      }
+    }
+
     function toggleJob(jobId) {
       if (activeJobId === jobId) {
+        // Destroy charts before closing
+        destroyActiveCharts();
+
         // Close the current panel
         const wrapper = document.querySelector(`.job-detail-wrapper[data-detail="${jobId}"]`);
         const card = document.querySelector(`.job-card[data-id="${jobId}"]`);
@@ -742,9 +996,17 @@
           }
         }, 500);
       } else {
+        // Destroy any existing charts first
+        destroyActiveCharts();
+
         // If another panel is open, close it first then open new
         activeJobId = jobId;
         renderGrid();
+
+        // Initialize charts after panel is rendered and opened
+        setTimeout(() => {
+          initChartsForJob(jobId);
+        }, 150);
 
         // Scroll to the card smoothly
         setTimeout(() => {

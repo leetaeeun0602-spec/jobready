@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>면접 질문은행 - JobReady</title>
+  <meta name="description" content="직무별 예상 면접 질문과 STAR 프레임워크로 완벽하게 면접을 준비하세요. 8개 직무, 85개 이상의 질문으로 체계적인 면접 준비.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== Interview Page Variables ===== */
+    :root {
+      --bg: #FFFFFF;
+      --section-bg: #F8F9FA;
+      --primary: #3182F6;
+      --primary-hover: #1B6AE0;
+      --navy: #1B1D6A;
+      --text: #191F28;
+      --text-secondary: #4E5968;
+      --text-muted: #8B95A1;
+      --card-radius: 16px;
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    body.interview-page {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ===== Nav Override ===== */
+    body.interview-page .nav {
+      background: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 14px 0;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    body.interview-page .nav-logo { color: var(--text); }
+    body.interview-page .nav-links a {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    body.interview-page .nav-links a:hover,
+    body.interview-page .nav-links .nav-link-active {
+      color: var(--primary);
+    }
+
+    /* ===== Hero ===== */
+    .iv-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 120px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .iv-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+    }
+    .iv-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 60px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;
+      background-size: 1440px 100%;
+    }
+    .iv-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .iv-hero-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .iv-hero-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .iv-hero-subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    /* ===== Main Container ===== */
+    .iv-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ===== Overall Progress ===== */
+    .iv-progress-section {
+      padding: 32px 0 0;
+    }
+    .iv-progress-card {
+      background: var(--bg);
+      border: 1px solid #E5E8EB;
+      border-radius: var(--card-radius);
+      padding: 24px 28px;
+      box-shadow: var(--card-shadow);
+    }
+    .iv-progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .iv-progress-label {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .iv-progress-pct {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .iv-progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #E5E8EB;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .iv-progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #6DB3F8);
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+      width: 0%;
+    }
+    .iv-progress-detail {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ===== Job Tabs ===== */
+    .iv-tabs-section {
+      padding: 28px 0 8px;
+    }
+    .iv-tabs-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .iv-tab {
+      padding: 9px 20px;
+      border-radius: 24px;
+      border: 1px solid #E5E8EB;
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      font-family: inherit;
+      white-space: nowrap;
+      position: relative;
+    }
+    .iv-tab:hover {
+      border-color: #CED4DA;
+      color: var(--text-secondary);
+    }
+    .iv-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .iv-tab-count {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      opacity: 0.7;
+    }
+
+    /* ===== Section Labels ===== */
+    .iv-section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 32px 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #E5E8EB;
+    }
+    .iv-section-icon {
+      font-size: 20px;
+    }
+    .iv-section-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .iv-section-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* ===== Question Card ===== */
+    .iv-qcard {
+      background: var(--bg);
+      border: 1px solid #E5E8EB;
+      border-radius: var(--card-radius);
+      margin-bottom: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .iv-qcard:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .iv-qcard.has-answer {
+      border-color: rgba(49,130,246,0.3);
+    }
+    .iv-qcard-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+    .iv-qcard-header:hover {
+      background: var(--section-bg);
+    }
+    .iv-qcard-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--section-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .iv-qcard.has-answer .iv-qcard-num {
+      background: rgba(49,130,246,0.1);
+      color: var(--primary);
+    }
+    .iv-qcard-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .iv-qcard-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .iv-badge-skill {
+      background: rgba(49,130,246,0.08);
+      color: #3182F6;
+    }
+    .iv-badge-personality {
+      background: rgba(52,199,89,0.08);
+      color: #34C759;
+    }
+    .iv-badge-situation {
+      background: rgba(255,149,0,0.1);
+      color: #FF9500;
+    }
+    .iv-badge-motivation {
+      background: rgba(74,91,255,0.08);
+      color: #4A5BFF;
+    }
+    .iv-qcard-toggle {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--section-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .iv-qcard.open .iv-qcard-toggle {
+      transform: rotate(180deg);
+      background: rgba(49,130,246,0.08);
+      color: var(--primary);
+    }
+    .iv-qcard-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #E5E8EB;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .iv-qcard.has-answer .iv-qcard-check {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .iv-qcard.has-answer .iv-qcard-check::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* ===== STAR Body ===== */
+    .iv-qcard-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .iv-qcard.open .iv-qcard-body {
+      max-height: 800px;
+    }
+    .iv-star-wrap {
+      padding: 0 20px 20px;
+    }
+    .iv-star-tip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(49,130,246,0.05);
+      border: 1px solid rgba(49,130,246,0.12);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      line-height: 1.5;
+    }
+    .iv-star-tip-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .iv-star-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .iv-star-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .iv-star-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .iv-star-letter {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .iv-star-s .iv-star-letter { background: #3182F6; }
+    .iv-star-t .iv-star-letter { background: #4A5BFF; }
+    .iv-star-a .iv-star-letter { background: #FF9500; }
+    .iv-star-r .iv-star-letter { background: #34C759; }
+    .iv-star-label-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .iv-star-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 14px;
+      border: 1px solid #E5E8EB;
+      border-radius: 10px;
+      background: var(--section-bg);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .iv-star-textarea::placeholder {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .iv-star-textarea:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(49,130,246,0.1);
+    }
+
+    /* ===== Bottom Padding ===== */
+    .iv-bottom-space {
+      height: 80px;
+    }
+
+    /* ===== Scroll to Top Button ===== */
+    .iv-scroll-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(49,130,246,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      z-index: 50;
+    }
+    .iv-scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .iv-scroll-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(49,130,246,0.4);
+      background: var(--primary-hover);
+    }
+
+    /* ===== Animations ===== */
+    @keyframes ivFadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .iv-animate {
+      animation: ivFadeInUp 0.5s ease both;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .iv-star-grid {
+        grid-template-columns: 1fr;
+      }
+      .iv-qcard-header {
+        padding: 14px 16px;
+        gap: 10px;
+      }
+      .iv-qcard-text {
+        font-size: 14px;
+      }
+      .iv-star-wrap {
+        padding: 0 16px 16px;
+      }
+      .iv-container {
+        padding: 0 16px;
+      }
+      .iv-progress-card {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .iv-hero {
+        padding: 100px 16px 48px;
+      }
+      .iv-hero-title {
+        font-size: 26px;
+        letter-spacing: -1px;
+      }
+      .iv-hero-subtitle {
+        font-size: 14px;
+      }
+      .iv-tabs-wrap {
+        gap: 6px;
+      }
+      .iv-tab {
+        padding: 7px 14px;
+        font-size: 13px;
+      }
+      .iv-qcard-badge {
+        display: none;
+      }
+      .iv-section-title {
+        font-size: 16px;
+      }
+      .iv-qcard-text {
+        font-size: 13px;
+      }
+      .iv-star-textarea {
+        min-height: 64px;
+        font-size: 12px;
+      }
+      .iv-scroll-top {
+        bottom: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body class="interview-page">
+
+<!-- ===== Navigation ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="logo-icon">📋</span>
+      <span class="logo-text">JobReady</span>
+    </a>
+    <div class="nav-links">
+      <a href="/#certificates">자격증</a>
+      <a href="/#calendar">시험일정</a>
+      <a href="/diagnosis.html">취업진단</a>
+      <a href="/analysis.html">직무분석</a>
+      <a href="/roadmap.html">로드맵</a>
+      <a href="/roi.html">자격증ROI</a>
+      <a href="/documents.html">서류체크</a>
+      <a href="/interview.html" class="nav-link-active">면접준비</a>
+      <a href="/#ranking">랭킹</a>
+      <a href="/#community">커뮤니티</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="iv-hero">
+  <div class="iv-hero-content">
+    <span class="iv-hero-icon">🎯</span>
+    <h1 class="iv-hero-title">면접 질문은행</h1>
+    <p class="iv-hero-subtitle">직무별 예상 질문과 STAR 프레임워크로 완벽하게 준비하세요</p>
+  </div>
+</section>
+
+<!-- ===== Main ===== -->
+<div class="iv-container">
+
+  <!-- Overall Progress -->
+  <section class="iv-progress-section iv-animate">
+    <div class="iv-progress-card">
+      <div class="iv-progress-header">
+        <span class="iv-progress-label">📊 답변 작성률</span>
+        <span class="iv-progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="iv-progress-bar-track">
+        <div class="iv-progress-bar-fill" id="progressBar"></div>
+      </div>
+      <div class="iv-progress-detail" id="progressDetail">
+        작성한 질문: 0 / 85
+      </div>
+    </div>
+  </section>
+
+  <!-- Job Tabs -->
+  <section class="iv-tabs-section">
+    <div class="iv-tabs-wrap" id="jobTabs"></div>
+  </section>
+
+  <!-- Common Questions -->
+  <div id="commonSection">
+    <div class="iv-section-label">
+      <span class="iv-section-icon">🌐</span>
+      <span class="iv-section-title">공통 질문</span>
+      <span class="iv-section-count" id="commonCount">0/5 완료</span>
+    </div>
+    <div id="commonCards"></div>
+  </div>
+
+  <!-- Job-Specific Questions -->
+  <div id="jobSection">
+    <div class="iv-section-label">
+      <span class="iv-section-icon" id="jobSectionIcon">💼</span>
+      <span class="iv-section-title" id="jobSectionTitle">사무/행정 질문</span>
+      <span class="iv-section-count" id="jobCount">0/10 완료</span>
+    </div>
+    <div id="jobCards"></div>
+  </div>
+
+  <div class="iv-bottom-space"></div>
+</div>
+
+<!-- Scroll to Top -->
+<button class="iv-scroll-top" id="scrollTopBtn" title="맨 위로">↑</button>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-col footer-brand-col">
+        <div class="footer-logo"><span>📋</span> JobReady</div>
+        <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+      </div>
+      <div class="footer-col">
+        <h4>서비스</h4>
+        <a href="/#certificates">자격증 가이드</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html">취업진단</a>
+        <a href="/analysis.html">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
+        <a href="/roi.html">자격증ROI</a>
+        <a href="/documents.html">서류체크</a>
+        <a href="/interview.html">면접준비</a>
+      </div>
+      <div class="footer-col">
+        <h4>커뮤니티</h4>
+        <a href="/#community">자유게시판</a>
+        <a href="/#community">합격수기</a>
+        <a href="/#community">시험꿀팁</a>
+        <a href="/#community">스터디모집</a>
+      </div>
+      <div class="footer-col">
+        <h4>고객지원</h4>
+        <a href="/#about">서비스소개</a>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">문의하기</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-business">
+      <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+      <div class="footer-business-links"><a href="#">개인정보처리방침</a><span>|</span><a href="#">이용약관</a></div>
+      <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== Data =====
+  const STORAGE_KEY = 'jobready_interview_answers';
+
+  const JOBS = [
+    { id: 'office',     label: '사무/행정', icon: '🏢' },
+    { id: 'it',         label: 'IT/개발',   icon: '💻' },
+    { id: 'accounting', label: '회계/재무', icon: '📊' },
+    { id: 'electric',   label: '전기',      icon: '⚡' },
+    { id: 'safety',     label: '안전',      icon: '🛡️' },
+    { id: 'marketing',  label: '마케팅',    icon: '📢' },
+    { id: 'sales',      label: '영업',      icon: '🤝' },
+    { id: 'planning',   label: '기획',      icon: '📋' }
+  ];
+
+  const COMMON_QUESTIONS = [
+    { q: '1분 자기소개를 해주세요', cat: '인성/태도' },
+    { q: '지원동기가 무엇인가요?', cat: '지원동기' },
+    { q: '본인의 장단점을 말해주세요', cat: '인성/태도' },
+    { q: '5년 후 본인의 모습은?', cat: '인성/태도' },
+    { q: '마지막으로 하고 싶은 말이 있나요?', cat: '인성/태도' }
+  ];
+
+  const JOB_QUESTIONS = {
+    office: [
+      { q: '문서 관리 경험이 있나요?', cat: '직무역량' },
+      { q: '엑셀/한글 활용 수준은?', cat: '직무역량' },
+      { q: '상사와 의견 충돌 시 어떻게 하나요?', cat: '상황대처' },
+      { q: '멀티태스킹 경험을 말해주세요', cat: '직무역량' },
+      { q: '업무 우선순위를 어떻게 정하나요?', cat: '직무역량' },
+      { q: '비효율적 프로세스를 개선한 경험?', cat: '상황대처' },
+      { q: '민원/불만 응대 경험이 있나요?', cat: '상황대처' },
+      { q: 'ERP 시스템 사용 경험이 있나요?', cat: '직무역량' },
+      { q: '팀 프로젝트에서 본인의 역할은?', cat: '인성/태도' },
+      { q: '보안/기밀 문서 취급 경험은?', cat: '직무역량' }
+    ],
+    it: [
+      { q: '코딩 테스트 경험을 말해주세요', cat: '직무역량' },
+      { q: '가장 자신 있는 프로젝트를 설명해주세요', cat: '직무역량' },
+      { q: '주로 사용하는 기술 스택은?', cat: '직무역량' },
+      { q: '코드 리뷰 경험이 있나요?', cat: '직무역량' },
+      { q: '디버깅 과정을 설명해주세요', cat: '직무역량' },
+      { q: '애자일/스크럼 경험이 있나요?', cat: '직무역량' },
+      { q: '기술적 의견 충돌 시 어떻게 해결하나요?', cat: '상황대처' },
+      { q: '새로운 기술을 어떻게 학습하나요?', cat: '인성/태도' },
+      { q: 'Git을 활용한 협업 경험은?', cat: '직무역량' },
+      { q: '서비스 장애 발생 시 대응 경험?', cat: '상황대처' }
+    ],
+    accounting: [
+      { q: '전표 처리 경험을 말해주세요', cat: '직무역량' },
+      { q: '세법 변경에 어떻게 대응하나요?', cat: '직무역량' },
+      { q: 'ERP 사용 경험이 있나요?', cat: '직무역량' },
+      { q: '결산 업무 경험을 설명해주세요', cat: '직무역량' },
+      { q: '세무 조사 대응 경험은?', cat: '상황대처' },
+      { q: '원가 분석 경험이 있나요?', cat: '직무역량' },
+      { q: '재무제표 분석 능력은?', cat: '직무역량' },
+      { q: '부정 거래 발견 시 어떻게 하나요?', cat: '상황대처' },
+      { q: '회계 관련 자격증은?', cat: '직무역량' },
+      { q: '마감 기한 압박 속 업무 경험은?', cat: '상황대처' }
+    ],
+    electric: [
+      { q: '전기 안전 관리 경험이 있나요?', cat: '직무역량' },
+      { q: '전기 도면 해독 능력은?', cat: '직무역량' },
+      { q: '현장 실습/경험을 말해주세요', cat: '직무역량' },
+      { q: '정전 사고 대응 경험은?', cat: '상황대처' },
+      { q: 'PLC 프로그래밍 경험이 있나요?', cat: '직무역량' },
+      { q: '전기 설비 점검 절차를 설명해주세요', cat: '직무역량' },
+      { q: '고압 전기 작업 시 안전 수칙은?', cat: '직무역량' },
+      { q: '에너지 절감 방안을 제시해주세요', cat: '상황대처' },
+      { q: '전기 관련 자격증은?', cat: '직무역량' },
+      { q: '야간/교대 근무 가능한가요?', cat: '인성/태도' }
+    ],
+    safety: [
+      { q: '사고 사례 대응 경험을 말해주세요', cat: '직무역량' },
+      { q: '안전 교육 진행 경험이 있나요?', cat: '직무역량' },
+      { q: '산업안전보건법 이해도는?', cat: '직무역량' },
+      { q: '위험성 평가 수행 경험은?', cat: '직무역량' },
+      { q: '안전 점검 체크리스트 작성 경험?', cat: '직무역량' },
+      { q: '작업자가 안전 수칙을 무시할 때?', cat: '상황대처' },
+      { q: '중대재해 예방 방안은?', cat: '직무역량' },
+      { q: 'MSDS 관리 경험이 있나요?', cat: '직무역량' },
+      { q: '안전 관련 자격증은?', cat: '직무역량' },
+      { q: '현장과 사무실 업무 비율 선호는?', cat: '인성/태도' }
+    ],
+    marketing: [
+      { q: '디지털 마케팅 경험이 있나요?', cat: '직무역량' },
+      { q: 'SNS 채널 운영 경험을 말해주세요', cat: '직무역량' },
+      { q: '콘텐츠 기획 과정을 설명해주세요', cat: '직무역량' },
+      { q: '데이터 분석 도구 사용 경험은?', cat: '직무역량' },
+      { q: '광고 캠페인 성과 측정 방법은?', cat: '직무역량' },
+      { q: '브랜딩 전략을 수립한 경험은?', cat: '직무역량' },
+      { q: '예산 제한 속 마케팅 방안은?', cat: '상황대처' },
+      { q: '경쟁사 분석 경험을 말해주세요', cat: '직무역량' },
+      { q: '트렌드를 어떻게 파악하나요?', cat: '인성/태도' },
+      { q: '실패한 마케팅 사례와 교훈은?', cat: '상황대처' }
+    ],
+    sales: [
+      { q: '영업 실적/경험을 말해주세요', cat: '직무역량' },
+      { q: '거절당했을 때 어떻게 대처하나요?', cat: '상황대처' },
+      { q: '고객 관계 관리 방법은?', cat: '직무역량' },
+      { q: '목표 달성 전략을 설명해주세요', cat: '직무역량' },
+      { q: '경쟁사 제품 대비 자사 강점 어필은?', cat: '직무역량' },
+      { q: '클레임 처리 경험을 말해주세요', cat: '상황대처' },
+      { q: '신규 고객 발굴 방법은?', cat: '직무역량' },
+      { q: 'CRM 시스템 사용 경험은?', cat: '직무역량' },
+      { q: '스트레스 관리 방법은?', cat: '인성/태도' },
+      { q: '매출 하락 시 대응 방안은?', cat: '상황대처' }
+    ],
+    planning: [
+      { q: '사업 기획서 작성 경험이 있나요?', cat: '직무역량' },
+      { q: '시장 조사 방법을 설명해주세요', cat: '직무역량' },
+      { q: '프로젝트 관리 경험을 말해주세요', cat: '직무역량' },
+      { q: 'KPI 설정 및 관리 경험은?', cat: '직무역량' },
+      { q: '부서 간 협업 경험을 말해주세요', cat: '상황대처' },
+      { q: '데이터 기반 의사결정 경험은?', cat: '직무역량' },
+      { q: '실패한 기획 사례와 교훈은?', cat: '상황대처' },
+      { q: '프레젠테이션 경험을 말해주세요', cat: '직무역량' },
+      { q: '업무 도구(Notion, Jira 등) 사용 경험?', cat: '직무역량' },
+      { q: '신사업 아이디어를 제안해본 경험?', cat: '직무역량' }
+    ]
+  };
+
+  // ===== State =====
+  let currentJob = 'office';
+  let answers = {};
+  let saveTimer = null;
+
+  // ===== Load / Save =====
+  function loadAnswers() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) answers = JSON.parse(raw);
+    } catch(e) {
+      answers = {};
+    }
+  }
+
+  function saveAnswers() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+    } catch(e) {}
+  }
+
+  function debouncedSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveAnswers, 500);
+  }
+
+  // ===== Helpers =====
+  function getKey(prefix, idx) {
+    return prefix + '_' + idx;
+  }
+
+  function hasAnswer(key) {
+    const a = answers[key];
+    if (!a) return false;
+    return (a.s && a.s.trim()) || (a.t && a.t.trim()) || (a.a && a.a.trim()) || (a.r && a.r.trim());
+  }
+
+  function getBadgeClass(cat) {
+    switch(cat) {
+      case '직무역량': return 'iv-badge-skill';
+      case '인성/태도': return 'iv-badge-personality';
+      case '상황대처': return 'iv-badge-situation';
+      case '지원동기': return 'iv-badge-motivation';
+      default: return 'iv-badge-skill';
+    }
+  }
+
+  function getTotalQuestions() {
+    return COMMON_QUESTIONS.length + JOB_QUESTIONS[currentJob].length;
+  }
+
+  function getAnsweredCount(prefix, questions) {
+    let count = 0;
+    questions.forEach(function(_, i) {
+      if (hasAnswer(getKey(prefix, i))) count++;
+    });
+    return count;
+  }
+
+  function getTotalAnswered() {
+    let count = 0;
+    // Common
+    COMMON_QUESTIONS.forEach(function(_, i) {
+      if (hasAnswer(getKey('common', i))) count++;
+    });
+    // Current job
+    JOB_QUESTIONS[currentJob].forEach(function(_, i) {
+      if (hasAnswer(getKey(currentJob, i))) count++;
+    });
+    return count;
+  }
+
+  function getGlobalAnswered() {
+    // Count all answers across all jobs + common
+    let count = 0;
+    COMMON_QUESTIONS.forEach(function(_, i) {
+      if (hasAnswer(getKey('common', i))) count++;
+    });
+    JOBS.forEach(function(job) {
+      JOB_QUESTIONS[job.id].forEach(function(_, i) {
+        if (hasAnswer(getKey(job.id, i))) count++;
+      });
+    });
+    return count;
+  }
+
+  function getGlobalTotal() {
+    let total = COMMON_QUESTIONS.length;
+    JOBS.forEach(function(job) {
+      total += JOB_QUESTIONS[job.id].length;
+    });
+    return total;
+  }
+
+  // ===== Build Tabs =====
+  function buildTabs() {
+    var wrap = document.getElementById('jobTabs');
+    wrap.innerHTML = '';
+    JOBS.forEach(function(job) {
+      var btn = document.createElement('button');
+      btn.className = 'iv-tab' + (job.id === currentJob ? ' active' : '');
+      var answered = getAnsweredCount(job.id, JOB_QUESTIONS[job.id]);
+      var total = JOB_QUESTIONS[job.id].length;
+      btn.innerHTML = job.icon + ' ' + job.label + '<span class="iv-tab-count">' + answered + '/' + total + '</span>';
+      btn.onclick = function() { switchJob(job.id); };
+      wrap.appendChild(btn);
+    });
+  }
+
+  // ===== Build Question Card =====
+  function buildQuestionCard(prefix, idx, question) {
+    var key = getKey(prefix, idx);
+    var ans = answers[key] || { s: '', t: '', a: '', r: '' };
+    var filled = hasAnswer(key);
+
+    var card = document.createElement('div');
+    card.className = 'iv-qcard' + (filled ? ' has-answer' : '');
+    card.setAttribute('data-key', key);
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'iv-qcard-header';
+    header.innerHTML =
+      '<div class="iv-qcard-check"></div>' +
+      '<span class="iv-qcard-num">' + (idx + 1) + '</span>' +
+      '<span class="iv-qcard-text">' + escapeHtml(question.q) + '</span>' +
+      '<span class="iv-qcard-badge ' + getBadgeClass(question.cat) + '">' + question.cat + '</span>' +
+      '<span class="iv-qcard-toggle">▼</span>';
+    header.onclick = function() { toggleCard(card); };
+    card.appendChild(header);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'iv-qcard-body';
+
+    var starWrap = document.createElement('div');
+    starWrap.className = 'iv-star-wrap';
+
+    // Tip
+    var tip = document.createElement('div');
+    tip.className = 'iv-star-tip';
+    tip.innerHTML = '<span class="iv-star-tip-icon">💡</span>STAR 기법: 구체적 상황(S) → 과제(T) → 행동(A) → 결과(R)로 구조화하세요';
+    starWrap.appendChild(tip);
+
+    // Grid
+    var grid = document.createElement('div');
+    grid.className = 'iv-star-grid';
+
+    var fields = [
+      { letter: 'S', label: 'Situation', cls: 'iv-star-s', placeholder: '당시 상황을 설명해주세요', field: 's' },
+      { letter: 'T', label: 'Task', cls: 'iv-star-t', placeholder: '해결해야 할 과제는?', field: 't' },
+      { letter: 'A', label: 'Action', cls: 'iv-star-a', placeholder: '어떤 행동을 했나요?', field: 'a' },
+      { letter: 'R', label: 'Result', cls: 'iv-star-r', placeholder: '결과는 어떠했나요?', field: 'r' }
+    ];
+
+    fields.forEach(function(f) {
+      var fieldDiv = document.createElement('div');
+      fieldDiv.className = 'iv-star-field ' + f.cls;
+      fieldDiv.innerHTML =
+        '<div class="iv-star-label">' +
+          '<span class="iv-star-letter">' + f.letter + '</span>' +
+          '<span class="iv-star-label-text">' + f.label + '</span>' +
+        '</div>';
+
+      var ta = document.createElement('textarea');
+      ta.className = 'iv-star-textarea';
+      ta.placeholder = f.placeholder;
+      ta.value = ans[f.field] || '';
+      ta.setAttribute('data-key', key);
+      ta.setAttribute('data-field', f.field);
+      ta.oninput = function() { onStarInput(ta, card); };
+      fieldDiv.appendChild(ta);
+      grid.appendChild(fieldDiv);
+    });
+
+    starWrap.appendChild(grid);
+    body.appendChild(starWrap);
+    card.appendChild(body);
+
+    return card;
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ===== Card Toggle =====
+  function toggleCard(card) {
+    var wasOpen = card.classList.contains('open');
+    card.classList.toggle('open');
+    if (!wasOpen) {
+      // Scroll into view after animation
+      setTimeout(function() {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+  }
+
+  // ===== Input Handler =====
+  function onStarInput(ta, card) {
+    var key = ta.getAttribute('data-key');
+    var field = ta.getAttribute('data-field');
+    if (!answers[key]) answers[key] = { s: '', t: '', a: '', r: '' };
+    answers[key][field] = ta.value;
+
+    var filled = hasAnswer(key);
+    if (filled) {
+      card.classList.add('has-answer');
+    } else {
+      card.classList.remove('has-answer');
+    }
+
+    debouncedSave();
+    updateProgress();
+    updateTabCounts();
+  }
+
+  // ===== Render Sections =====
+  function renderCommon() {
+    var container = document.getElementById('commonCards');
+    container.innerHTML = '';
+    COMMON_QUESTIONS.forEach(function(q, i) {
+      var card = buildQuestionCard('common', i, q);
+      card.style.animationDelay = (i * 0.05) + 's';
+      card.classList.add('iv-animate');
+      container.appendChild(card);
+    });
+    updateCommonCount();
+  }
+
+  function renderJobQuestions() {
+    var container = document.getElementById('jobCards');
+    container.innerHTML = '';
+    var questions = JOB_QUESTIONS[currentJob];
+    var jobData = JOBS.find(function(j) { return j.id === currentJob; });
+
+    document.getElementById('jobSectionIcon').textContent = jobData.icon;
+    document.getElementById('jobSectionTitle').textContent = jobData.label + ' 질문';
+
+    questions.forEach(function(q, i) {
+      var card = buildQuestionCard(currentJob, i, q);
+      card.style.animationDelay = (i * 0.05) + 's';
+      card.classList.add('iv-animate');
+      container.appendChild(card);
+    });
+    updateJobCount();
+  }
+
+  // ===== Switch Job =====
+  function switchJob(jobId) {
+    currentJob = jobId;
+    buildTabs();
+    renderJobQuestions();
+    updateProgress();
+    // Smooth scroll to job section
+    document.getElementById('jobSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ===== Progress Updates =====
+  function updateProgress() {
+    var answered = getGlobalAnswered();
+    var total = getGlobalTotal();
+    var pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressDetail').textContent = '작성한 질문: ' + answered + ' / ' + total;
+  }
+
+  function updateCommonCount() {
+    var answered = getAnsweredCount('common', COMMON_QUESTIONS);
+    document.getElementById('commonCount').textContent = answered + '/' + COMMON_QUESTIONS.length + ' 완료';
+  }
+
+  function updateJobCount() {
+    var questions = JOB_QUESTIONS[currentJob];
+    var answered = getAnsweredCount(currentJob, questions);
+    document.getElementById('jobCount').textContent = answered + '/' + questions.length + ' 완료';
+  }
+
+  function updateTabCounts() {
+    updateCommonCount();
+    updateJobCount();
+    // Update tab count badges
+    var tabs = document.querySelectorAll('.iv-tab');
+    tabs.forEach(function(tab, i) {
+      var job = JOBS[i];
+      var answered = getAnsweredCount(job.id, JOB_QUESTIONS[job.id]);
+      var total = JOB_QUESTIONS[job.id].length;
+      var countSpan = tab.querySelector('.iv-tab-count');
+      if (countSpan) countSpan.textContent = answered + '/' + total;
+    });
+  }
+
+  // ===== Scroll to Top =====
+  var scrollTopBtn = document.getElementById('scrollTopBtn');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) {
+      scrollTopBtn.classList.add('visible');
+    } else {
+      scrollTopBtn.classList.remove('visible');
+    }
+  });
+  scrollTopBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ===== Init =====
+  loadAnswers();
+  buildTabs();
+  renderCommon();
+  renderJobQuestions();
+  updateProgress();
+
+})();
+</script>
+</body>
+</html>

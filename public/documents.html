@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서류 체크리스트 - JobReady</title>
+  <meta name="description" content="이력서, 자기소개서, 포트폴리오 준비 상태를 점검하세요. 취업 서류 체크리스트로 빠짐없이 준비하세요.">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ===== Document Checklist Page Styles ===== */
+    :root {
+      --bg: #FFFFFF;
+      --section-bg: #F8F9FA;
+      --primary: #3182F6;
+      --primary-hover: #1B6AE0;
+      --navy: #1B1D6A;
+      --text: #191F28;
+      --text-secondary: #4E5968;
+      --text-muted: #8B95A1;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ===== Nav Active Link ===== */
+    .nav-link-active {
+      color: var(--primary) !important;
+    }
+
+    /* ===== Hero Section ===== */
+    .doc-hero {
+      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
+      padding: 120px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .doc-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 2;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;
+      background-size: 1440px 100%;
+    }
+    .doc-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .doc-hero-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .doc-hero-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+      animation: fadeInUp 0.6s ease 0.1s both;
+    }
+    .doc-hero-desc {
+      font-size: 16px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    /* ===== Main Content ===== */
+    .doc-main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ===== Overall Progress Section ===== */
+    .overall-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 32px;
+      background: var(--bg);
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 36px;
+      animation: fadeInUp 0.6s ease 0.3s both;
+    }
+    .progress-ring-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin-bottom: 20px;
+    }
+    .progress-ring-svg {
+      transform: rotate(-90deg);
+      width: 160px;
+      height: 160px;
+    }
+    .progress-ring-bg {
+      fill: none;
+      stroke: #E5E8EB;
+      stroke-width: 10;
+    }
+    .progress-ring-fill {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+    }
+    .progress-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-percent {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1;
+    }
+    .progress-percent-sign {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .progress-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+      transition: all 0.4s ease;
+    }
+    .grade-start {
+      background: rgba(255,59,48,0.1);
+      color: #FF3B30;
+      border: 1px solid rgba(255,59,48,0.2);
+    }
+    .grade-progress {
+      background: rgba(255,149,0,0.1);
+      color: #FF9500;
+      border: 1px solid rgba(255,149,0,0.2);
+    }
+    .grade-almost {
+      background: rgba(49,130,246,0.08);
+      color: #3182F6;
+      border: 1px solid rgba(49,130,246,0.15);
+    }
+    .grade-ready {
+      background: rgba(52,199,89,0.1);
+      color: #34C759;
+      border: 1px solid rgba(52,199,89,0.2);
+    }
+    .overall-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    /* ===== Tabs ===== */
+    .doc-tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease 0.4s both;
+    }
+    .doc-tab {
+      padding: 10px 24px;
+      border-radius: 24px;
+      border: 1px solid #E5E8EB;
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: inherit;
+      user-select: none;
+    }
+    .doc-tab:hover {
+      border-color: #CED4DA;
+      color: var(--text-secondary);
+    }
+    .doc-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* ===== Tab Content ===== */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ===== Per-tab Progress Bar ===== */
+    .tab-progress {
+      margin-bottom: 20px;
+      background: var(--bg);
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .tab-progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .tab-progress-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .tab-progress-percent {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .tab-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #E5E8EB;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .tab-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #5BA4FC);
+      border-radius: 3px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    /* ===== Checklist Card ===== */
+    .checklist-card {
+      background: var(--bg);
+      border: 1px solid #E5E8EB;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* ===== Checklist Item ===== */
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      border-bottom: 1px solid #F1F3F5;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      user-select: none;
+    }
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+    .checklist-item:hover {
+      background: #FAFBFC;
+    }
+    .checklist-item.checked {
+      background: #FAFBFC;
+    }
+
+    /* ===== Custom Checkbox ===== */
+    .check-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      border: 2px solid #CED4DA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .check-box svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .checklist-item.checked .check-box {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(49,130,246,0.3);
+    }
+    .checklist-item.checked .check-box svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Check animation ripple */
+    .check-box::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: rgba(49,130,246,0.15);
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.4s ease;
+    }
+    .checklist-item.just-checked .check-box::after {
+      animation: checkRipple 0.5s ease forwards;
+    }
+    @keyframes checkRipple {
+      0% { opacity: 1; transform: scale(0); }
+      100% { opacity: 0; transform: scale(2.5); }
+    }
+
+    .check-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.3s ease;
+      flex: 1;
+      line-height: 1.5;
+    }
+    .checklist-item.checked .check-label {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .check-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #F1F3F5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .checklist-item.checked .check-number {
+      background: rgba(49,130,246,0.08);
+      color: var(--primary);
+    }
+
+    /* ===== Reset Button ===== */
+    .reset-section {
+      text-align: center;
+      margin-top: 36px;
+      animation: fadeInUp 0.6s ease 0.5s both;
+    }
+    .reset-btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      border: 1px solid #E5E8EB;
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reset-btn:hover {
+      border-color: #FF3B30;
+      color: #FF3B30;
+      background: rgba(255,59,48,0.04);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,59,48,0.1);
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .doc-main {
+        padding: 32px 16px 60px;
+      }
+      .overall-progress {
+        padding: 32px 24px;
+      }
+      .progress-ring-container {
+        width: 140px;
+        height: 140px;
+      }
+      .progress-ring-svg {
+        width: 140px;
+        height: 140px;
+      }
+      .progress-percent {
+        font-size: 30px;
+      }
+      .checklist-item {
+        padding: 16px 20px;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .doc-hero {
+        padding: 100px 16px 48px;
+      }
+      .doc-hero-title {
+        font-size: 26px;
+      }
+      .doc-hero-desc {
+        font-size: 14px;
+      }
+      .doc-main {
+        padding: 24px 12px 48px;
+      }
+      .overall-progress {
+        padding: 24px 16px;
+      }
+      .progress-ring-container {
+        width: 120px;
+        height: 120px;
+      }
+      .progress-ring-svg {
+        width: 120px;
+        height: 120px;
+      }
+      .progress-percent {
+        font-size: 26px;
+      }
+      .progress-percent-sign {
+        font-size: 16px;
+      }
+      .doc-tab {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+      .checklist-item {
+        padding: 14px 16px;
+        gap: 10px;
+      }
+      .check-label {
+        font-size: 14px;
+      }
+      .tab-progress {
+        padding: 16px;
+      }
+      .tab-progress-title {
+        font-size: 14px;
+      }
+      .grade-badge {
+        font-size: 13px;
+        padding: 5px 16px;
+      }
+      .overall-text {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">📋</span>
+        <span class="logo-text">JobReady</span>
+      </a>
+      <div class="nav-links">
+        <a href="/#certificates">자격증</a>
+        <a href="/#calendar">시험일정</a>
+        <a href="/diagnosis.html">취업진단</a>
+        <a href="/analysis.html">직무분석</a>
+        <a href="/roadmap.html">로드맵</a>
+        <a href="/roi.html">자격증ROI</a>
+        <a href="/documents.html" class="nav-link-active">서류체크</a>
+        <a href="/interview.html">면접준비</a>
+        <a href="/#ranking">랭킹</a>
+        <a href="/#community">커뮤니티</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="doc-hero">
+    <div class="doc-hero-content">
+      <div class="doc-hero-icon">📄</div>
+      <h1 class="doc-hero-title">서류 체크리스트</h1>
+      <p class="doc-hero-desc">이력서, 자기소개서, 포트폴리오 준비 상태를 점검하세요</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="doc-main">
+
+    <!-- Overall Progress -->
+    <div class="overall-progress" id="overallProgress">
+      <div class="progress-ring-container">
+        <svg class="progress-ring-svg" viewBox="0 0 160 160">
+          <circle class="progress-ring-bg" cx="80" cy="80" r="65"></circle>
+          <circle class="progress-ring-fill" id="progressRing" cx="80" cy="80" r="65"
+                  stroke-dasharray="408.41" stroke-dashoffset="408.41"></circle>
+        </svg>
+        <div class="progress-ring-text">
+          <div>
+            <span class="progress-percent" id="overallPercent">0</span><span class="progress-percent-sign">%</span>
+          </div>
+          <div class="progress-label">전체 완성도</div>
+        </div>
+      </div>
+      <div class="grade-badge grade-start" id="gradeBadge">시작</div>
+      <div class="overall-text" id="overallText">전체 완성도 0%</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="doc-tabs" id="docTabs">
+      <button class="doc-tab active" data-tab="resume">이력서</button>
+      <button class="doc-tab" data-tab="coverletter">자기소개서</button>
+      <button class="doc-tab" data-tab="portfolio">포트폴리오</button>
+    </div>
+
+    <!-- Tab: Resume -->
+    <div class="tab-panel active" id="panel-resume">
+      <div class="tab-progress">
+        <div class="tab-progress-header">
+          <span class="tab-progress-title">이력서 준비 현황</span>
+          <span class="tab-progress-percent" id="resumePercent">0%</span>
+        </div>
+        <div class="tab-progress-bar">
+          <div class="tab-progress-fill" id="resumeFill"></div>
+        </div>
+      </div>
+      <div class="checklist-card">
+        <div class="checklist-item" data-key="resume-1">
+          <div class="check-number">1</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">증명사진 준비</span>
+        </div>
+        <div class="checklist-item" data-key="resume-2">
+          <div class="check-number">2</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">인적사항 작성 (이름, 연락처, 이메일)</span>
+        </div>
+        <div class="checklist-item" data-key="resume-3">
+          <div class="check-number">3</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">학력사항 작성</span>
+        </div>
+        <div class="checklist-item" data-key="resume-4">
+          <div class="check-number">4</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">경력/인턴 경험 작성</span>
+        </div>
+        <div class="checklist-item" data-key="resume-5">
+          <div class="check-number">5</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">자격증/면허 기재</span>
+        </div>
+        <div class="checklist-item" data-key="resume-6">
+          <div class="check-number">6</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">수상/활동 내역</span>
+        </div>
+        <div class="checklist-item" data-key="resume-7">
+          <div class="check-number">7</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">자기소개 요약문 (3줄)</span>
+        </div>
+        <div class="checklist-item" data-key="resume-8">
+          <div class="check-number">8</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">희망연봉 기재</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Cover Letter -->
+    <div class="tab-panel" id="panel-coverletter">
+      <div class="tab-progress">
+        <div class="tab-progress-header">
+          <span class="tab-progress-title">자기소개서 준비 현황</span>
+          <span class="tab-progress-percent" id="coverletterPercent">0%</span>
+        </div>
+        <div class="tab-progress-bar">
+          <div class="tab-progress-fill" id="coverletterFill"></div>
+        </div>
+      </div>
+      <div class="checklist-card">
+        <div class="checklist-item" data-key="coverletter-1">
+          <div class="check-number">1</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">지원동기 작성</span>
+        </div>
+        <div class="checklist-item" data-key="coverletter-2">
+          <div class="check-number">2</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">성장과정 작성</span>
+        </div>
+        <div class="checklist-item" data-key="coverletter-3">
+          <div class="check-number">3</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">직무역량/경험 기술</span>
+        </div>
+        <div class="checklist-item" data-key="coverletter-4">
+          <div class="check-number">4</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">입사 후 포부 작성</span>
+        </div>
+        <div class="checklist-item" data-key="coverletter-5">
+          <div class="check-number">5</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">맞춤법/문법 검수 완료</span>
+        </div>
+        <div class="checklist-item" data-key="coverletter-6">
+          <div class="check-number">6</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">분량 확인 (500~1000자)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Portfolio -->
+    <div class="tab-panel" id="panel-portfolio">
+      <div class="tab-progress">
+        <div class="tab-progress-header">
+          <span class="tab-progress-title">포트폴리오 준비 현황</span>
+          <span class="tab-progress-percent" id="portfolioPercent">0%</span>
+        </div>
+        <div class="tab-progress-bar">
+          <div class="tab-progress-fill" id="portfolioFill"></div>
+        </div>
+      </div>
+      <div class="checklist-card">
+        <div class="checklist-item" data-key="portfolio-1">
+          <div class="check-number">1</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">프로젝트 1 정리</span>
+        </div>
+        <div class="checklist-item" data-key="portfolio-2">
+          <div class="check-number">2</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">프로젝트 2 정리</span>
+        </div>
+        <div class="checklist-item" data-key="portfolio-3">
+          <div class="check-number">3</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">프로젝트 3 정리</span>
+        </div>
+        <div class="checklist-item" data-key="portfolio-4">
+          <div class="check-number">4</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">스크린샷/결과물 첨부</span>
+        </div>
+        <div class="checklist-item" data-key="portfolio-5">
+          <div class="check-number">5</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">본인 기여도/역할 명시</span>
+        </div>
+        <div class="checklist-item" data-key="portfolio-6">
+          <div class="check-number">6</div>
+          <div class="check-box">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="check-label">PDF 정리 완료</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div class="reset-section">
+      <button class="reset-btn" id="resetBtn">체크리스트 초기화</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <div class="footer-logo"><span>📋</span> JobReady</div>
+          <p class="footer-tagline">취업 준비의 모든 것, 한 곳에서</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <a href="/#certificates">자격증 가이드</a>
+          <a href="/#calendar">시험일정</a>
+          <a href="/diagnosis.html">취업진단</a>
+          <a href="/analysis.html">직무분석</a>
+          <a href="/roadmap.html">로드맵</a>
+          <a href="/roi.html">자격증ROI</a>
+          <a href="/documents.html">서류체크</a>
+          <a href="/interview.html">면접준비</a>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <a href="/#community">자유게시판</a>
+          <a href="/#community">합격수기</a>
+          <a href="/#community">시험꿀팁</a>
+          <a href="/#community">스터디모집</a>
+        </div>
+        <div class="footer-col">
+          <h4>고객지원</h4>
+          <a href="/#about">서비스소개</a>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-business">
+        <p class="footer-business-info">후스튜디오 | 대표: 이태은 | 사업자등록번호: 311-12-54597 경기 수원시 장안구 경수대로 935 203호(송죽동)</p>
+        <div class="footer-business-links"><a href="#">개인정보처리방침</a><span>|</span><a href="#">이용약관</a></div>
+        <p class="footer-copyright">&copy; 2026 JobReady. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ===== Constants =====
+      const STORAGE_KEY = 'jobready_documents_checklist';
+      const CIRCUMFERENCE = 2 * Math.PI * 65; // ~408.41
+
+      // ===== DOM References =====
+      const progressRing = document.getElementById('progressRing');
+      const overallPercentEl = document.getElementById('overallPercent');
+      const overallTextEl = document.getElementById('overallText');
+      const gradeBadge = document.getElementById('gradeBadge');
+      const tabs = document.querySelectorAll('.doc-tab');
+      const panels = document.querySelectorAll('.tab-panel');
+      const allItems = document.querySelectorAll('.checklist-item');
+      const resetBtn = document.getElementById('resetBtn');
+
+      // Tab category definitions
+      const categories = {
+        resume: { fill: 'resumeFill', percent: 'resumePercent', count: 8 },
+        coverletter: { fill: 'coverletterFill', percent: 'coverletterPercent', count: 6 },
+        portfolio: { fill: 'portfolioFill', percent: 'portfolioPercent', count: 6 }
+      };
+
+      // ===== Load State from localStorage =====
+      function loadState() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            return JSON.parse(saved);
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+        return {};
+      }
+
+      // ===== Save State to localStorage =====
+      function saveState(state) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          // Ignore storage errors
+        }
+      }
+
+      // ===== Initialize Checkboxes =====
+      let state = loadState();
+
+      allItems.forEach(function(item) {
+        var key = item.getAttribute('data-key');
+        if (state[key]) {
+          item.classList.add('checked');
+        }
+      });
+
+      // ===== Tab Switching =====
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          var target = this.getAttribute('data-tab');
+
+          tabs.forEach(function(t) { t.classList.remove('active'); });
+          panels.forEach(function(p) { p.classList.remove('active'); });
+
+          this.classList.add('active');
+          document.getElementById('panel-' + target).classList.add('active');
+        });
+      });
+
+      // ===== Toggle Checkbox =====
+      allItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+          var key = this.getAttribute('data-key');
+          var isChecked = this.classList.contains('checked');
+
+          if (isChecked) {
+            this.classList.remove('checked');
+            state[key] = false;
+          } else {
+            this.classList.add('checked');
+            this.classList.add('just-checked');
+            state[key] = true;
+
+            // Remove ripple class after animation
+            setTimeout(function() {
+              item.classList.remove('just-checked');
+            }, 500);
+          }
+
+          saveState(state);
+          updateProgress();
+        });
+      });
+
+      // ===== Update All Progress Indicators =====
+      function updateProgress() {
+        var totalChecked = 0;
+        var totalItems = 0;
+
+        // Per-tab progress
+        Object.keys(categories).forEach(function(cat) {
+          var info = categories[cat];
+          var checked = 0;
+          var items = document.querySelectorAll('[data-key^="' + cat + '-"]');
+          items.forEach(function(item) {
+            if (item.classList.contains('checked')) checked++;
+          });
+          var pct = Math.round((checked / info.count) * 100);
+
+          document.getElementById(info.fill).style.width = pct + '%';
+          document.getElementById(info.percent).textContent = pct + '%';
+
+          totalChecked += checked;
+          totalItems += info.count;
+        });
+
+        // Overall progress
+        var overallPct = Math.round((totalChecked / totalItems) * 100);
+
+        // Animate the number
+        animateNumber(overallPercentEl, overallPct);
+
+        // Update ring
+        var offset = CIRCUMFERENCE - (overallPct / 100) * CIRCUMFERENCE;
+        progressRing.style.strokeDashoffset = offset;
+
+        // Ring color based on grade
+        if (overallPct >= 90) {
+          progressRing.style.stroke = '#34C759';
+        } else if (overallPct >= 60) {
+          progressRing.style.stroke = '#3182F6';
+        } else if (overallPct >= 30) {
+          progressRing.style.stroke = '#FF9500';
+        } else {
+          progressRing.style.stroke = '#FF3B30';
+        }
+
+        // Update overall text
+        overallTextEl.textContent = '전체 완성도 ' + overallPct + '%';
+
+        // Update grade badge
+        updateGradeBadge(overallPct);
+      }
+
+      // ===== Animate Number =====
+      function animateNumber(el, target) {
+        var current = parseInt(el.textContent) || 0;
+        if (current === target) return;
+
+        var step = current < target ? 1 : -1;
+        var duration = 400;
+        var steps = Math.abs(target - current);
+        var interval = Math.max(Math.floor(duration / steps), 16);
+
+        function tick() {
+          current += step;
+          el.textContent = current;
+          if (current !== target) {
+            setTimeout(tick, interval);
+          }
+        }
+        tick();
+      }
+
+      // ===== Update Grade Badge =====
+      function updateGradeBadge(pct) {
+        // Remove all grade classes
+        gradeBadge.className = 'grade-badge';
+
+        if (pct >= 90) {
+          gradeBadge.classList.add('grade-ready');
+          gradeBadge.textContent = '제출가능';
+        } else if (pct >= 60) {
+          gradeBadge.classList.add('grade-almost');
+          gradeBadge.textContent = '거의완성';
+        } else if (pct >= 30) {
+          gradeBadge.classList.add('grade-progress');
+          gradeBadge.textContent = '준비중';
+        } else {
+          gradeBadge.classList.add('grade-start');
+          gradeBadge.textContent = '시작';
+        }
+      }
+
+      // ===== Reset =====
+      resetBtn.addEventListener('click', function() {
+        if (!confirm('체크리스트를 초기화하시겠습니까?\n모든 체크 항목이 해제됩니다.')) return;
+
+        state = {};
+        saveState(state);
+
+        allItems.forEach(function(item) {
+          item.classList.remove('checked');
+          item.classList.remove('just-checked');
+        });
+
+        updateProgress();
+      });
+
+      // ===== Nav scroll effect =====
+      window.addEventListener('scroll', function() {
+        var nav = document.getElementById('nav');
+        if (window.scrollY > 10) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      });
+
+      // ===== Initial render =====
+      updateProgress();
+
+    })();
+  </script>
+
+</body>
+</html>
