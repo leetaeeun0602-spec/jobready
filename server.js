@@ -22,8 +22,11 @@ app.use('/api/diagnosis', diagnosisRouter);
 app.use('/api/analysis', analysisRouter);
 app.use('/api/roadmap', roadmapRouter);
 
-// ===== Contact API (uses dataStore) =====
-const { contactsDb, saveContacts, createBackup, getStats, printStartupStatus } = require('./utils/dataStore');
+// ===== Contact API =====
+const {
+  contactsDb, saveContacts,
+  createBackup, getStats, printStartupStatus, verifyAllFiles
+} = require('./utils/dataStore');
 
 app.post('/api/contact', (req, res) => {
   const { name, email, type, message } = req.body;
@@ -48,7 +51,8 @@ app.post('/api/contact', (req, res) => {
 app.post('/api/admin/backup', (req, res) => {
   try {
     const backupPath = createBackup();
-    res.json({ success: true, path: backupPath, timestamp: new Date().toISOString() });
+    const stats = getStats();
+    res.json({ success: true, path: backupPath, timestamp: new Date().toISOString(), stats });
   } catch (e) {
     res.status(500).json({ error: '백업 실패: ' + e.message });
   }
@@ -58,10 +62,12 @@ app.get('/api/admin/stats', (req, res) => {
   res.json(getStats());
 });
 
+// ===== Server Start =====
 app.listen(PORT, () => {
   console.log(`==========================================`);
   console.log(`  🚀 JobReady 서버 실행 중`);
   console.log(`  📍 http://localhost:${PORT}`);
+  verifyAllFiles();
   printStartupStatus();
   console.log(`==========================================`);
 });

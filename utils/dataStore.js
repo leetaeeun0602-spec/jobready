@@ -1,22 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 
-// ===== Data Directory (env override) =====
+// ===== Data Directory (env override for Railway volume) =====
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
 const BACKUP_DIR = path.join(DATA_DIR, 'backup');
 
-// File paths
+// ===== All Data File Paths =====
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const POSTS_FILE = path.join(DATA_DIR, 'posts.json');
 const ATTENDANCE_FILE = path.join(DATA_DIR, 'attendance.json');
 const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
+const ROADMAPS_FILE = path.join(DATA_DIR, 'userRoadmaps.json');
 
 // ===== Default Data Structures =====
 const DEFAULTS = {
   users: { users: {} },
   posts: { posts: [], nextPostId: 1, nextCommentId: 1, sessions: {} },
   attendance: { users: {} },
-  contacts: []
+  contacts: [],
+  roadmaps: { users: {} }
 };
 
 // ===== Ensure directories exist =====
@@ -28,7 +30,7 @@ function ensureDir(dir) {
 }
 ensureDir(DATA_DIR);
 
-// ===== Atomic JSON Write (temp + rename) =====
+// ===== Atomic JSON Write (temp file → rename) =====
 function saveJson(filePath, data) {
   try {
     const json = JSON.stringify(data, null, 2);
@@ -53,7 +55,9 @@ function loadJson(filePath, defaultValue) {
       const raw = fs.readFileSync(filePath, 'utf-8');
       if (!raw || !raw.trim()) {
         console.warn(`[DATA] 빈 파일 감지, 초기값 사용: ${path.basename(filePath)}`);
-        return JSON.parse(JSON.stringify(defaultValue));
+        const fresh = JSON.parse(JSON.stringify(defaultValue));
+        saveJson(filePath, fresh);
+        return fresh;
       }
       const parsed = JSON.parse(raw);
       console.log(`[DATA] 로드 성공: ${path.basename(filePath)}`);
@@ -62,24 +66,31 @@ function loadJson(filePath, defaultValue) {
   } catch (e) {
     console.error(`[DATA ERROR] 파싱 실패 (${path.basename(filePath)}):`, e.message);
     console.log(`[DATA] 깨진 파일 → 초기값으로 리셋`);
-    // Save fresh default to fix corrupted file
-    try {
-      saveJson(filePath, defaultValue);
-    } catch (e2) { /* ignore */ }
+    try { saveJson(filePath, defaultValue); } catch (_) {}
   }
-  // File doesn't exist: create with defaults
+  // File doesn't exist → create with defaults
   console.log(`[DATA] 새 파일 생성: ${path.basename(filePath)}`);
   const fresh = JSON.parse(JSON.stringify(defaultValue));
   saveJson(filePath, fresh);
   return fresh;
 }
 
-// ===== Load All Data =====
+// ===== Load All Data from Files =====
 const usersDb = loadJson(USERS_FILE, DEFAULTS.users);
+
 const communityDb = loadJson(POSTS_FILE, DEFAULTS.posts);
+// Ensure structure integrity
+if (!Array.isArray(communityDb.posts)) communityDb.posts = [];
+if (!communityDb.nextPostId) communityDb.nextPostId = 1;
+if (!communityDb.nextCommentId) communityDb.nextCommentId = 1;
+if (!communityDb.sessions) communityDb.sessions = {};
+
 const contactsDb = loadJson(CONTACTS_FILE, DEFAULTS.contacts);
 
-// Attendance: restore Sets from arrays
+const roadmapsDb = loadJson(ROADMAPS_FILE, DEFAULTS.roadmaps);
+if (!roadmapsDb.users) roadmapsDb.users = {};
+
+// Attendance: restore Sets from serialized arrays
 const attendanceRaw = loadJson(ATTENDANCE_FILE, DEFAULTS.attendance);
 const attendanceDb = { users: {} };
 for (const [sid, user] of Object.entries(attendanceRaw.users || {})) {
@@ -90,18 +101,17 @@ for (const [sid, user] of Object.entries(attendanceRaw.users || {})) {
   };
 }
 
-// ===== Save Functions =====
+// ===== Save Functions (즉시 파일 기록) =====
 function saveUsers() {
   saveJson(USERS_FILE, usersDb);
-  console.log(`[SAVE] users: ${Object.keys(usersDb.users).length}명`);
 }
 
 function savePosts() {
   saveJson(POSTS_FILE, communityDb);
-  console.log(`[SAVE] posts: ${communityDb.posts.length}개, nextId: ${communityDb.nextPostId}`);
 }
 
 function saveAttendance() {
+  // Set → Array 변환하여 직렬화
   const serializable = { users: {} };
   for (const [sid, user] of Object.entries(attendanceDb.users)) {
     serializable.users[sid] = {
@@ -111,12 +121,14 @@ function saveAttendance() {
     };
   }
   saveJson(ATTENDANCE_FILE, serializable);
-  console.log(`[SAVE] attendance: ${Object.keys(attendanceDb.users).length}명`);
 }
 
 function saveContacts() {
   saveJson(CONTACTS_FILE, contactsDb);
-  console.log(`[SAVE] contacts: ${contactsDb.length}건`);
+}
+
+function saveRoadmaps() {
+  saveJson(ROADMAPS_FILE, roadmapsDb);
 }
 
 // ===== Helper Functions =====
@@ -129,7 +141,7 @@ function getNickname(sessionId) {
   if (!sessionId) return generateNickname();
   if (!communityDb.sessions[sessionId]) {
     communityDb.sessions[sessionId] = generateNickname();
-    savePosts();
+    savePosts(); // 세션 매핑도 즉시 저장
   }
   return communityDb.sessions[sessionId];
 }
@@ -168,13 +180,7 @@ function createBackup() {
   const backupPath = path.join(BACKUP_DIR, ts);
   ensureDir(backupPath);
 
-  const files = [
-    { name: 'users.json', data: usersDb },
-    { name: 'posts.json', data: communityDb },
-    { name: 'contacts.json', data: contactsDb }
-  ];
-
-  // Attendance needs serialization
+  // Attendance Set → Array serialization
   const attSer = { users: {} };
   for (const [sid, user] of Object.entries(attendanceDb.users)) {
     attSer.users[sid] = {
@@ -183,7 +189,14 @@ function createBackup() {
       checkins: user.checkins || {}
     };
   }
-  files.push({ name: 'attendance.json', data: attSer });
+
+  const files = [
+    { name: 'users.json', data: usersDb },
+    { name: 'posts.json', data: communityDb },
+    { name: 'attendance.json', data: attSer },
+    { name: 'contacts.json', data: contactsDb },
+    { name: 'userRoadmaps.json', data: roadmapsDb }
+  ];
 
   files.forEach(f => {
     fs.writeFileSync(path.join(backupPath, f.name), JSON.stringify(f.data, null, 2), 'utf-8');
@@ -199,41 +212,74 @@ function getStats() {
   const freePosts = communityDb.posts.filter(p => p.board === 'free').length;
   const studyPosts = communityDb.posts.filter(p => p.board === 'study').length;
   const totalComments = communityDb.posts.reduce((s, p) => s + (p.comments || []).length, 0);
+  const totalLikes = communityDb.posts.reduce((s, p) => s + (p.likes || 0), 0);
   return {
     users: Object.keys(usersDb.users).length,
     posts: { total: totalPosts, free: freePosts, study: studyPosts },
     comments: totalComments,
+    likes: totalLikes,
     attendance: Object.keys(attendanceDb.users).length,
-    contacts: contactsDb.length,
+    contacts: Array.isArray(contactsDb) ? contactsDb.length : 0,
+    roadmaps: Object.keys(roadmapsDb.users).length,
     sessions: Object.keys(communityDb.sessions).length
   };
 }
 
-// ===== Print startup status =====
+// ===== Startup Status =====
 function printStartupStatus() {
   const stats = getStats();
   console.log(`  📊 데이터 현황:`);
-  console.log(`     회원: ${stats.users}명 | 게시글: ${stats.posts.total}개 (자유:${stats.posts.free}, 스터디:${stats.posts.study})`);
-  console.log(`     댓글: ${stats.comments}개 | 출석: ${stats.attendance}명 | 문의: ${stats.contacts}건`);
-  console.log(`     데이터 경로: ${DATA_DIR}`);
+  console.log(`     회원: ${stats.users}명 | 세션: ${stats.sessions}개`);
+  console.log(`     게시글: ${stats.posts.total}개 (자유:${stats.posts.free} | 스터디:${stats.posts.study})`);
+  console.log(`     댓글: ${stats.comments}개 | 좋아요: ${stats.likes}개`);
+  console.log(`     출석: ${stats.attendance}명 | 문의: ${stats.contacts}건 | 로드맵: ${stats.roadmaps}명`);
+  console.log(`  📂 데이터 경로: ${DATA_DIR}`);
+}
+
+// ===== File integrity check on startup =====
+function verifyAllFiles() {
+  const fileChecks = [
+    { path: USERS_FILE, name: 'users.json' },
+    { path: POSTS_FILE, name: 'posts.json' },
+    { path: ATTENDANCE_FILE, name: 'attendance.json' },
+    { path: CONTACTS_FILE, name: 'contacts.json' },
+    { path: ROADMAPS_FILE, name: 'userRoadmaps.json' }
+  ];
+  let allOk = true;
+  fileChecks.forEach(f => {
+    if (!fs.existsSync(f.path)) {
+      console.warn(`[VERIFY] 누락 파일 발견: ${f.name} → 이미 초기화됨`);
+      allOk = false;
+    }
+  });
+  if (allOk) {
+    console.log(`  ✅ 전체 데이터 파일 무결성 확인 완료 (${fileChecks.length}개)`);
+  }
 }
 
 module.exports = {
+  // Data objects
   usersDb,
   communityDb,
   attendanceDb,
   contactsDb,
+  roadmapsDb,
+  // Save functions
   saveUsers,
   savePosts,
   saveAttendance,
   saveContacts,
+  saveRoadmaps,
+  // Helpers
   generateNickname,
   getNickname,
   serverTodayStr,
   calcStreak,
+  // Admin
   createBackup,
   getStats,
   printStartupStatus,
-  DATA_DIR,
-  CONTACTS_FILE
+  verifyAllFiles,
+  // Constants
+  DATA_DIR
 };
