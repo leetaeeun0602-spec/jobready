@@ -1,27 +1,76 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 app.use(express.json());
 
-// ===== In-Memory Databases =====
-const usersDb = {
-  // phone -> { name, phone, birthDate, createdAt }
-  users: {}
-};
+// ===== Data Persistence =====
+const DATA_DIR = path.join(__dirname, 'data');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const POSTS_FILE = path.join(DATA_DIR, 'posts.json');
+const ATTENDANCE_FILE = path.join(DATA_DIR, 'attendance.json');
 
-const communityDb = {
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+function loadJson(filePath, defaultValue) {
+  try {
+    if (fs.existsSync(filePath)) {
+      return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    }
+  } catch (e) {
+    console.error(`데이터 로드 실패 (${filePath}):`, e.message);
+  }
+  return defaultValue;
+}
+
+function saveJson(filePath, data) {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (e) {
+    console.error(`데이터 저장 실패 (${filePath}):`, e.message);
+  }
+}
+
+function saveUsers() { saveJson(USERS_FILE, usersDb); }
+function savePosts() { saveJson(POSTS_FILE, communityDb); }
+function saveAttendance() {
+  // Set을 배열로 변환하여 저장
+  const serializable = { users: {} };
+  for (const [sid, user] of Object.entries(attendanceDb.users)) {
+    serializable.users[sid] = {
+      nickname: user.nickname,
+      certs: [...user.certs],
+      checkins: user.checkins
+    };
+  }
+  saveJson(ATTENDANCE_FILE, serializable);
+}
+
+// ===== Load Data from Files =====
+const usersDb = loadJson(USERS_FILE, { users: {} });
+
+const communityDb = loadJson(POSTS_FILE, {
   posts: [],
   nextPostId: 1,
   nextCommentId: 1,
   sessions: {}
-};
+});
 
-const attendanceDb = {
-  // sessionId -> { nickname, certs: Set, checkins: { certName: [dateStr] } }
-  users: {}
-};
+const attendanceRaw = loadJson(ATTENDANCE_FILE, { users: {} });
+const attendanceDb = { users: {} };
+// 배열로 저장된 certs를 Set으로 복원
+for (const [sid, user] of Object.entries(attendanceRaw.users)) {
+  attendanceDb.users[sid] = {
+    nickname: user.nickname,
+    certs: new Set(user.certs),
+    checkins: user.checkins
+  };
+}
 
 function generateNickname() {
   const num = String(Math.floor(1000 + Math.random() * 9000));
@@ -32,6 +81,7 @@ function getNickname(sessionId) {
   if (!sessionId) return generateNickname();
   if (!communityDb.sessions[sessionId]) {
     communityDb.sessions[sessionId] = generateNickname();
+    savePosts();
   }
   return communityDb.sessions[sessionId];
 }
@@ -83,6 +133,7 @@ app.post('/api/auth/register', (req, res) => {
     createdAt: new Date().toISOString()
   };
   usersDb.users[phoneTrimmed] = user;
+  saveUsers();
   res.json({ success: true, user: { name: user.name, phone: user.phone, createdAt: user.createdAt } });
 });
 
@@ -159,6 +210,7 @@ app.post('/api/posts', (req, res) => {
     joinedMembers: board === 'study' ? [{ sessionId, nickname }] : []
   };
   communityDb.posts.push(post);
+  savePosts();
   res.json({ id: post.id, nickname: post.nickname });
 });
 
@@ -175,6 +227,7 @@ app.post('/api/posts/:id/like', (req, res) => {
     post.likedBy.push(sessionId);
     post.likes++;
   }
+  savePosts();
   res.json({ likes: post.likes, liked: post.likedBy.includes(sessionId) });
 });
 
@@ -191,6 +244,7 @@ app.post('/api/posts/:id/comments', (req, res) => {
     content: content.trim(), createdAt: new Date().toISOString()
   };
   post.comments.push(comment);
+  savePosts();
   res.json(comment);
 });
 
@@ -206,6 +260,7 @@ app.post('/api/posts/:id/join', (req, res) => {
   const already = post.joinedMembers.some(m => m.sessionId === sessionId);
   if (already) {
     post.joinedMembers = post.joinedMembers.filter(m => m.sessionId !== sessionId);
+    savePosts();
     return res.json({ joined: false, currentMembers: post.joinedMembers.length });
   }
   if (post.maxMembers && post.joinedMembers.length >= post.maxMembers) {
@@ -213,6 +268,7 @@ app.post('/api/posts/:id/join', (req, res) => {
   }
   const nickname = getNickname(sessionId);
   post.joinedMembers.push({ sessionId, nickname });
+  savePosts();
   res.json({ joined: true, currentMembers: post.joinedMembers.length });
 });
 
@@ -233,6 +289,7 @@ app.post('/api/attendance/checkin', (req, res) => {
   if (!user.checkins[certName].includes(date)) {
     user.checkins[certName].push(date);
   }
+  saveAttendance();
   res.json({ success: true });
 });
 

@@ -78,7 +78,7 @@ const CERT_DETAILS = {
   },
   'ADsP': {
     fullName: '데이터분석 준전문가 (ADsP)', org: '한국데이터산업진흥원',
-    examType: '정기시험 (연 4회)', fee: '30,000원',
+    examType: '정기시험 (연 4회)', fee: '50,000원',
     passCriteria: '총점 60점 이상, 과목당 40점 이상', prepPeriod: '3~4주', difficulty: '중하',
     dailyStudy: '이론 1시간 + 기출풀이 0.5시간 (일 1.5시간)',
     studyTips: '데이터 분석 기획, 데이터 분석, 데이터 시각화 3개 과목을 골고루 학습하세요. 통계 기초 개념이 중요하며, 기출문제 패턴이 반복되므로 기출 위주로 학습하면 효율적입니다.',
@@ -110,7 +110,7 @@ const CERT_DETAILS = {
   },
   'TOEIC': {
     fullName: 'TOEIC (Test of English for International Communication)', org: 'YBM',
-    examType: '정기시험 (매월 2~3회, 일요일)', fee: '52,000원',
+    examType: '정기시험 (매월 2~3회, 일요일)', fee: '22,500원',
     passCriteria: '만점 990점 (LC 495 + RC 495)', prepPeriod: '2~3개월', difficulty: '중 (목표 점수에 따라 상이)',
     dailyStudy: 'LC 1시간 + RC 1시간 (일 2시간)',
     studyTips: 'LC는 Part 3, 4의 패러프레이징에 집중하고, RC는 Part 5 문법을 빠르게 풀어 Part 7에 시간을 확보하세요. ETS 공식 교재와 실전 모의고사를 최소 5회분 이상 풀어보세요. 매일 꾸준한 영어 듣기가 중요합니다.',
