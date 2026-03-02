@@ -22,8 +22,8 @@ app.use('/api/diagnosis', diagnosisRouter);
 app.use('/api/analysis', analysisRouter);
 app.use('/api/roadmap', roadmapRouter);
 
-// ===== Contact API =====
-const CONTACTS_FILE = path.join(__dirname, 'data', 'contacts.json');
+// ===== Contact API (uses dataStore) =====
+const { contactsDb, saveContacts, createBackup, getStats, printStartupStatus } = require('./utils/dataStore');
 
 app.post('/api/contact', (req, res) => {
   const { name, email, type, message } = req.body;
@@ -31,14 +31,7 @@ app.post('/api/contact', (req, res) => {
     return res.status(400).json({ error: '모든 항목을 입력해주세요' });
   }
 
-  let contacts = [];
-  try {
-    if (fs.existsSync(CONTACTS_FILE)) {
-      contacts = JSON.parse(fs.readFileSync(CONTACTS_FILE, 'utf-8'));
-    }
-  } catch { contacts = []; }
-
-  contacts.push({
+  contactsDb.push({
     id: Date.now(),
     name,
     email,
@@ -47,13 +40,28 @@ app.post('/api/contact', (req, res) => {
     createdAt: new Date().toISOString()
   });
 
-  fs.writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2), 'utf-8');
+  saveContacts();
   res.json({ success: true });
+});
+
+// ===== Admin API =====
+app.post('/api/admin/backup', (req, res) => {
+  try {
+    const backupPath = createBackup();
+    res.json({ success: true, path: backupPath, timestamp: new Date().toISOString() });
+  } catch (e) {
+    res.status(500).json({ error: '백업 실패: ' + e.message });
+  }
+});
+
+app.get('/api/admin/stats', (req, res) => {
+  res.json(getStats());
 });
 
 app.listen(PORT, () => {
   console.log(`==========================================`);
   console.log(`  🚀 JobReady 서버 실행 중`);
   console.log(`  📍 http://localhost:${PORT}`);
+  printStartupStatus();
   console.log(`==========================================`);
 });

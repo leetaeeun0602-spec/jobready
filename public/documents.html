@@ -3,507 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서류 체크리스트 - JobReady</title>
-  <meta name="description" content="이력서, 자기소개서, 포트폴리오 준비 상태를 점검하세요. 취업 서류 체크리스트로 빠짐없이 준비하세요.">
+  <title>서류관리 시스템 - JobReady</title>
+  <meta name="description" content="이력서, 자기소개서, 대외활동을 체계적으로 관리하세요. 취업 서류를 한 곳에서 작성하고 관리합니다.">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <style>
-    /* ===== Document Checklist Page Styles ===== */
     :root {
-      --bg: #FFFFFF;
-      --section-bg: #F8F9FA;
-      --primary: #3182F6;
-      --primary-hover: #1B6AE0;
-      --navy: #1B1D6A;
-      --text: #191F28;
-      --text-secondary: #4E5968;
-      --text-muted: #8B95A1;
+      --bg:#FFFFFF;--section-bg:#F8F9FA;--primary:#3182F6;--primary-hover:#1B6AE0;
+      --navy:#1B1D6A;--text:#191F28;--text-secondary:#4E5968;--text-muted:#8B95A1;
+      --border:#E5E8EB;--green:#34C759;--amber:#FF9500;--red:#FF3B30;
     }
+    body{background:var(--bg);color:var(--text)}
+    .nav-link-active{color:var(--primary)!important}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-    }
+    /* Hero */
+    .doc-hero{background:linear-gradient(135deg,#1B1D6A 0%,#3182F6 100%);padding:120px 24px 60px;text-align:center;position:relative;overflow:hidden}
+    .doc-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black 20%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse 60% 50% at 50% 50%,black 20%,transparent 70%);pointer-events:none}
+    .doc-hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:80px;z-index:2;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;background-size:1440px 100%}
+    .doc-hero-content{position:relative;z-index:1;max-width:640px;margin:0 auto}
+    .doc-hero-icon{font-size:48px;margin-bottom:16px;display:inline-block;animation:fadeInUp .6s ease both}
+    .doc-hero-title{font-size:clamp(28px,5vw,42px);font-weight:900;color:#fff;letter-spacing:-1.5px;margin-bottom:12px;animation:fadeInUp .6s ease .1s both}
+    .doc-hero-desc{font-size:16px;color:rgba(255,255,255,.75);line-height:1.7;animation:fadeInUp .6s ease .2s both}
 
-    /* ===== Nav Active Link ===== */
-    .nav-link-active {
-      color: var(--primary) !important;
-    }
+    /* Main */
+    .doc-main{max-width:800px;margin:0 auto;padding:48px 24px 80px}
 
-    /* ===== Hero Section ===== */
-    .doc-hero {
-      background: linear-gradient(135deg, #1B1D6A 0%, #3182F6 100%);
-      padding: 120px 24px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .doc-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
-      pointer-events: none;
-    }
-    .doc-hero::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 80px;
-      z-index: 2;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0,40 C240,90 480,0 720,50 C960,100 1200,20 1440,60 L1440,100 L0,100 Z'/%3E%3C/svg%3E") repeat-x;
-      background-size: 1440px 100%;
-    }
-    .doc-hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .doc-hero-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-      display: inline-block;
-      animation: fadeInUp 0.6s ease both;
-    }
-    .doc-hero-title {
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -1.5px;
-      margin-bottom: 12px;
-      animation: fadeInUp 0.6s ease 0.1s both;
-    }
-    .doc-hero-desc {
-      font-size: 16px;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.7;
-      animation: fadeInUp 0.6s ease 0.2s both;
-    }
+    /* Dashboard */
+    .doc-dashboard{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:32px;animation:fadeInUp .6s ease .3s both}
+    .dash-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .dash-card-icon{font-size:28px;margin-bottom:8px}
+    .dash-card-value{font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--text)}
+    .dash-card-label{font-size:13px;color:var(--text-muted);font-weight:600;margin-top:4px}
+    .dash-progress{grid-column:1/-1;display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .dash-progress-bar{flex:1;height:8px;background:#E5E8EB;border-radius:4px;overflow:hidden}
+    .dash-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),#5BA4FC);border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1);width:0%}
+    .dash-progress-text{font-size:14px;font-weight:800;color:var(--primary);white-space:nowrap}
+    .dash-progress-label{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap}
 
-    /* ===== Main Content ===== */
-    .doc-main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
+    /* Action buttons */
+    .doc-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:24px;flex-wrap:wrap;animation:fadeInUp .6s ease .35s both}
+    .doc-action-btn{padding:10px 20px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text-secondary);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s ease;display:flex;align-items:center;gap:6px}
+    .doc-action-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(49,130,246,.04)}
+    .doc-action-btn.danger:hover{border-color:var(--red);color:var(--red);background:rgba(255,59,48,.04)}
 
-    /* ===== Overall Progress Section ===== */
-    .overall-progress {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 32px;
-      background: var(--bg);
-      border: 1px solid #E5E8EB;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin-bottom: 36px;
-      animation: fadeInUp 0.6s ease 0.3s both;
-    }
-    .progress-ring-container {
-      position: relative;
-      width: 160px;
-      height: 160px;
-      margin-bottom: 20px;
-    }
-    .progress-ring-svg {
-      transform: rotate(-90deg);
-      width: 160px;
-      height: 160px;
-    }
-    .progress-ring-bg {
-      fill: none;
-      stroke: #E5E8EB;
-      stroke-width: 10;
-    }
-    .progress-ring-fill {
-      fill: none;
-      stroke: var(--primary);
-      stroke-width: 10;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
-    }
-    .progress-ring-text {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .progress-percent {
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: -2px;
-      color: var(--text);
-      line-height: 1;
-    }
-    .progress-percent-sign {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-    .progress-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .grade-badge {
-      display: inline-block;
-      padding: 6px 20px;
-      border-radius: 24px;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      margin-bottom: 12px;
-      transition: all 0.4s ease;
-    }
-    .grade-start {
-      background: rgba(255,59,48,0.1);
-      color: #FF3B30;
-      border: 1px solid rgba(255,59,48,0.2);
-    }
-    .grade-progress {
-      background: rgba(255,149,0,0.1);
-      color: #FF9500;
-      border: 1px solid rgba(255,149,0,0.2);
-    }
-    .grade-almost {
-      background: rgba(49,130,246,0.08);
-      color: #3182F6;
-      border: 1px solid rgba(49,130,246,0.15);
-    }
-    .grade-ready {
-      background: rgba(52,199,89,0.1);
-      color: #34C759;
-      border: 1px solid rgba(52,199,89,0.2);
-    }
-    .overall-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
+    /* Tabs */
+    .doc-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;animation:fadeInUp .6s ease .4s both}
+    .doc-tab{padding:10px 24px;border-radius:24px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:14px;font-weight:700;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);font-family:inherit;user-select:none}
+    .doc-tab:hover{border-color:#CED4DA;color:var(--text-secondary)}
+    .doc-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .tab-panel{display:none;animation:fadeIn .4s ease}
+    .tab-panel.active{display:block}
 
-    /* ===== Tabs ===== */
-    .doc-tabs {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      animation: fadeInUp 0.6s ease 0.4s both;
-    }
-    .doc-tab {
-      padding: 10px 24px;
-      border-radius: 24px;
-      border: 1px solid #E5E8EB;
-      background: var(--bg);
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      font-family: inherit;
-      user-select: none;
-    }
-    .doc-tab:hover {
-      border-color: #CED4DA;
-      color: var(--text-secondary);
-    }
-    .doc-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
+    /* Section Card */
+    .section-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .section-title{font-size:16px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
+    .section-title span{font-size:20px}
+    .add-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--primary);background:rgba(49,130,246,.06);color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s ease}
+    .add-btn:hover{background:var(--primary);color:#fff}
 
-    /* ===== Tab Content ===== */
-    .tab-panel {
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-    .tab-panel.active {
-      display: block;
-    }
+    /* Form fields */
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+    .form-row.col-3{grid-template-columns:1fr 1fr 1fr}
+    .form-row.col-1{grid-template-columns:1fr}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    .form-label{font-size:12px;font-weight:700;color:var(--text-muted)}
+    .form-input{padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);transition:border-color .2s ease;background:#FAFBFC;outline:none}
+    .form-input:focus{border-color:var(--primary);background:#fff}
+    .form-input::placeholder{color:#CED4DA}
+    select.form-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238B95A1' d='M3 5l3 3 3-3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+    textarea.form-input{resize:vertical;min-height:80px;line-height:1.6}
 
-    /* ===== Per-tab Progress Bar ===== */
-    .tab-progress {
-      margin-bottom: 20px;
-      background: var(--bg);
-      border: 1px solid #E5E8EB;
-      border-radius: 16px;
-      padding: 20px 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .tab-progress-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .tab-progress-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
-    .tab-progress-percent {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-    .tab-progress-bar {
-      width: 100%;
-      height: 6px;
-      background: #E5E8EB;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .tab-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), #5BA4FC);
-      border-radius: 3px;
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      width: 0%;
-    }
+    /* Repeatable entry */
+    .entry-item{background:var(--section-bg);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;border:1px solid transparent;transition:border-color .2s ease}
+    .entry-item:hover{border-color:var(--border)}
+    .entry-remove{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,59,48,.08);color:var(--red);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease;font-family:inherit}
+    .entry-remove:hover{background:var(--red);color:#fff}
 
-    /* ===== Checklist Card ===== */
-    .checklist-card {
-      background: var(--bg);
-      border: 1px solid #E5E8EB;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
+    /* Cover letter */
+    .cl-company-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+    .cl-company-chip{padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s ease}
+    .cl-company-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .cl-company-chip:hover:not(.active){border-color:#CED4DA;color:var(--text-secondary)}
+    .cl-add-company{padding:8px 14px;border-radius:20px;border:1px dashed var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s ease}
+    .cl-add-company:hover{border-color:var(--primary);color:var(--primary)}
+    .cl-item{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+    .cl-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .cl-item-title{font-size:15px;font-weight:800;color:var(--text)}
+    .cl-char-count{font-size:12px;font-weight:600;color:var(--text-muted)}
+    .cl-textarea{width:100%;min-height:140px;padding:14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--text);line-height:1.7;resize:vertical;outline:none;background:#FAFBFC;transition:border-color .2s ease}
+    .cl-textarea:focus{border-color:var(--primary);background:#fff}
+    .cl-tips-toggle{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s ease;margin-top:8px}
+    .cl-tips-toggle:hover{border-color:var(--primary);color:var(--primary)}
+    .cl-tips-box{margin-top:12px;padding:16px;background:#F0F7FF;border-radius:12px;font-size:13px;color:var(--text-secondary);line-height:1.8;display:none}
+    .cl-tips-box.show{display:block}
+    .cl-tips-box strong{color:var(--primary);font-weight:700}
 
-    /* ===== Checklist Item ===== */
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 18px 24px;
-      border-bottom: 1px solid #F1F3F5;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      user-select: none;
-    }
-    .checklist-item:last-child {
-      border-bottom: none;
-    }
-    .checklist-item:hover {
-      background: #FAFBFC;
-    }
-    .checklist-item.checked {
-      background: #FAFBFC;
-    }
+    /* Activities */
+    .act-filter-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+    .act-filter-chip{padding:7px 16px;border-radius:18px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s ease}
+    .act-filter-chip.active{background:var(--navy);border-color:var(--navy);color:#fff}
+    .act-filter-chip:hover:not(.active){border-color:#CED4DA;color:var(--text-secondary)}
+    .act-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;position:relative;transition:box-shadow .2s ease}
+    .act-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+    .act-card-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .act-category-badge{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;background:rgba(49,130,246,.08);color:var(--primary)}
+    .act-category-badge.cat-intern{background:rgba(52,199,89,.08);color:var(--green)}
+    .act-category-badge.cat-volunteer{background:rgba(255,149,0,.08);color:var(--amber)}
+    .act-category-badge.cat-project{background:rgba(74,91,255,.08);color:#4A5BFF}
+    .act-category-badge.cat-club{background:rgba(255,59,48,.08);color:var(--red)}
+    .act-category-badge.cat-contest{background:rgba(27,29,106,.08);color:var(--navy)}
+    .act-card-title{font-size:16px;font-weight:800;color:var(--text)}
+    .act-card-period{font-size:13px;color:var(--text-muted);font-weight:600}
+    .act-card-desc{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
+    .act-card-remove{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,59,48,.06);color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease;font-family:inherit}
+    .act-card-remove:hover{background:var(--red);color:#fff}
 
-    /* ===== Custom Checkbox ===== */
-    .check-box {
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      border: 2px solid #CED4DA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .check-box svg {
-      width: 14px;
-      height: 14px;
-      opacity: 0;
-      transform: scale(0.5);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .checklist-item.checked .check-box {
-      background: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(49,130,246,0.3);
-    }
-    .checklist-item.checked .check-box svg {
-      opacity: 1;
-      transform: scale(1);
-    }
+    /* Timeline */
+    .timeline-section{margin-top:32px}
+    .timeline-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .timeline{position:relative;padding-left:24px}
+    .timeline::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--border)}
+    .timeline-item{position:relative;padding-bottom:20px;padding-left:16px}
+    .timeline-dot{position:absolute;left:-20px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 2px var(--primary)}
+    .timeline-item-title{font-size:14px;font-weight:700;color:var(--text)}
+    .timeline-item-period{font-size:12px;color:var(--text-muted);font-weight:600;margin-top:2px}
+    .timeline-item-cat{font-size:11px;color:var(--primary);font-weight:600}
 
-    /* Check animation ripple */
-    .check-box::after {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: rgba(49,130,246,0.15);
-      opacity: 0;
-      transform: scale(0);
-      transition: all 0.4s ease;
-    }
-    .checklist-item.just-checked .check-box::after {
-      animation: checkRipple 0.5s ease forwards;
-    }
-    @keyframes checkRipple {
-      0% { opacity: 1; transform: scale(0); }
-      100% { opacity: 0; transform: scale(2.5); }
-    }
+    /* Empty state */
+    .empty-state{text-align:center;padding:48px 24px;color:var(--text-muted)}
+    .empty-state-icon{font-size:48px;margin-bottom:12px}
+    .empty-state-text{font-size:15px;font-weight:600}
 
-    .check-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.3s ease;
-      flex: 1;
-      line-height: 1.5;
-    }
-    .checklist-item.checked .check-label {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
+    /* Animations */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-    .check-number {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #F1F3F5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--text-muted);
-      flex-shrink: 0;
-      transition: all 0.3s ease;
+    /* Responsive */
+    @media(max-width:768px){
+      .doc-main{padding:32px 16px 60px}
+      .doc-dashboard{grid-template-columns:1fr 1fr 1fr;gap:10px}
+      .dash-card{padding:16px}
+      .dash-card-value{font-size:22px}
+      .form-row{grid-template-columns:1fr}
+      .form-row.col-3{grid-template-columns:1fr}
+      .doc-actions{justify-content:center}
     }
-    .checklist-item.checked .check-number {
-      background: rgba(49,130,246,0.08);
-      color: var(--primary);
-    }
-
-    /* ===== Reset Button ===== */
-    .reset-section {
-      text-align: center;
-      margin-top: 36px;
-      animation: fadeInUp 0.6s ease 0.5s both;
-    }
-    .reset-btn {
-      padding: 12px 28px;
-      border-radius: 12px;
-      border: 1px solid #E5E8EB;
-      background: var(--bg);
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reset-btn:hover {
-      border-color: #FF3B30;
-      color: #FF3B30;
-      background: rgba(255,59,48,0.04);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255,59,48,0.1);
-    }
-
-    /* ===== Animations ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .doc-main {
-        padding: 32px 16px 60px;
-      }
-      .overall-progress {
-        padding: 32px 24px;
-      }
-      .progress-ring-container {
-        width: 140px;
-        height: 140px;
-      }
-      .progress-ring-svg {
-        width: 140px;
-        height: 140px;
-      }
-      .progress-percent {
-        font-size: 30px;
-      }
-      .checklist-item {
-        padding: 16px 20px;
-        gap: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .doc-hero {
-        padding: 100px 16px 48px;
-      }
-      .doc-hero-title {
-        font-size: 26px;
-      }
-      .doc-hero-desc {
-        font-size: 14px;
-      }
-      .doc-main {
-        padding: 24px 12px 48px;
-      }
-      .overall-progress {
-        padding: 24px 16px;
-      }
-      .progress-ring-container {
-        width: 120px;
-        height: 120px;
-      }
-      .progress-ring-svg {
-        width: 120px;
-        height: 120px;
-      }
-      .progress-percent {
-        font-size: 26px;
-      }
-      .progress-percent-sign {
-        font-size: 16px;
-      }
-      .doc-tab {
-        padding: 8px 16px;
-        font-size: 13px;
-      }
-      .checklist-item {
-        padding: 14px 16px;
-        gap: 10px;
-      }
-      .check-label {
-        font-size: 14px;
-      }
-      .tab-progress {
-        padding: 16px;
-      }
-      .tab-progress-title {
-        font-size: 14px;
-      }
-      .grade-badge {
-        font-size: 13px;
-        padding: 5px 16px;
-      }
-      .overall-text {
-        font-size: 14px;
-      }
+    @media(max-width:480px){
+      .doc-hero{padding:100px 16px 48px}
+      .doc-hero-title{font-size:26px}
+      .doc-main{padding:24px 12px 48px}
+      .doc-dashboard{grid-template-columns:1fr 1fr 1fr}
+      .dash-card{padding:12px 8px}
+      .dash-card-value{font-size:20px}
+      .dash-card-icon{font-size:22px;margin-bottom:4px}
+      .dash-card-label{font-size:11px}
+      .doc-tab{padding:8px 16px;font-size:13px}
+      .section-card{padding:16px}
+      .cl-item{padding:14px}
+      .section-header{flex-direction:column;align-items:flex-start;gap:8px}
     }
   </style>
 </head>
@@ -532,7 +191,7 @@
             <a href="/diagnosis.html">취업진단</a>
             <a href="/analysis.html">직무분석</a>
             <a href="/roadmap.html">로드맵</a>
-            <a href="/documents.html" class="nav-link-active">서류체크</a>
+            <a href="/documents.html" class="nav-link-active">서류관리</a>
             <a href="/interview.html">면접준비</a>
           </div>
         </div>
@@ -563,7 +222,7 @@
       <a href="/diagnosis.html">취업진단</a>
       <a href="/analysis.html">직무분석</a>
       <a href="/roadmap.html">로드맵</a>
-      <a href="/documents.html" class="nav-link-active">서류체크</a>
+      <a href="/documents.html" class="nav-link-active">서류관리</a>
       <a href="/interview.html">면접준비</a>
     </div>
     <div class="nav-mobile-group">
@@ -574,232 +233,252 @@
     </div>
   </div>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="doc-hero">
     <div class="doc-hero-content">
-      <div class="doc-hero-icon">📄</div>
-      <h1 class="doc-hero-title">서류 체크리스트</h1>
-      <p class="doc-hero-desc">이력서, 자기소개서, 포트폴리오 준비 상태를 점검하세요</p>
+      <div class="doc-hero-icon">📝</div>
+      <h1 class="doc-hero-title">서류관리 시스템</h1>
+      <p class="doc-hero-desc">이력서, 자기소개서, 대외활동을 체계적으로 작성하고 관리하세요</p>
     </div>
   </section>
 
   <!-- Main Content -->
   <div class="doc-main">
 
-    <!-- Overall Progress -->
-    <div class="overall-progress" id="overallProgress">
-      <div class="progress-ring-container">
-        <svg class="progress-ring-svg" viewBox="0 0 160 160">
-          <circle class="progress-ring-bg" cx="80" cy="80" r="65"></circle>
-          <circle class="progress-ring-fill" id="progressRing" cx="80" cy="80" r="65"
-                  stroke-dasharray="408.41" stroke-dashoffset="408.41"></circle>
-        </svg>
-        <div class="progress-ring-text">
-          <div>
-            <span class="progress-percent" id="overallPercent">0</span><span class="progress-percent-sign">%</span>
-          </div>
-          <div class="progress-label">전체 완성도</div>
-        </div>
+    <!-- Dashboard -->
+    <div class="doc-dashboard" id="dashboard">
+      <div class="dash-card">
+        <div class="dash-card-icon">📄</div>
+        <div class="dash-card-value" id="dashResume">0%</div>
+        <div class="dash-card-label">이력서</div>
       </div>
-      <div class="grade-badge grade-start" id="gradeBadge">시작</div>
-      <div class="overall-text" id="overallText">전체 완성도 0%</div>
+      <div class="dash-card">
+        <div class="dash-card-icon">✍️</div>
+        <div class="dash-card-value" id="dashCover">0%</div>
+        <div class="dash-card-label">자기소개서</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-icon">🏆</div>
+        <div class="dash-card-value" id="dashActivity">0건</div>
+        <div class="dash-card-label">대외활동</div>
+      </div>
+      <div class="dash-progress">
+        <span class="dash-progress-label">전체 완성도</span>
+        <div class="dash-progress-bar"><div class="dash-progress-fill" id="dashFill"></div></div>
+        <span class="dash-progress-text" id="dashPercent">0%</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="doc-actions">
+      <button class="doc-action-btn" onclick="exportData()">📥 내보내기(JSON)</button>
+      <button class="doc-action-btn" onclick="document.getElementById('importFile').click()">📤 가져오기</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="doc-action-btn danger" onclick="resetAllData()">🗑 초기화</button>
     </div>
 
     <!-- Tabs -->
     <div class="doc-tabs" id="docTabs">
-      <button class="doc-tab active" data-tab="resume">이력서</button>
-      <button class="doc-tab" data-tab="coverletter">자기소개서</button>
-      <button class="doc-tab" data-tab="portfolio">포트폴리오</button>
+      <button class="doc-tab active" data-tab="resume">📄 이력서</button>
+      <button class="doc-tab" data-tab="coverletter">✍️ 자기소개서</button>
+      <button class="doc-tab" data-tab="activity">🏆 대외활동</button>
     </div>
 
-    <!-- Tab: Resume -->
+    <!-- ===== Tab 1: Resume ===== -->
     <div class="tab-panel active" id="panel-resume">
-      <div class="tab-progress">
-        <div class="tab-progress-header">
-          <span class="tab-progress-title">이력서 준비 현황</span>
-          <span class="tab-progress-percent" id="resumePercent">0%</span>
+
+      <!-- Personal Info -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>👤</span> 인적사항</div>
         </div>
-        <div class="tab-progress-bar">
-          <div class="tab-progress-fill" id="resumeFill"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">이름</label>
+            <input class="form-input" id="r-name" placeholder="홍길동" data-field="personal.name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">생년월일</label>
+            <input class="form-input" type="date" id="r-birth" data-field="personal.birthDate">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">연락처</label>
+            <input class="form-input" id="r-phone" placeholder="010-0000-0000" data-field="personal.phone">
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일</label>
+            <input class="form-input" type="email" id="r-email" placeholder="email@example.com" data-field="personal.email">
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="form-group">
+            <label class="form-label">주소</label>
+            <input class="form-input" id="r-address" placeholder="서울시 강남구..." data-field="personal.address">
+          </div>
         </div>
       </div>
-      <div class="checklist-card">
-        <div class="checklist-item" data-key="resume-1">
-          <div class="check-number">1</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">증명사진 준비</span>
+
+      <!-- Education -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>🎓</span> 학력사항</div>
+          <button class="add-btn" onclick="addEducation()">+ 추가</button>
         </div>
-        <div class="checklist-item" data-key="resume-2">
-          <div class="check-number">2</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">인적사항 작성 (이름, 연락처, 이메일)</span>
+        <div id="educationList"></div>
+      </div>
+
+      <!-- Career -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>💼</span> 경력/인턴</div>
+          <button class="add-btn" onclick="addCareer()">+ 추가</button>
         </div>
-        <div class="checklist-item" data-key="resume-3">
-          <div class="check-number">3</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">학력사항 작성</span>
+        <div id="careerList"></div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>📜</span> 자격증</div>
+          <button class="add-btn" onclick="addCert()">+ 추가</button>
         </div>
-        <div class="checklist-item" data-key="resume-4">
-          <div class="check-number">4</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">경력/인턴 경험 작성</span>
+        <div id="certList"></div>
+      </div>
+
+      <!-- Languages -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>🌍</span> 어학</div>
+          <button class="add-btn" onclick="addLanguage()">+ 추가</button>
         </div>
-        <div class="checklist-item" data-key="resume-5">
-          <div class="check-number">5</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">자격증/면허 기재</span>
+        <div id="languageList"></div>
+      </div>
+
+      <!-- Awards -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>🏅</span> 수상/활동</div>
+          <button class="add-btn" onclick="addAward()">+ 추가</button>
         </div>
-        <div class="checklist-item" data-key="resume-6">
-          <div class="check-number">6</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">수상/활동 내역</span>
+        <div id="awardList"></div>
+      </div>
+
+      <!-- Summary -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>📝</span> 자기소개 요약</div>
+          <span id="summaryCount" style="font-size:12px;font-weight:600;color:var(--text-muted)">0/500자</span>
         </div>
-        <div class="checklist-item" data-key="resume-7">
-          <div class="check-number">7</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">자기소개 요약문 (3줄)</span>
-        </div>
-        <div class="checklist-item" data-key="resume-8">
-          <div class="check-number">8</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">희망연봉 기재</span>
-        </div>
+        <textarea class="form-input" id="r-summary" placeholder="간단한 자기소개 요약을 작성해주세요 (500자 이내)" maxlength="500" style="min-height:120px" data-field="summary"></textarea>
       </div>
     </div>
 
-    <!-- Tab: Cover Letter -->
+    <!-- ===== Tab 2: Cover Letter ===== -->
     <div class="tab-panel" id="panel-coverletter">
-      <div class="tab-progress">
-        <div class="tab-progress-header">
-          <span class="tab-progress-title">자기소개서 준비 현황</span>
-          <span class="tab-progress-percent" id="coverletterPercent">0%</span>
+
+      <!-- Company selector -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>🏢</span> 기업별 자기소개서</div>
         </div>
-        <div class="tab-progress-bar">
-          <div class="tab-progress-fill" id="coverletterFill"></div>
+        <div class="cl-company-bar" id="companyBar">
+          <button class="cl-company-chip active" data-company="기본" onclick="switchCompany('기본')">기본</button>
+          <button class="cl-add-company" onclick="addCompany()">+ 기업추가</button>
         </div>
       </div>
-      <div class="checklist-card">
-        <div class="checklist-item" data-key="coverletter-1">
-          <div class="check-number">1</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">지원동기 작성</span>
-        </div>
-        <div class="checklist-item" data-key="coverletter-2">
-          <div class="check-number">2</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">성장과정 작성</span>
-        </div>
-        <div class="checklist-item" data-key="coverletter-3">
-          <div class="check-number">3</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">직무역량/경험 기술</span>
-        </div>
-        <div class="checklist-item" data-key="coverletter-4">
-          <div class="check-number">4</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">입사 후 포부 작성</span>
-        </div>
-        <div class="checklist-item" data-key="coverletter-5">
-          <div class="check-number">5</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">맞춤법/문법 검수 완료</span>
-        </div>
-        <div class="checklist-item" data-key="coverletter-6">
-          <div class="check-number">6</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">분량 확인 (500~1000자)</span>
+
+      <!-- Cover letter items -->
+      <div id="coverLetterItems"></div>
+
+      <!-- Add item -->
+      <div style="text-align:center;margin-top:12px">
+        <button class="add-btn" onclick="addCoverLetterItem()">+ 항목 추가</button>
+      </div>
+
+      <!-- Writing tips -->
+      <div class="section-card" style="margin-top:20px">
+        <button class="cl-tips-toggle" onclick="toggleTips()">💡 작성 팁 보기</button>
+        <div class="cl-tips-box" id="tipsBox">
+          <strong>STAR 기법으로 작성하세요:</strong><br>
+          <strong>S</strong>ituation - 어떤 상황이었는지 구체적으로 설명<br>
+          <strong>T</strong>ask - 해결해야 할 과제/목표<br>
+          <strong>A</strong>ction - 본인이 취한 구체적인 행동<br>
+          <strong>R</strong>esult - 행동의 결과와 성과 (수치화)<br><br>
+          <strong>핵심 포인트:</strong><br>
+          - 두괄식으로 핵심 메시지를 먼저 전달<br>
+          - 구체적인 숫자와 사례로 뒷받침<br>
+          - 지원 직무와 연관된 역량 강조<br>
+          - 500~1000자 분량 권장
         </div>
       </div>
     </div>
 
-    <!-- Tab: Portfolio -->
-    <div class="tab-panel" id="panel-portfolio">
-      <div class="tab-progress">
-        <div class="tab-progress-header">
-          <span class="tab-progress-title">포트폴리오 준비 현황</span>
-          <span class="tab-progress-percent" id="portfolioPercent">0%</span>
-        </div>
-        <div class="tab-progress-bar">
-          <div class="tab-progress-fill" id="portfolioFill"></div>
-        </div>
-      </div>
-      <div class="checklist-card">
-        <div class="checklist-item" data-key="portfolio-1">
-          <div class="check-number">1</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">프로젝트 1 정리</span>
-        </div>
-        <div class="checklist-item" data-key="portfolio-2">
-          <div class="check-number">2</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">프로젝트 2 정리</span>
-        </div>
-        <div class="checklist-item" data-key="portfolio-3">
-          <div class="check-number">3</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">프로젝트 3 정리</span>
-        </div>
-        <div class="checklist-item" data-key="portfolio-4">
-          <div class="check-number">4</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">스크린샷/결과물 첨부</span>
-        </div>
-        <div class="checklist-item" data-key="portfolio-5">
-          <div class="check-number">5</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">본인 기여도/역할 명시</span>
-        </div>
-        <div class="checklist-item" data-key="portfolio-6">
-          <div class="check-number">6</div>
-          <div class="check-box">
-            <svg viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <span class="check-label">PDF 정리 완료</span>
-        </div>
-      </div>
-    </div>
+    <!-- ===== Tab 3: Activities ===== -->
+    <div class="tab-panel" id="panel-activity">
 
-    <!-- Reset -->
-    <div class="reset-section">
-      <button class="reset-btn" id="resetBtn">체크리스트 초기화</button>
+      <!-- Add activity -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title"><span>➕</span> 활동 추가</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">활동명</label>
+            <input class="form-input" id="act-title" placeholder="활동/프로젝트 이름">
+          </div>
+          <div class="form-group">
+            <label class="form-label">카테고리</label>
+            <select class="form-input" id="act-category">
+              <option value="인턴">인턴</option>
+              <option value="봉사활동">봉사활동</option>
+              <option value="프로젝트">프로젝트</option>
+              <option value="동아리">동아리</option>
+              <option value="공모전">공모전</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">시작일</label>
+            <input class="form-input" type="date" id="act-start">
+          </div>
+          <div class="form-group">
+            <label class="form-label">종료일</label>
+            <input class="form-input" type="date" id="act-end">
+          </div>
+        </div>
+        <div class="form-row col-1">
+          <div class="form-group">
+            <label class="form-label">활동 설명</label>
+            <textarea class="form-input" id="act-desc" placeholder="활동 내용과 성과를 작성해주세요" style="min-height:80px"></textarea>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:8px">
+          <button class="add-btn" onclick="addActivity()">활동 추가</button>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="act-filter-bar" id="actFilterBar">
+        <button class="act-filter-chip active" data-cat="전체" onclick="filterActivities('전체')">전체</button>
+        <button class="act-filter-chip" data-cat="인턴" onclick="filterActivities('인턴')">인턴</button>
+        <button class="act-filter-chip" data-cat="봉사활동" onclick="filterActivities('봉사활동')">봉사활동</button>
+        <button class="act-filter-chip" data-cat="프로젝트" onclick="filterActivities('프로젝트')">프로젝트</button>
+        <button class="act-filter-chip" data-cat="동아리" onclick="filterActivities('동아리')">동아리</button>
+        <button class="act-filter-chip" data-cat="공모전" onclick="filterActivities('공모전')">공모전</button>
+      </div>
+
+      <!-- Activity cards -->
+      <div id="activityCards"></div>
+
+      <!-- Timeline -->
+      <div class="timeline-section" id="timelineSection" style="display:none">
+        <div class="timeline-title"><span>📅</span> 타임라인</div>
+        <div class="timeline" id="timelineContent"></div>
+      </div>
     </div>
 
   </div>
@@ -824,7 +503,7 @@
           <a href="/diagnosis.html">취업진단</a>
           <a href="/analysis.html">직무분석</a>
           <a href="/roadmap.html">로드맵</a>
-          <a href="/documents.html">서류체크</a>
+          <a href="/documents.html">서류관리</a>
           <a href="/interview.html">면접준비</a>
         </div>
         <div class="footer-col">
@@ -850,217 +529,606 @@
     // ===== Mobile Menu =====
     function openMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.add('open');document.getElementById('nav-mobile-menu')?.classList.add('open');document.body.style.overflow='hidden';}
     function closeMobileMenu(){document.getElementById('nav-mobile-overlay')?.classList.remove('open');document.getElementById('nav-mobile-menu')?.classList.remove('open');document.body.style.overflow='';}
-    (function() {
+
+    (function(){
       'use strict';
 
       // ===== Constants =====
-      const STORAGE_KEY = 'jobready_documents_checklist';
-      const CIRCUMFERENCE = 2 * Math.PI * 65; // ~408.41
+      var STORAGE_KEY = 'jobready_documents_v2';
+      var CERT_OPTIONS = [
+        '정보처리기사','정보처리산업기사','정보보안기사','빅데이터분석기사','SQLD','ADsP',
+        '컴퓨터활용능력1급','컴퓨터활용능력2급','한국사능력검정시험',
+        'TOEIC','JLPT','HSK','TOEFL','IELTS',
+        '전기기사','전기산업기사','건축기사','토목기사','산업안전기사',
+        '소방설비기사','기계기사','에너지관리기사','환경기사','건설안전기사',
+        '사회복지사1급','공인중개사','한식조리기능사','간호조무사','위험물산업기사',
+        'MOS','ITQ','네트워크관리사','리눅스마스터','AWS Cloud Practitioner',
+        '세무회계','ERP정보관리사','투자자산운용사','AFPK'
+      ];
 
-      // ===== DOM References =====
-      const progressRing = document.getElementById('progressRing');
-      const overallPercentEl = document.getElementById('overallPercent');
-      const overallTextEl = document.getElementById('overallText');
-      const gradeBadge = document.getElementById('gradeBadge');
-      const tabs = document.querySelectorAll('.doc-tab');
-      const panels = document.querySelectorAll('.tab-panel');
-      const allItems = document.querySelectorAll('.checklist-item');
-      const resetBtn = document.getElementById('resetBtn');
-
-      // Tab category definitions
-      const categories = {
-        resume: { fill: 'resumeFill', percent: 'resumePercent', count: 8 },
-        coverletter: { fill: 'coverletterFill', percent: 'coverletterPercent', count: 6 },
-        portfolio: { fill: 'portfolioFill', percent: 'portfolioPercent', count: 6 }
+      var CATEGORY_CLASSES = {
+        '인턴':'cat-intern','봉사활동':'cat-volunteer','프로젝트':'cat-project',
+        '동아리':'cat-club','공모전':'cat-contest','기타':''
       };
 
-      // ===== Load State from localStorage =====
-      function loadState() {
-        try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) {
-            return JSON.parse(saved);
+      // ===== Default Data Structure =====
+      function defaultData(){
+        return {
+          resume:{
+            personal:{name:'',birthDate:'',phone:'',email:'',address:''},
+            education:[],
+            career:[],
+            certs:[],
+            languages:[],
+            awards:[],
+            summary:''
+          },
+          coverLetters:{
+            '기본':[
+              {title:'지원동기',content:''},
+              {title:'성장과정',content:''},
+              {title:'직무역량/경험',content:''},
+              {title:'입사후포부',content:''}
+            ]
+          },
+          currentCompany:'기본',
+          activities:[]
+        };
+      }
+
+      // ===== State =====
+      var data = loadData();
+      var currentFilter = '전체';
+
+      function loadData(){
+        try{
+          var saved = localStorage.getItem(STORAGE_KEY);
+          if(saved){
+            var parsed = JSON.parse(saved);
+            var def = defaultData();
+            // Merge with defaults
+            if(!parsed.resume) parsed.resume = def.resume;
+            if(!parsed.resume.personal) parsed.resume.personal = def.resume.personal;
+            if(!parsed.resume.education) parsed.resume.education = [];
+            if(!parsed.resume.career) parsed.resume.career = [];
+            if(!parsed.resume.certs) parsed.resume.certs = [];
+            if(!parsed.resume.languages) parsed.resume.languages = [];
+            if(!parsed.resume.awards) parsed.resume.awards = [];
+            if(parsed.resume.summary === undefined) parsed.resume.summary = '';
+            if(!parsed.coverLetters) parsed.coverLetters = def.coverLetters;
+            if(!parsed.currentCompany) parsed.currentCompany = '기본';
+            if(!parsed.activities) parsed.activities = [];
+            return parsed;
           }
-        } catch (e) {
-          // Ignore parse errors
-        }
-        return {};
+        }catch(e){}
+        return defaultData();
       }
 
-      // ===== Save State to localStorage =====
-      function saveState(state) {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {
-          // Ignore storage errors
-        }
+      function saveData(){
+        try{
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }catch(e){}
+        updateDashboard();
       }
 
-      // ===== Initialize Checkboxes =====
-      let state = loadState();
-
-      allItems.forEach(function(item) {
-        var key = item.getAttribute('data-key');
-        if (state[key]) {
-          item.classList.add('checked');
-        }
-      });
+      // ===== Escape HTML =====
+      function esc(str){
+        var div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+      }
 
       // ===== Tab Switching =====
-      tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
+      var tabs = document.querySelectorAll('.doc-tab');
+      var panels = document.querySelectorAll('.tab-panel');
+      tabs.forEach(function(tab){
+        tab.addEventListener('click',function(){
           var target = this.getAttribute('data-tab');
-
-          tabs.forEach(function(t) { t.classList.remove('active'); });
-          panels.forEach(function(p) { p.classList.remove('active'); });
-
+          tabs.forEach(function(t){t.classList.remove('active')});
+          panels.forEach(function(p){p.classList.remove('active')});
           this.classList.add('active');
-          document.getElementById('panel-' + target).classList.add('active');
+          document.getElementById('panel-'+target).classList.add('active');
         });
       });
 
-      // ===== Toggle Checkbox =====
-      allItems.forEach(function(item) {
-        item.addEventListener('click', function() {
-          var key = this.getAttribute('data-key');
-          var isChecked = this.classList.contains('checked');
-
-          if (isChecked) {
-            this.classList.remove('checked');
-            state[key] = false;
-          } else {
-            this.classList.add('checked');
-            this.classList.add('just-checked');
-            state[key] = true;
-
-            // Remove ripple class after animation
-            setTimeout(function() {
-              item.classList.remove('just-checked');
-            }, 500);
+      // ===== Auto-save on input =====
+      document.addEventListener('input',function(e){
+        var el = e.target;
+        var field = el.getAttribute('data-field');
+        if(field){
+          var parts = field.split('.');
+          if(parts.length === 2){
+            data.resume[parts[0]][parts[1]] = el.value;
+          } else if(parts.length === 1){
+            data.resume[parts[0]] = el.value;
           }
-
-          saveState(state);
-          updateProgress();
-        });
+          saveData();
+        }
+        // Summary counter
+        if(el.id === 'r-summary'){
+          document.getElementById('summaryCount').textContent = el.value.length + '/500자';
+        }
       });
 
-      // ===== Update All Progress Indicators =====
-      function updateProgress() {
-        var totalChecked = 0;
-        var totalItems = 0;
-
-        // Per-tab progress
-        Object.keys(categories).forEach(function(cat) {
-          var info = categories[cat];
-          var checked = 0;
-          var items = document.querySelectorAll('[data-key^="' + cat + '-"]');
-          items.forEach(function(item) {
-            if (item.classList.contains('checked')) checked++;
-          });
-          var pct = Math.round((checked / info.count) * 100);
-
-          document.getElementById(info.fill).style.width = pct + '%';
-          document.getElementById(info.percent).textContent = pct + '%';
-
-          totalChecked += checked;
-          totalItems += info.count;
-        });
-
-        // Overall progress
-        var overallPct = Math.round((totalChecked / totalItems) * 100);
-
-        // Animate the number
-        animateNumber(overallPercentEl, overallPct);
-
-        // Update ring
-        var offset = CIRCUMFERENCE - (overallPct / 100) * CIRCUMFERENCE;
-        progressRing.style.strokeDashoffset = offset;
-
-        // Ring color based on grade
-        if (overallPct >= 90) {
-          progressRing.style.stroke = '#34C759';
-        } else if (overallPct >= 60) {
-          progressRing.style.stroke = '#3182F6';
-        } else if (overallPct >= 30) {
-          progressRing.style.stroke = '#FF9500';
-        } else {
-          progressRing.style.stroke = '#FF3B30';
+      // ============================================
+      // RESUME: Education
+      // ============================================
+      function renderEducation(){
+        var list = document.getElementById('educationList');
+        if(data.resume.education.length === 0){
+          list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎓</div><div class="empty-state-text">학력사항을 추가해주세요</div></div>';
+          return;
         }
+        list.innerHTML = data.resume.education.map(function(ed,i){
+          return '<div class="entry-item">'
+            +'<button class="entry-remove" onclick="removeEducation('+i+')">&times;</button>'
+            +'<div class="form-row">'
+            +'<div class="form-group"><label class="form-label">학교명</label><input class="form-input" value="'+esc(ed.school)+'" onchange="updateEducation('+i+',\'school\',this.value)" placeholder="OO대학교"></div>'
+            +'<div class="form-group"><label class="form-label">전공</label><input class="form-input" value="'+esc(ed.major)+'" onchange="updateEducation('+i+',\'major\',this.value)" placeholder="컴퓨터공학과"></div>'
+            +'</div>'
+            +'<div class="form-row col-3">'
+            +'<div class="form-group"><label class="form-label">구분</label><select class="form-input" onchange="updateEducation('+i+',\'type\',this.value)"><option value="고등학교"'+(ed.type==='고등학교'?' selected':'')+'>고등학교</option><option value="전문대"'+(ed.type==='전문대'?' selected':'')+'>전문대</option><option value="대학교"'+(ed.type==='대학교'?' selected':'')+'>대학교</option><option value="대학원"'+(ed.type==='대학원'?' selected':'')+'>대학원</option></select></div>'
+            +'<div class="form-group"><label class="form-label">기간</label><input class="form-input" value="'+esc(ed.period)+'" onchange="updateEducation('+i+',\'period\',this.value)" placeholder="2020.03~2024.02"></div>'
+            +'<div class="form-group"><label class="form-label">학점</label><input class="form-input" value="'+esc(ed.gpa)+'" onchange="updateEducation('+i+',\'gpa\',this.value)" placeholder="3.8/4.5"></div>'
+            +'</div>'
+            +'</div>';
+        }).join('');
+      }
+      window.addEducation = function(){
+        data.resume.education.push({school:'',major:'',type:'대학교',period:'',gpa:''});
+        saveData(); renderEducation();
+      };
+      window.removeEducation = function(i){
+        data.resume.education.splice(i,1); saveData(); renderEducation();
+      };
+      window.updateEducation = function(i,key,val){
+        data.resume.education[i][key] = val; saveData();
+      };
 
-        // Update overall text
-        overallTextEl.textContent = '전체 완성도 ' + overallPct + '%';
+      // ============================================
+      // RESUME: Career
+      // ============================================
+      function renderCareer(){
+        var list = document.getElementById('careerList');
+        if(data.resume.career.length === 0){
+          list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">💼</div><div class="empty-state-text">경력/인턴 경험을 추가해주세요</div></div>';
+          return;
+        }
+        list.innerHTML = data.resume.career.map(function(c,i){
+          return '<div class="entry-item">'
+            +'<button class="entry-remove" onclick="removeCareer('+i+')">&times;</button>'
+            +'<div class="form-row">'
+            +'<div class="form-group"><label class="form-label">회사명</label><input class="form-input" value="'+esc(c.company)+'" onchange="updateCareer('+i+',\'company\',this.value)" placeholder="OO기업"></div>'
+            +'<div class="form-group"><label class="form-label">직무</label><input class="form-input" value="'+esc(c.position)+'" onchange="updateCareer('+i+',\'position\',this.value)" placeholder="백엔드 개발"></div>'
+            +'</div>'
+            +'<div class="form-row">'
+            +'<div class="form-group"><label class="form-label">기간</label><input class="form-input" value="'+esc(c.period)+'" onchange="updateCareer('+i+',\'period\',this.value)" placeholder="2023.07~2023.12"></div>'
+            +'<div class="form-group"><label class="form-label">설명</label><input class="form-input" value="'+esc(c.desc)+'" onchange="updateCareer('+i+',\'desc\',this.value)" placeholder="담당 업무 및 성과"></div>'
+            +'</div>'
+            +'</div>';
+        }).join('');
+      }
+      window.addCareer = function(){
+        data.resume.career.push({company:'',position:'',period:'',desc:''});
+        saveData(); renderCareer();
+      };
+      window.removeCareer = function(i){
+        data.resume.career.splice(i,1); saveData(); renderCareer();
+      };
+      window.updateCareer = function(i,key,val){
+        data.resume.career[i][key] = val; saveData();
+      };
 
-        // Update grade badge
-        updateGradeBadge(overallPct);
+      // ============================================
+      // RESUME: Certifications
+      // ============================================
+      function renderCerts(){
+        var list = document.getElementById('certList');
+        if(data.resume.certs.length === 0){
+          list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📜</div><div class="empty-state-text">보유 자격증을 추가해주세요</div></div>';
+          return;
+        }
+        var options = CERT_OPTIONS.map(function(c){return '<option value="'+c+'">'+c+'</option>'}).join('');
+        list.innerHTML = data.resume.certs.map(function(c,i){
+          var selOpts = '<option value="">-- 선택 --</option>' + CERT_OPTIONS.map(function(opt){
+            return '<option value="'+opt+'"'+(c.name===opt?' selected':'')+'>'+opt+'</option>';
+          }).join('') + '<option value="__custom"'+(c.name && CERT_OPTIONS.indexOf(c.name)===-1 && c.name!==''?' selected':'')+'>직접입력</option>';
+          var isCustom = c.name && CERT_OPTIONS.indexOf(c.name)===-1 && c.name !== '';
+          return '<div class="entry-item">'
+            +'<button class="entry-remove" onclick="removeCert('+i+')">&times;</button>'
+            +'<div class="form-row col-3">'
+            +'<div class="form-group"><label class="form-label">자격증명</label><select class="form-input" onchange="selectCert('+i+',this.value)">'+selOpts+'</select></div>'
+            +(isCustom?'<div class="form-group"><label class="form-label">자격증명(직접입력)</label><input class="form-input" value="'+esc(c.name)+'" onchange="updateCert('+i+',\'name\',this.value)"></div>':'<div class="form-group"></div>')
+            +'<div class="form-group"><label class="form-label">취득일</label><input class="form-input" type="date" value="'+(c.date||'')+'" onchange="updateCert('+i+',\'date\',this.value)"></div>'
+            +'</div>'
+            +'</div>';
+        }).join('');
+      }
+      window.addCert = function(){
+        data.resume.certs.push({name:'',date:''});
+        saveData(); renderCerts();
+      };
+      window.removeCert = function(i){
+        data.resume.certs.splice(i,1); saveData(); renderCerts();
+      };
+      window.updateCert = function(i,key,val){
+        data.resume.certs[i][key] = val; saveData();
+      };
+      window.selectCert = function(i,val){
+        if(val === '__custom'){
+          data.resume.certs[i].name = '';
+        } else {
+          data.resume.certs[i].name = val;
+        }
+        saveData(); renderCerts();
+      };
+
+      // ============================================
+      // RESUME: Languages
+      // ============================================
+      function renderLanguages(){
+        var list = document.getElementById('languageList');
+        if(data.resume.languages.length === 0){
+          list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌍</div><div class="empty-state-text">어학 성적을 추가해주세요</div></div>';
+          return;
+        }
+        list.innerHTML = data.resume.languages.map(function(l,i){
+          return '<div class="entry-item">'
+            +'<button class="entry-remove" onclick="removeLanguage('+i+')">&times;</button>'
+            +'<div class="form-row col-3">'
+            +'<div class="form-group"><label class="form-label">어학종류</label><select class="form-input" onchange="updateLanguage('+i+',\'type\',this.value)"><option value="TOEIC"'+(l.type==='TOEIC'?' selected':'')+'>TOEIC</option><option value="TOEFL"'+(l.type==='TOEFL'?' selected':'')+'>TOEFL</option><option value="IELTS"'+(l.type==='IELTS'?' selected':'')+'>IELTS</option><option value="JLPT"'+(l.type==='JLPT'?' selected':'')+'>JLPT</option><option value="HSK"'+(l.type==='HSK'?' selected':'')+'>HSK</option><option value="OPIc"'+(l.type==='OPIc'?' selected':'')+'>OPIc</option><option value="기타"'+(l.type==='기타'?' selected':'')+'>기타</option></select></div>'
+            +'<div class="form-group"><label class="form-label">점수</label><input class="form-input" value="'+esc(l.score)+'" onchange="updateLanguage('+i+',\'score\',this.value)" placeholder="850"></div>'
+            +'<div class="form-group"><label class="form-label">등급/취득일</label><input class="form-input" value="'+esc(l.grade)+'" onchange="updateLanguage('+i+',\'grade\',this.value)" placeholder="2024.05"></div>'
+            +'</div>'
+            +'</div>';
+        }).join('');
+      }
+      window.addLanguage = function(){
+        data.resume.languages.push({type:'TOEIC',score:'',grade:''});
+        saveData(); renderLanguages();
+      };
+      window.removeLanguage = function(i){
+        data.resume.languages.splice(i,1); saveData(); renderLanguages();
+      };
+      window.updateLanguage = function(i,key,val){
+        data.resume.languages[i][key] = val; saveData();
+      };
+
+      // ============================================
+      // RESUME: Awards
+      // ============================================
+      function renderAwards(){
+        var list = document.getElementById('awardList');
+        if(data.resume.awards.length === 0){
+          list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏅</div><div class="empty-state-text">수상/활동 내역을 추가해주세요</div></div>';
+          return;
+        }
+        list.innerHTML = data.resume.awards.map(function(a,i){
+          return '<div class="entry-item">'
+            +'<button class="entry-remove" onclick="removeAward('+i+')">&times;</button>'
+            +'<div class="form-row col-3">'
+            +'<div class="form-group"><label class="form-label">수상/활동명</label><input class="form-input" value="'+esc(a.title)+'" onchange="updateAward('+i+',\'title\',this.value)" placeholder="OO공모전 대상"></div>'
+            +'<div class="form-group"><label class="form-label">수여기관</label><input class="form-input" value="'+esc(a.org)+'" onchange="updateAward('+i+',\'org\',this.value)" placeholder="OO재단"></div>'
+            +'<div class="form-group"><label class="form-label">날짜</label><input class="form-input" type="date" value="'+(a.date||'')+'" onchange="updateAward('+i+',\'date\',this.value)"></div>'
+            +'</div>'
+            +'</div>';
+        }).join('');
+      }
+      window.addAward = function(){
+        data.resume.awards.push({title:'',org:'',date:''});
+        saveData(); renderAwards();
+      };
+      window.removeAward = function(i){
+        data.resume.awards.splice(i,1); saveData(); renderAwards();
+      };
+      window.updateAward = function(i,key,val){
+        data.resume.awards[i][key] = val; saveData();
+      };
+
+      // ============================================
+      // COVER LETTER
+      // ============================================
+      function renderCompanyBar(){
+        var bar = document.getElementById('companyBar');
+        var companies = Object.keys(data.coverLetters);
+        bar.innerHTML = companies.map(function(c){
+          return '<button class="cl-company-chip'+(c===data.currentCompany?' active':'')+'" data-company="'+esc(c)+'" onclick="switchCompany(\''+esc(c).replace(/'/g,"\\'")+'\')">'+esc(c)
+            +(c!=='기본'?'<span onclick="event.stopPropagation();removeCompany(\''+esc(c).replace(/'/g,"\\'")+'\');" style="margin-left:6px;font-size:11px;opacity:.6;cursor:pointer">&times;</span>':'')
+            +'</button>';
+        }).join('')
+        +'<button class="cl-add-company" onclick="addCompany()">+ 기업추가</button>';
       }
 
-      // ===== Animate Number =====
-      function animateNumber(el, target) {
-        var current = parseInt(el.textContent) || 0;
-        if (current === target) return;
+      function renderCoverLetterItems(){
+        var items = data.coverLetters[data.currentCompany] || [];
+        var container = document.getElementById('coverLetterItems');
+        if(items.length === 0){
+          container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">✍️</div><div class="empty-state-text">자기소개서 항목을 추가해주세요</div></div>';
+          return;
+        }
+        container.innerHTML = items.map(function(item,i){
+          var len = (item.content||'').length;
+          var color = len >= 500 ? 'var(--green)' : len >= 200 ? 'var(--primary)' : 'var(--text-muted)';
+          return '<div class="cl-item">'
+            +'<div class="cl-item-header">'
+            +'<input class="form-input" value="'+esc(item.title)+'" onchange="updateCLTitle('+i+',this.value)" style="font-weight:800;font-size:15px;border:none;background:transparent;padding:0;flex:1">'
+            +'<span class="cl-char-count" style="color:'+color+'">'+len+'자</span>'
+            +(items.length > 1 ? '<button class="entry-remove" style="position:static;margin-left:8px" onclick="removeCLItem('+i+')">&times;</button>':'')
+            +'</div>'
+            +'<textarea class="cl-textarea" placeholder="내용을 작성해주세요..." oninput="updateCLContent('+i+',this.value)">'+esc(item.content)+'</textarea>'
+            +'</div>';
+        }).join('');
+      }
 
-        var step = current < target ? 1 : -1;
-        var duration = 400;
-        var steps = Math.abs(target - current);
-        var interval = Math.max(Math.floor(duration / steps), 16);
-
-        function tick() {
-          current += step;
-          el.textContent = current;
-          if (current !== target) {
-            setTimeout(tick, interval);
+      window.switchCompany = function(name){
+        data.currentCompany = name;
+        saveData(); renderCompanyBar(); renderCoverLetterItems();
+      };
+      window.addCompany = function(){
+        var name = prompt('기업명을 입력하세요:');
+        if(!name || !name.trim()) return;
+        name = name.trim();
+        if(data.coverLetters[name]){
+          alert('이미 존재하는 기업입니다.');
+          return;
+        }
+        // Copy from default template
+        data.coverLetters[name] = [
+          {title:'지원동기',content:''},
+          {title:'성장과정',content:''},
+          {title:'직무역량/경험',content:''},
+          {title:'입사후포부',content:''}
+        ];
+        data.currentCompany = name;
+        saveData(); renderCompanyBar(); renderCoverLetterItems();
+      };
+      window.removeCompany = function(name){
+        if(name === '기본') return;
+        if(!confirm('"'+name+'" 자기소개서를 삭제하시겠습니까?')) return;
+        delete data.coverLetters[name];
+        if(data.currentCompany === name) data.currentCompany = '기본';
+        saveData(); renderCompanyBar(); renderCoverLetterItems();
+      };
+      window.addCoverLetterItem = function(){
+        var items = data.coverLetters[data.currentCompany];
+        if(!items) return;
+        var title = prompt('항목 제목을 입력하세요:','추가 항목');
+        if(!title || !title.trim()) return;
+        items.push({title:title.trim(),content:''});
+        saveData(); renderCoverLetterItems();
+      };
+      window.removeCLItem = function(i){
+        var items = data.coverLetters[data.currentCompany];
+        if(!items || items.length <= 1) return;
+        items.splice(i,1); saveData(); renderCoverLetterItems();
+      };
+      window.updateCLTitle = function(i,val){
+        var items = data.coverLetters[data.currentCompany];
+        if(items && items[i]) items[i].title = val;
+        saveData();
+      };
+      window.updateCLContent = function(i,val){
+        var items = data.coverLetters[data.currentCompany];
+        if(items && items[i]){
+          items[i].content = val;
+          saveData();
+          // Update char count
+          var clItems = document.querySelectorAll('.cl-item');
+          if(clItems[i]){
+            var counter = clItems[i].querySelector('.cl-char-count');
+            if(counter){
+              var len = val.length;
+              counter.textContent = len + '자';
+              counter.style.color = len >= 500 ? 'var(--green)' : len >= 200 ? 'var(--primary)' : 'var(--text-muted)';
+            }
           }
         }
-        tick();
-      }
+      };
 
-      // ===== Update Grade Badge =====
-      function updateGradeBadge(pct) {
-        // Remove all grade classes
-        gradeBadge.className = 'grade-badge';
+      window.toggleTips = function(){
+        document.getElementById('tipsBox').classList.toggle('show');
+      };
 
-        if (pct >= 90) {
-          gradeBadge.classList.add('grade-ready');
-          gradeBadge.textContent = '제출가능';
-        } else if (pct >= 60) {
-          gradeBadge.classList.add('grade-almost');
-          gradeBadge.textContent = '거의완성';
-        } else if (pct >= 30) {
-          gradeBadge.classList.add('grade-progress');
-          gradeBadge.textContent = '준비중';
+      // ============================================
+      // ACTIVITIES
+      // ============================================
+      function renderActivities(){
+        var acts = data.activities;
+        var filtered = currentFilter === '전체' ? acts : acts.filter(function(a){return a.category === currentFilter});
+        var container = document.getElementById('activityCards');
+
+        if(filtered.length === 0){
+          container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏆</div><div class="empty-state-text">'+(acts.length===0?'대외활동을 추가해주세요':'해당 카테고리에 활동이 없습니다')+'</div></div>';
         } else {
-          gradeBadge.classList.add('grade-start');
-          gradeBadge.textContent = '시작';
+          container.innerHTML = filtered.map(function(a){
+            var catClass = CATEGORY_CLASSES[a.category] || '';
+            var period = '';
+            if(a.startDate){
+              period = a.startDate.replace(/-/g,'.');
+              if(a.endDate) period += ' ~ ' + a.endDate.replace(/-/g,'.');
+            }
+            return '<div class="act-card" data-id="'+a.id+'">'
+              +'<button class="act-card-remove" onclick="removeActivity('+a.id+')">&times;</button>'
+              +'<div class="act-card-top">'
+              +'<span class="act-category-badge '+catClass+'">'+esc(a.category)+'</span>'
+              +(period?'<span class="act-card-period">'+period+'</span>':'')
+              +'</div>'
+              +'<div class="act-card-title">'+esc(a.title)+'</div>'
+              +(a.desc?'<div class="act-card-desc">'+esc(a.desc)+'</div>':'')
+              +'</div>';
+          }).join('');
         }
+
+        // Timeline
+        renderTimeline();
       }
 
-      // ===== Reset =====
-      resetBtn.addEventListener('click', function() {
-        if (!confirm('체크리스트를 초기화하시겠습니까?\n모든 체크 항목이 해제됩니다.')) return;
+      function renderTimeline(){
+        var acts = data.activities.filter(function(a){return a.startDate});
+        var section = document.getElementById('timelineSection');
+        if(acts.length === 0){
+          section.style.display = 'none';
+          return;
+        }
+        section.style.display = 'block';
+        acts.sort(function(a,b){return (b.startDate||'').localeCompare(a.startDate||'')});
+        var container = document.getElementById('timelineContent');
+        container.innerHTML = acts.map(function(a){
+          var period = a.startDate.replace(/-/g,'.');
+          if(a.endDate) period += ' ~ '+a.endDate.replace(/-/g,'.');
+          return '<div class="timeline-item">'
+            +'<div class="timeline-dot"></div>'
+            +'<div class="timeline-item-cat">'+esc(a.category)+'</div>'
+            +'<div class="timeline-item-title">'+esc(a.title)+'</div>'
+            +'<div class="timeline-item-period">'+period+'</div>'
+            +'</div>';
+        }).join('');
+      }
 
-        state = {};
-        saveState(state);
-
-        allItems.forEach(function(item) {
-          item.classList.remove('checked');
-          item.classList.remove('just-checked');
+      window.addActivity = function(){
+        var title = document.getElementById('act-title').value.trim();
+        if(!title){alert('활동명을 입력해주세요');return;}
+        var act = {
+          id: Date.now(),
+          title: title,
+          category: document.getElementById('act-category').value,
+          startDate: document.getElementById('act-start').value,
+          endDate: document.getElementById('act-end').value,
+          desc: document.getElementById('act-desc').value.trim()
+        };
+        data.activities.push(act);
+        saveData(); renderActivities();
+        // Clear form
+        document.getElementById('act-title').value = '';
+        document.getElementById('act-start').value = '';
+        document.getElementById('act-end').value = '';
+        document.getElementById('act-desc').value = '';
+      };
+      window.removeActivity = function(id){
+        data.activities = data.activities.filter(function(a){return a.id !== id});
+        saveData(); renderActivities();
+      };
+      window.filterActivities = function(cat){
+        currentFilter = cat;
+        document.querySelectorAll('.act-filter-chip').forEach(function(c){
+          c.classList.toggle('active', c.getAttribute('data-cat') === cat);
         });
+        renderActivities();
+      };
 
-        updateProgress();
-      });
+      // ============================================
+      // DASHBOARD
+      // ============================================
+      function updateDashboard(){
+        // Resume completeness
+        var r = data.resume;
+        var total = 7, filled = 0;
+        var p = r.personal;
+        if(p.name && p.phone && p.email) filled++;
+        if(r.education.length > 0 && r.education.some(function(e){return e.school})) filled++;
+        if(r.career.length > 0 && r.career.some(function(c){return c.company})) filled++;
+        if(r.certs.length > 0 && r.certs.some(function(c){return c.name})) filled++;
+        if(r.languages.length > 0 && r.languages.some(function(l){return l.score})) filled++;
+        if(r.awards.length > 0 && r.awards.some(function(a){return a.title})) filled++;
+        if(r.summary && r.summary.length >= 50) filled++;
+        var resumePct = Math.round((filled/total)*100);
 
-      // ===== Nav scroll effect =====
-      window.addEventListener('scroll', function() {
+        // Cover letter completeness
+        var cl = data.coverLetters[data.currentCompany] || [];
+        var clTotal = cl.length || 1;
+        var clFilled = cl.filter(function(item){return item.content && item.content.length >= 100}).length;
+        var coverPct = Math.round((clFilled/clTotal)*100);
+
+        // Activity count
+        var actCount = data.activities.length;
+
+        // Overall
+        var overallPct = Math.round((resumePct + coverPct) / 2);
+
+        document.getElementById('dashResume').textContent = resumePct + '%';
+        document.getElementById('dashCover').textContent = coverPct + '%';
+        document.getElementById('dashActivity').textContent = actCount + '건';
+        document.getElementById('dashPercent').textContent = overallPct + '%';
+        document.getElementById('dashFill').style.width = overallPct + '%';
+      }
+
+      // ============================================
+      // EXPORT / IMPORT / RESET
+      // ============================================
+      window.exportData = function(){
+        var json = JSON.stringify(data, null, 2);
+        var blob = new Blob([json], {type:'application/json'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'JobReady_서류관리_' + new Date().toISOString().slice(0,10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+      window.importData = function(e){
+        var file = e.target.files[0];
+        if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev){
+          try{
+            var imported = JSON.parse(ev.target.result);
+            if(!imported.resume && !imported.coverLetters && !imported.activities){
+              alert('올바른 서류관리 데이터 파일이 아닙니다.');
+              return;
+            }
+            if(confirm('현재 데이터를 가져온 데이터로 교체하시겠습니까?')){
+              data = imported;
+              saveData();
+              renderAll();
+              alert('데이터를 성공적으로 가져왔습니다!');
+            }
+          }catch(err){
+            alert('파일을 읽을 수 없습니다. JSON 형식을 확인해주세요.');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      };
+      window.resetAllData = function(){
+        if(!confirm('모든 서류 데이터를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
+        data = defaultData();
+        saveData();
+        renderAll();
+      };
+
+      // ============================================
+      // INITIAL RENDER
+      // ============================================
+      function renderAll(){
+        // Resume fields
+        var p = data.resume.personal;
+        document.getElementById('r-name').value = p.name || '';
+        document.getElementById('r-birth').value = p.birthDate || '';
+        document.getElementById('r-phone').value = p.phone || '';
+        document.getElementById('r-email').value = p.email || '';
+        document.getElementById('r-address').value = p.address || '';
+        document.getElementById('r-summary').value = data.resume.summary || '';
+        document.getElementById('summaryCount').textContent = (data.resume.summary||'').length + '/500자';
+
+        renderEducation();
+        renderCareer();
+        renderCerts();
+        renderLanguages();
+        renderAwards();
+        renderCompanyBar();
+        renderCoverLetterItems();
+        renderActivities();
+        updateDashboard();
+      }
+
+      renderAll();
+
+      // ===== Nav scroll =====
+      window.addEventListener('scroll',function(){
         var nav = document.getElementById('nav');
-        if (window.scrollY > 10) {
-          nav.classList.add('scrolled');
-        } else {
-          nav.classList.remove('scrolled');
-        }
+        if(window.scrollY>10) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
       });
-
-      // ===== Initial render =====
-      updateProgress();
 
     })();
   </script>

@@ -1,0 +1,29 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "board": "free",
+      "nickname": "취준생#7749",
+      "sessionId": "test123",
+      "title": "�����׽�Ʈ",
+      "content": "�׽�Ʈ ���Դϴ�",
+      "company": "",
+      "position": "",
+      "certTag": "",
+      "likes": 0,
+      "likedBy": [],
+      "comments": [],
+      "createdAt": "2026-03-02T11:50:57.553Z",
+      "maxMembers": 0,
+      "method": "",
+      "region": "",
+      "regionCity": "",
+      "joinedMembers": []
+    }
+  ],
+  "nextPostId": 2,
+  "nextCommentId": 1,
+  "sessions": {
+    "test123": "취준생#7749"
+  }
+}
