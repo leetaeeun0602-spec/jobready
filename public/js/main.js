@@ -159,14 +159,52 @@ const CERT_DETAILS = {
     dailyStudy: '이론 1시간 + 실습(KcLep) 1시간 (일 2시간)',
     studyTips: '회계원리 기초를 먼저 학습하고, KcLep 프로그램 실습에 집중하세요. 전표 입력, 결산 처리, 부가세 신고가 실기의 핵심입니다. 유튜브 무료 강의와 기출문제를 병행하면 단기 합격이 가능합니다.',
     schedule: '연 5회 정기시험', nextExam: '한국세무사회 홈페이지 참고'
+  },
+  'AWS Cloud Practitioner': {
+    fullName: 'AWS Certified Cloud Practitioner', org: 'Amazon Web Services (AWS)',
+    examType: '상시시험 (Pearson VUE 테스트센터 또는 온라인)', fee: '$100 (약 13만원, VAT 별도)',
+    passCriteria: '1,000점 만점 700점 이상', prepPeriod: '1~2개월', difficulty: '입문 (Foundational)',
+    dailyStudy: '이론 1시간 + 실습 30분 (일 1.5시간)',
+    studyTips: 'AWS 공식 무료 교육(Cloud Practitioner Essentials)부터 시작하세요. 핵심 서비스(EC2, S3, RDS, Lambda, IAM)의 개념을 이해하고, 클라우드 장점·요금 모델·공유 책임 모델·Well-Architected Framework를 중점 학습하세요. 65문항 선택형(90분)으로 시간은 넉넉합니다. 한국어 시험을 지원하며, 추가 30분 연장(ESL)도 가능합니다.',
+    schedule: '상시시험 (온라인 또는 테스트센터)', nextExam: '상시 응시 가능 (Pearson VUE 예약)'
   }
 };
 
 const PLACEHOLDER_CERTS = [
-  'MOS Excel Expert', 'ITQ', 'AWS Cloud Practitioner', '네트워크관리사', '리눅스마스터',
+  'MOS Excel Expert', 'ITQ', '네트워크관리사', '리눅스마스터',
   '전기산업기사', '기계기사', '소방설비기사', '에너지관리기사', '환경기사', '건설안전기사',
   '세무회계', 'ERP정보관리사', '투자자산운용사', 'AFPK', 'IELTS', 'TOEFL'
 ];
+
+// ===== 자격증 ROI 데이터 =====
+const CERT_ROI_DATA = {
+  '컴활1급':        { sector: 'IT', demand: 0.75, trend: 0.30, difficulty: 0.45, supply: 0.80, passRate: '38%', applicants: '20만', jobMention: '40%' },
+  '컴활2급':        { sector: 'IT', demand: 0.65, trend: 0.25, difficulty: 0.30, supply: 0.85, passRate: '45%', applicants: '25만', jobMention: '35%' },
+  '워드프로세서':     { sector: 'IT', demand: 0.50, trend: 0.15, difficulty: 0.15, supply: 0.90, passRate: '60%', applicants: '15만', jobMention: '25%' },
+  '한국사능력검정':   { sector: '기타', demand: 0.55, trend: 0.35, difficulty: 0.20, supply: 0.80, passRate: '65%', applicants: '30만', jobMention: '30%' },
+  '정보처리기사':     { sector: 'IT', demand: 0.90, trend: 0.80, difficulty: 0.50, supply: 0.70, passRate: '40%', applicants: '15만', jobMention: '35%' },
+  'SQLD':           { sector: 'IT', demand: 0.85, trend: 0.90, difficulty: 0.35, supply: 0.50, passRate: '48%', applicants: '5만', jobMention: '25%' },
+  'ADsP':           { sector: 'IT', demand: 0.80, trend: 0.85, difficulty: 0.30, supply: 0.45, passRate: '55%', applicants: '6만', jobMention: '20%' },
+  '빅데이터분석기사':  { sector: 'IT', demand: 0.80, trend: 0.95, difficulty: 0.55, supply: 0.30, passRate: '35%', applicants: '3만', jobMention: '15%' },
+  '전기기사':        { sector: '전기/안전', demand: 0.85, trend: 0.60, difficulty: 0.60, supply: 0.50, passRate: '30%', applicants: '8만', jobMention: '30%' },
+  '산업안전기사':     { sector: '전기/안전', demand: 0.90, trend: 0.70, difficulty: 0.50, supply: 0.45, passRate: '35%', applicants: '6만', jobMention: '28%' },
+  'TOEIC':          { sector: '어학', demand: 0.70, trend: 0.20, difficulty: 0.20, supply: 0.90, passRate: 'N/A', applicants: '170만', jobMention: '55%' },
+  'OPIc':           { sector: '어학', demand: 0.72, trend: 0.55, difficulty: 0.30, supply: 0.50, passRate: 'N/A', applicants: '40만', jobMention: '35%' },
+  'TOEIC Speaking':  { sector: '어학', demand: 0.68, trend: 0.50, difficulty: 0.30, supply: 0.55, passRate: 'N/A', applicants: '20만', jobMention: '30%' },
+  '재경관리사':      { sector: '경영/회계', demand: 0.65, trend: 0.50, difficulty: 0.45, supply: 0.35, passRate: '40%', applicants: '3만', jobMention: '15%' },
+  '전산회계1급':     { sector: '경영/회계', demand: 0.70, trend: 0.40, difficulty: 0.30, supply: 0.60, passRate: '45%', applicants: '10만', jobMention: '20%' },
+  'AWS Cloud Practitioner': { sector: 'IT', demand: 0.78, trend: 0.90, difficulty: 0.25, supply: 0.35, passRate: '85%', applicants: '2만', jobMention: '15%' }
+};
+
+function calcCertROI(r) {
+  return Math.round(((0.45 * r.demand + 0.20 * r.trend - 0.20 * r.difficulty - 0.15 * r.supply) + 1) / 2 * 100);
+}
+
+function certRoiColor(score) {
+  if (score >= 70) return 'green';
+  if (score >= 50) return 'amber';
+  return 'red';
+}
 
 // ===== 상시시험 안내 데이터 =====
 const ALWAYS_EXAMS = [
@@ -763,61 +801,146 @@ function openCertDetail(certName) {
   certDetailMiniCalYear = new Date().getFullYear();
   document.getElementById('cert-detail-name').textContent = certName;
   const detail = CERT_DETAILS[certName];
+  const roi = CERT_ROI_DATA[certName];
   const container = document.getElementById('cert-detail-content');
 
-  if (!detail) {
-    container.innerHTML = `
+  // === 기본정보 탭 내용 ===
+  let basicHTML = '';
+  if (detail) {
+    basicHTML = `
+      <div class="cert-detail-section">
+        <div class="cert-section-title">📌 기본 정보</div>
+        <div class="cert-info-grid">
+          <div class="cert-info-item"><div class="cert-info-label">주관기관</div><div class="cert-info-value">${detail.org}</div></div>
+          <div class="cert-info-item"><div class="cert-info-label">시험유형</div><div class="cert-info-value">${detail.examType}</div></div>
+          <div class="cert-info-item"><div class="cert-info-label">응시료</div><div class="cert-info-value">${detail.fee}</div></div>
+          <div class="cert-info-item"><div class="cert-info-label">합격기준</div><div class="cert-info-value">${detail.passCriteria}</div></div>
+        </div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-section-title">📅 시험일정</div>
+        <div class="cert-info-grid">
+          <div class="cert-info-item full-width"><div class="cert-info-label">일정</div><div class="cert-info-value">${detail.schedule}</div></div>
+          <div class="cert-info-item full-width"><div class="cert-info-label">다음 시험</div><div class="cert-info-value">${detail.nextExam}</div></div>
+        </div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-section-title">💡 공부 팁</div>
+        <div class="cert-info-grid" style="margin-bottom:10px;">
+          <div class="cert-info-item"><div class="cert-info-label">예상 준비기간</div><div class="cert-info-value">${detail.prepPeriod}</div></div>
+          <div class="cert-info-item"><div class="cert-info-label">난이도</div><div class="cert-info-value">${detail.difficulty}</div></div>
+        </div>
+        <div class="cert-study-tip">${detail.studyTips}</div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-section-title">⏰ 하루 추천 공부량</div>
+        <div class="cert-daily-box">${detail.dailyStudy}</div>
+      </div>`;
+  } else {
+    basicHTML = `
       <div class="cert-placeholder">
         <div class="cert-placeholder-icon">📋</div>
         <p><strong>${escapeHtml(certName)}</strong></p>
         <p style="margin-top:8px;">상세 정보 준비 중입니다.<br>곧 업데이트될 예정이에요!</p>
-      </div>
-      <div class="cert-detail-section">
-        <div class="cert-section-title">✅ 일일 출석체크</div>
-        <div class="checkin-area" id="checkin-area"></div>
-      </div>
-    `;
-    renderCheckinArea(certName);
-    document.getElementById('cert-detail-modal').classList.add('active');
-    return;
+      </div>`;
   }
-
-  container.innerHTML = `
-    <div class="cert-detail-section">
-      <div class="cert-section-title">📌 기본 정보</div>
-      <div class="cert-info-grid">
-        <div class="cert-info-item"><div class="cert-info-label">주관기관</div><div class="cert-info-value">${detail.org}</div></div>
-        <div class="cert-info-item"><div class="cert-info-label">시험유형</div><div class="cert-info-value">${detail.examType}</div></div>
-        <div class="cert-info-item"><div class="cert-info-label">응시료</div><div class="cert-info-value">${detail.fee}</div></div>
-        <div class="cert-info-item"><div class="cert-info-label">합격기준</div><div class="cert-info-value">${detail.passCriteria}</div></div>
-      </div>
-    </div>
-    <div class="cert-detail-section">
-      <div class="cert-section-title">📅 시험일정</div>
-      <div class="cert-info-grid">
-        <div class="cert-info-item full-width"><div class="cert-info-label">일정</div><div class="cert-info-value">${detail.schedule}</div></div>
-        <div class="cert-info-item full-width"><div class="cert-info-label">다음 시험</div><div class="cert-info-value">${detail.nextExam}</div></div>
-      </div>
-    </div>
-    <div class="cert-detail-section">
-      <div class="cert-section-title">💡 공부 팁</div>
-      <div class="cert-info-grid" style="margin-bottom:10px;">
-        <div class="cert-info-item"><div class="cert-info-label">예상 준비기간</div><div class="cert-info-value">${detail.prepPeriod}</div></div>
-        <div class="cert-info-item"><div class="cert-info-label">난이도</div><div class="cert-info-value">${detail.difficulty}</div></div>
-      </div>
-      <div class="cert-study-tip">${detail.studyTips}</div>
-    </div>
-    <div class="cert-detail-section">
-      <div class="cert-section-title">⏰ 하루 추천 공부량</div>
-      <div class="cert-daily-box">${detail.dailyStudy}</div>
-    </div>
+  basicHTML += `
     <div class="cert-detail-section">
       <div class="cert-section-title">✅ 일일 출석체크</div>
       <div class="checkin-area" id="checkin-area"></div>
+    </div>`;
+
+  // === ROI분석 탭 내용 ===
+  let roiHTML = '';
+  if (roi) {
+    const roiScore = calcCertROI(roi);
+    const color = certRoiColor(roiScore);
+    roiHTML = `
+      <div class="cert-roi-score-wrap">
+        <div class="cert-roi-score-num cert-roi-score-${color}">${roiScore}</div>
+        <div class="cert-roi-score-label">ROI 점수 (100점 환산)</div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-section-title">📊 핵심 지표</div>
+        <div class="cert-roi-bars">
+          <div class="cert-roi-bar-row">
+            <span class="cert-roi-bar-label">수요지수</span>
+            <div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-demand" data-width="${(roi.demand * 100).toFixed(0)}"></div></div>
+            <span class="cert-roi-bar-num">${(roi.demand * 100).toFixed(0)}</span>
+          </div>
+          <div class="cert-roi-bar-row">
+            <span class="cert-roi-bar-label">트렌드</span>
+            <div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-trend" data-width="${(roi.trend * 100).toFixed(0)}"></div></div>
+            <span class="cert-roi-bar-num">${(roi.trend * 100).toFixed(0)}</span>
+          </div>
+          <div class="cert-roi-bar-row">
+            <span class="cert-roi-bar-label">난이도</span>
+            <div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-difficulty" data-width="${(roi.difficulty * 100).toFixed(0)}"></div></div>
+            <span class="cert-roi-bar-num">${(roi.difficulty * 100).toFixed(0)}</span>
+          </div>
+          <div class="cert-roi-bar-row">
+            <span class="cert-roi-bar-label">공급과열</span>
+            <div class="cert-roi-bar-track"><div class="cert-roi-bar-fill bar-supply" data-width="${(roi.supply * 100).toFixed(0)}"></div></div>
+            <span class="cert-roi-bar-num">${(roi.supply * 100).toFixed(0)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-section-title">📈 시장 데이터</div>
+        <div class="cert-roi-stats">
+          <div class="cert-roi-stat">
+            <div class="cert-roi-stat-value">${roi.jobMention}</div>
+            <div class="cert-roi-stat-key">공고언급률</div>
+          </div>
+          <div class="cert-roi-stat">
+            <div class="cert-roi-stat-value">${roi.passRate}</div>
+            <div class="cert-roi-stat-key">합격률</div>
+          </div>
+          <div class="cert-roi-stat">
+            <div class="cert-roi-stat-value">${roi.applicants}</div>
+            <div class="cert-roi-stat-key">연간응시자</div>
+          </div>
+        </div>
+      </div>
+      <div class="cert-detail-section">
+        <div class="cert-roi-formula-box">
+          <div class="cert-roi-formula-label">ROI 산출 공식</div>
+          <div class="cert-roi-formula-text">ROI = 0.45 × 수요 + 0.20 × 트렌드 − 0.20 × 난이도 − 0.15 × 공급</div>
+        </div>
+      </div>`;
+  } else {
+    roiHTML = `
+      <div class="cert-placeholder">
+        <div class="cert-placeholder-icon">📊</div>
+        <p><strong>${escapeHtml(certName)}</strong></p>
+        <p style="margin-top:8px;">ROI 분석 데이터 준비 중입니다.<br>곧 업데이트될 예정이에요!</p>
+      </div>`;
+  }
+
+  container.innerHTML = `
+    <div class="cert-modal-tabs">
+      <button class="cert-modal-tab active" data-tab="basic" onclick="switchCertTab('basic')">기본정보</button>
+      <button class="cert-modal-tab" data-tab="roi" onclick="switchCertTab('roi')">ROI분석</button>
     </div>
+    <div class="cert-tab-content" id="cert-tab-basic">${basicHTML}</div>
+    <div class="cert-tab-content" id="cert-tab-roi" style="display:none">${roiHTML}</div>
   `;
   renderCheckinArea(certName);
   document.getElementById('cert-detail-modal').classList.add('active');
+}
+
+function switchCertTab(tab) {
+  document.querySelectorAll('.cert-modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.cert-modal-tab[data-tab="' + tab + '"]').classList.add('active');
+  document.getElementById('cert-tab-basic').style.display = tab === 'basic' ? 'block' : 'none';
+  document.getElementById('cert-tab-roi').style.display = tab === 'roi' ? 'block' : 'none';
+  if (tab === 'roi') {
+    setTimeout(() => {
+      document.querySelectorAll('#cert-tab-roi .cert-roi-bar-fill').forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+    }, 50);
+  }
 }
 
 function closeCertDetailModal() {
